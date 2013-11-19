@@ -1,0 +1,105 @@
+#include <cmath>
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+const double EPS = 1e-6;
+
+struct point {
+  double x, y;
+  point() {}
+  point(double x_, double y_): x(x_), y(y_) {}
+  point(const point& p): x(p.x), y(p.y) {}
+
+  point operator+(const point& p) const { return point(x + p.x, y + p.y); }
+  point operator-(const point& p) const { return point(x - p.x, y - p.y); }
+  point operator*(double c) const { return point(x * c, y * c); }
+  point operator/(double c) const { return point(x / c, y / c); }
+};
+
+double dot(point p, point q) { return p.x * q.x + p.y * q.y; }
+double dist2(point p, point q) { return dot(p - q, p - q); }
+double dist(point p, point q) { return sqrt(dist2(p, q)); }
+double cross(point p, point q) { return p.x * q.y - p.y * q.x; }
+
+// test if point c is Left | On | Right of line through a, b
+// returns > 0 if left, = 0 if on, < 0 if right
+double is_left(point a, point b, point c) {
+  return cross(b - a, c - a);
+}
+// rotate point counter-clockwise around origin
+point rotate(point p, double a) {
+  return point(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));
+}
+
+// project c on line through a and b (a != b)
+point project_point_line(point a, point b, point c) {
+  return a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
+}
+// project point c onto line segment through a and b
+point project_point_segment(point a, point b, point c) {
+  double d = dot(b - a, b - a);
+  if (abs(d) < EPS) return a;
+  d = dot(c - a, b - a) / d;
+  if (d < 0) return a;
+  if (d > 1) return b;
+  return a + (b - a) * d;
+}
+
+// compute distance from c to segment between a and b
+double distance_point_segment(point a, point b, point c) {
+  return sqrt(dist2(c, project_point_segment(a, b, c)));
+}
+// compute distance between point (x, y, z) and plane ax + by + cz = d
+double distance_point_plane(double x, double y, double z,
+    double a, double b, double c, double d) {
+  return abs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);
+}
+
+// determine if lines a - b and c - d are parallel or collinear
+bool lines_parallel(point a, point b, point c, point d) {
+  return abs(cross(b - a, c - d)) < EPS;
+}
+bool lines_collinear(point a, point b, point c, point d) {
+  return lines_parallel(a, b, c, d) &&
+    abs(cross(a - b, a - c)) < EPS &&
+    abs(cross(c - d, c - a)) < EPS;
+}
+
+// test if point p is in polygon (use winding number test)
+bool point_in_poly(point p, vector<point>& v) {
+  v.push_back(v[0]);
+  int wn = 0;
+  int n = static_cast<int>(v.size());
+  for (int i = 0; i < n; ++i) {
+    if (v[i].y <= p.y) {
+      if (v[i + 1].y > p.y && is_left(v[i], v[i + 1], p) > 0)
+        ++wn;
+    } else {
+      if (v[i + 1].y <= p.y && is_left(v[i], v[i + 1], p) < 0)
+        --wn;
+    }
+  }
+  v.pop_back();
+
+  return wn != 0;
+}
+
+int main()
+{
+  vector<point> v;
+  v.push_back(point(0, 0));
+  v.push_back(point(5, 0));
+  v.push_back(point(5, 5));
+  v.push_back(point(0, 5));
+
+  // expected 1 1 1 0 0
+  cerr << point_in_poly(point(2, 2), v) << " "
+       << point_in_poly(point(2, 0), v) << " "
+       << point_in_poly(point(0, 2), v) << " "
+       << point_in_poly(point(5, 2), v) << " "
+       << point_in_poly(point(2, 5), v) << endl;
+
+  return 0;
+}

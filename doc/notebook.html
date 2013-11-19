@@ -1,0 +1,244 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <title></title>
+  <style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+  </style>
+</head>
+<body>
+<table class="sourceCode cpp numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+</pre></td><td class="sourceCode"><pre><code class="sourceCode cpp"><span class="co">// Geometry routines</span>
+
+<span class="ot">#include &lt;cmath&gt;</span>
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">const</span> <span class="dt">double</span> EPS = <span class="fl">1e-6</span>;
+
+<span class="kw">struct</span> point {
+  <span class="dt">double</span> x, y;
+  point() {}
+  point(<span class="dt">double</span> x_, <span class="dt">double</span> y_): x(x_), y(y_) {}
+  point(<span class="dt">const</span> point&amp; p): x(p.x), y(p.y) {}
+
+  point <span class="kw">operator</span>+(<span class="dt">const</span> point&amp; p) <span class="dt">const</span> { <span class="kw">return</span> point(x + p.x, y + p.y); }
+  point <span class="kw">operator</span>-(<span class="dt">const</span> point&amp; p) <span class="dt">const</span> { <span class="kw">return</span> point(x - p.x, y - p.y); }
+  point <span class="kw">operator</span>*(<span class="dt">double</span> c) <span class="dt">const</span> { <span class="kw">return</span> point(x * c, y * c); }
+  point <span class="kw">operator</span>/(<span class="dt">double</span> c) <span class="dt">const</span> { <span class="kw">return</span> point(x / c, y / c); }
+};
+
+<span class="dt">double</span> dot(point p, point q) { <span class="kw">return</span> p.x * q.x + p.y * q.y; }
+<span class="dt">double</span> dist2(point p, point q) { <span class="kw">return</span> dot(p - q, p - q); }
+<span class="dt">double</span> dist(point p, point q) { <span class="kw">return</span> sqrt(dist2(p, q)); }
+<span class="dt">double</span> cross(point p, point q) { <span class="kw">return</span> p.x * q.y - p.y * q.x; }
+
+<span class="co">// test if point c is Left | On | Right of line through a, b</span>
+<span class="co">// returns &gt; 0 if left, = 0 if on, &lt; 0 if right</span>
+<span class="dt">double</span> is_left(point a, point b, point c) {
+  <span class="kw">return</span> cross(b - a, c - a);
+}
+<span class="co">// rotate point counter-clockwise around origin</span>
+point rotate(point p, <span class="dt">double</span> a) {
+  <span class="kw">return</span> point(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));
+}
+
+<span class="co">// project c on line through a and b (a != b)</span>
+point project_point_line(point a, point b, point c) {
+  <span class="kw">return</span> a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
+}
+<span class="co">// project point c onto line segment through a and b</span>
+point project_point_segment(point a, point b, point c) {
+  <span class="dt">double</span> d = dot(b - a, b - a);
+  <span class="kw">if</span> (abs(d) &lt; EPS) <span class="kw">return</span> a;
+  d = dot(c - a, b - a) / d;
+  <span class="kw">if</span> (d &lt; <span class="dv">0</span>) <span class="kw">return</span> a;
+  <span class="kw">if</span> (d &gt; <span class="dv">1</span>) <span class="kw">return</span> b;
+  <span class="kw">return</span> a + (b - a) * d;
+}
+
+<span class="co">// compute distance from c to segment between a and b</span>
+<span class="dt">double</span> distance_point_segment(point a, point b, point c) {
+  <span class="kw">return</span> sqrt(dist2(c, project_point_segment(a, b, c)));
+}
+<span class="co">// compute distance between point (x, y, z) and plane ax + by + cz = d</span>
+<span class="dt">double</span> distance_point_plane(<span class="dt">double</span> x, <span class="dt">double</span> y, <span class="dt">double</span> z,
+    <span class="dt">double</span> a, <span class="dt">double</span> b, <span class="dt">double</span> c, <span class="dt">double</span> d) {
+  <span class="kw">return</span> abs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);
+}
+
+<span class="co">// determine if lines a - b and c - d are parallel or collinear</span>
+<span class="dt">bool</span> lines_parallel(point a, point b, point c, point d) {
+  <span class="kw">return</span> abs(cross(b - a, c - d)) &lt; EPS;
+}
+<span class="dt">bool</span> lines_collinear(point a, point b, point c, point d) {
+  <span class="kw">return</span> lines_parallel(a, b, c, d) &amp;&amp;
+    abs(cross(a - b, a - c)) &lt; EPS &amp;&amp;
+    abs(cross(c - d, c - a)) &lt; EPS;
+}
+
+<span class="co">// test if point p is in polygon (use winding number test)</span>
+<span class="dt">bool</span> point_in_poly(point p, vector&lt;point&gt;&amp; v) {
+  v.push_back(v[<span class="dv">0</span>]);
+  <span class="dt">int</span> wn = <span class="dv">0</span>;
+  <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
+    <span class="kw">if</span> (v[i].y &lt;= p.y) {
+      <span class="kw">if</span> (v[i + <span class="dv">1</span>].y &gt; p.y &amp;&amp; is_left(v[i], v[i + <span class="dv">1</span>], p) &gt; <span class="dv">0</span>)
+        ++wn;
+    } <span class="kw">else</span> {
+      <span class="kw">if</span> (v[i + <span class="dv">1</span>].y &lt;= p.y &amp;&amp; is_left(v[i], v[i + <span class="dv">1</span>], p) &lt; <span class="dv">0</span>)
+        --wn;
+    }
+  }
+  v.pop_back();
+
+  <span class="kw">return</span> wn != <span class="dv">0</span>;
+}
+
+<span class="dt">int</span> main()
+{
+  vector&lt;point&gt; v;
+  v.push_back(point(<span class="dv">0</span>, <span class="dv">0</span>));
+  v.push_back(point(<span class="dv">5</span>, <span class="dv">0</span>));
+  v.push_back(point(<span class="dv">5</span>, <span class="dv">5</span>));
+  v.push_back(point(<span class="dv">0</span>, <span class="dv">5</span>));
+
+  <span class="co">// expected 1 1 1 0 0</span>
+  cerr &lt;&lt; point_in_poly(point(<span class="dv">2</span>, <span class="dv">2</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
+       &lt;&lt; point_in_poly(point(<span class="dv">2</span>, <span class="dv">0</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
+       &lt;&lt; point_in_poly(point(<span class="dv">0</span>, <span class="dv">2</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
+       &lt;&lt; point_in_poly(point(<span class="dv">5</span>, <span class="dv">2</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
+       &lt;&lt; point_in_poly(point(<span class="dv">2</span>, <span class="dv">5</span>), v) &lt;&lt; endl;
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre></td></tr></table>
+</body>
+</html>
