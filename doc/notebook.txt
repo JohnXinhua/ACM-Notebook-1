@@ -389,43 +389,6 @@ long long mfmc()
 Graphs
 ======
 
-Bellman-Ford
-------------
-~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-int coad[Nmax*10],viz[Nmax],nrviz[Nmax],x,y,z,N,M,S=1,k,st,ok=1,best[Nmax];
-struct Nod{
-  int cost,val,nrmuchie;
-  Nod *next;} *l[Nmax];
-void adauga(int x,int y,int z)
-{
-  Nod *q=new Nod;
-  q->val=y;
-  q->cost=z;
-  q->next=l[x];
-  l[x]=q;
-}
-void make_bell(int p)
-{
-  viz[p]=0;
-  for(Nod *it=l[p];it!=NULL;it=it->next)
-  {
-
-    if(best[it->val]>best[p]+(it->cost))
-    {
-      best[it->val]=best[p]+it->cost;
-      if(viz[it->val]==0)
-      {
-        viz[it->val]=1;
-        coad[k++]=it->val;
-        ++nrviz[it->val];
-        if(nrviz[it->val]==N+1)
-          ok=0;
-      }
-    }
-  }
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Euler cycle
 -----------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
@@ -1049,65 +1012,6 @@ int main()
 }
 ~~~~~~~~~~~~~~~~
 
-Aho-Corasick
-------------
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-int lg,n,l,final[DN],ic,sc;
-char tx[DL],c[DN];
-
-struct ac {
-    vector<int> nd;//sirurile care se termina in nodul curent
-    int n0;//numarul de potriviri din nodul curent sau din fii lui
-    ac *f[DA],*fail;
-    ac() {
-        n0=0;
-        fail=NULL;
-        memset(f,0,sizeof(f));
-    }
-} *q[DN*DN],*t,*p;
-
-
-void ins(ac *t,char *p,int i) {//inserarea se face ca si la trie
-    if(!isalpha(*p)) {
-        t->nd.push_back(i);
-        return;
-    }
-    int urm=*p-'a';
-    if(0==t->f[urm]) t->f[urm]=new ac;
-    ins(t->f[urm],p+1,i);
-}
-
-void bfs(ac *t) {
-    ac *dolar;//unde o sa mearga fail-ul fiecarui nod
-    t->fail=t;
-    for(q[ic=sc=1]=t;ic<=sc;++ic) {
-        ac *fr=q[ic];
-        for(int i=0; i<DA; ++i) if(fr->f[i]!=NULL) {//nodul caruia ii cautam fail-ul
-            //ne ducem in fail pana gasim un nod care are ca fiu ultima litera a nodului sau pana ajungem in radacina
-            for(dolar=fr->fail;dolar!=t && dolar->f[i]==NULL;dolar=dolar->fail);
-
-            if(dolar->f[i]!=NULL && dolar->f[i]!=fr->f[i]) dolar=dolar->f[i];
-            fr->f[i]->fail=dolar;
-            q[++sc]=fr->f[i];
-        }
-    }
-    t->fail=NULL;
-}
-
-
-void antibfs(ac *t) {
-    //parcurgem nodurile in ordinea inversa a bfs-ului astfel fiecare nod va fi parcurs dupa ce au
-    //fost parcursi toti fii lui si astfel putem calcula n0
-    for(int i=sc; i>0; --i) {
-        ac *fr=q[i];
-        if(fr->fail!=NULL) fr->fail->n0+=fr->n0;
-        //parcurgem toate cuvintele care se termina in nodul curent si actualizam solutia
-        for(int j=0; j<fr->nd.size(); ++j) final[fr->nd[j]]=fr->n0;
-    }
-}
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 Longest palindromic substring
 -----------------------------
 
@@ -1468,57 +1372,6 @@ bool is_simple(const vector<point>& v) {
 
 Other
 =====
-
-Range minimum query
--------------------
-
-~~~~~~~~~~~~~~~~~~{.cpp}
-#define log 18
-#define Nmax 100100
-
-inline int min(int a,int b)
-{
-  if(a<b)
-    return a;
-  return b;
-}
-
-int rmq[log][Nmax],x,y,maxi,sh;
-int v[Nmax];
-int lg[Nmax],N,M;
-int main()
-{
-  freopen("rmq.in","r",stdin);
-  freopen("rmq.out","w",stdout);
-
-  scanf("%d%d",&N,&M);
-  for(int i=1;i<=N;++i)
-    scanf("%d",&v[i]);
-  for(int i=2;i<=N;++i)
-    lg[i]=lg[i/2]+1;
-
-  for(int i=1;i<=N;++i)
-    rmq[0][i]=v[i];
-  v[0]=-1;
-
-  for(int i=1;(1<<i)<=N;++i)
-  {
-    for(int j=1;j+(1<<i)-1<=N;++j)
-    {
-      maxi=1<<(i-1);
-      rmq[i][j]=min(rmq[i-1][j],rmq[i-1][j+maxi]);
-    }
-  }
-
-  for(int i=1;i<=M;++i)
-  {
-    scanf("%d%d",&x,&y);
-    maxi=lg[y-x+1];
-    sh=y-x+1-(1<<maxi);
-    printf("%d\n",min(rmq[maxi][x],rmq[maxi][x+sh]));
-  }
-}
-~~~~~~~~~~~~~~~~~~~~~~~~
 
 2SAT
 ----
