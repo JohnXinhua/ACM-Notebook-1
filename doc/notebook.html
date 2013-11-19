@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title>ACM Notebook</title>
+  <title>UoS ACM Notebook</title>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -30,59 +30,52 @@ code > span.er { color: #ff0000; font-weight: bold; }
   University of Southampton
 </div>
 <div id="header">
-<h1 class="title">ACM Notebook</h1>
+<h1 class="title">UoS ACM Notebook</h1>
 </div>
 <div id="TOC">
 <ul>
-<li><a href="#data-structures">Data Structures</a><ul>
-<li><a href="#binary-indexed-tree">Binary indexed tree</a></li>
-<li><a href="#segment-tree">Segment tree</a></li>
-<li><a href="#treap">Treap</a></li>
+<li><a href="#data-structures"><span class="toc-section-number">1</span> Data Structures</a><ul>
+<li><a href="#binary-indexed-tree"><span class="toc-section-number">1.1</span> Binary indexed tree</a></li>
+<li><a href="#segment-tree"><span class="toc-section-number">1.2</span> Segment tree</a></li>
+<li><a href="#treap"><span class="toc-section-number">1.3</span> Treap</a></li>
 </ul></li>
-<li><a href="#maximum-flows">Maximum Flows</a><ul>
-<li><a href="#max-flow">Max flow</a></li>
-<li><a href="#min-cost-max-flow">Min cost max flow</a></li>
+<li><a href="#maximum-flows"><span class="toc-section-number">2</span> Maximum Flows</a><ul>
+<li><a href="#max-flow"><span class="toc-section-number">2.1</span> Max flow</a></li>
+<li><a href="#min-cost-max-flow"><span class="toc-section-number">2.2</span> Min cost max flow</a></li>
 </ul></li>
-<li><a href="#graphs">Graphs</a><ul>
-<li><a href="#bellman-ford">Bellman-Ford</a></li>
-<li><a href="#euler-cycle">Euler cycle</a></li>
-<li><a href="#maximum-matching">Maximum matching</a></li>
-<li><a href="#hamiltonian-path">Hamiltonian path</a></li>
-<li><a href="#heavy-path-decomposition">Heavy path decomposition</a></li>
-<li><a href="#lowest-common-ancestor">Lowest common ancestor</a></li>
+<li><a href="#graphs"><span class="toc-section-number">3</span> Graphs</a><ul>
+<li><a href="#bellman-ford"><span class="toc-section-number">3.1</span> Bellman-Ford</a></li>
+<li><a href="#euler-cycle"><span class="toc-section-number">3.2</span> Euler cycle</a></li>
+<li><a href="#maximum-matching"><span class="toc-section-number">3.3</span> Maximum matching</a></li>
+<li><a href="#hamiltonian-path"><span class="toc-section-number">3.4</span> Hamiltonian path</a></li>
+<li><a href="#heavy-path-decomposition"><span class="toc-section-number">3.5</span> Heavy path decomposition</a></li>
+<li><a href="#lowest-common-ancestor"><span class="toc-section-number">3.6</span> Lowest common ancestor</a></li>
 </ul></li>
-<li><a href="#mathematics">Mathematics</a><ul>
-<li><a href="#number-theoretic-algorithms">Number theoretic algorithms</a></li>
-<li><a href="#gaussian-elimination">Gaussian elimination</a></li>
+<li><a href="#mathematics"><span class="toc-section-number">4</span> Mathematics</a><ul>
+<li><a href="#number-theoretic-algorithms"><span class="toc-section-number">4.1</span> Number theoretic algorithms</a></li>
+<li><a href="#gaussian-elimination"><span class="toc-section-number">4.2</span> Gaussian elimination</a></li>
 </ul></li>
-<li><a href="#strings">Strings</a><ul>
-<li><a href="#knuth-morris-pratt">Knuth-Morris-Pratt</a></li>
-<li><a href="#rabin-karp">Rabin-Karp</a></li>
-<li><a href="#aho-corasick">Aho-Corasick</a></li>
-<li><a href="#longest-palindromic-substring">Longest palindromic substring</a></li>
-<li><a href="#trie">Trie</a></li>
+<li><a href="#strings"><span class="toc-section-number">5</span> Strings</a><ul>
+<li><a href="#knuth-morris-pratt"><span class="toc-section-number">5.1</span> Knuth-Morris-Pratt</a></li>
+<li><a href="#rabin-karp"><span class="toc-section-number">5.2</span> Rabin-Karp</a></li>
+<li><a href="#aho-corasick"><span class="toc-section-number">5.3</span> Aho-Corasick</a></li>
+<li><a href="#longest-palindromic-substring"><span class="toc-section-number">5.4</span> Longest palindromic substring</a></li>
+<li><a href="#trie"><span class="toc-section-number">5.5</span> Trie</a></li>
 </ul></li>
-<li><a href="#geometry">Geometry</a><ul>
-<li><a href="#convex-hull">Convex hull</a></li>
-<li><a href="#miscellaneous-geometry">Miscellaneous geometry</a></li>
+<li><a href="#geometry"><span class="toc-section-number">6</span> Geometry</a><ul>
+<li><a href="#convex-hull"><span class="toc-section-number">6.1</span> Convex hull</a></li>
+<li><a href="#miscellaneous-geometry"><span class="toc-section-number">6.2</span> Miscellaneous geometry</a></li>
 </ul></li>
-<li><a href="#other">Other</a><ul>
-<li><a href="#range-minimum-query">Range minimum query</a></li>
-<li><a href="#sat">2SAT</a></li>
-<li><a href="#kd-tree">KD-tree</a></li>
+<li><a href="#other"><span class="toc-section-number">7</span> Other</a><ul>
+<li><a href="#range-minimum-query"><span class="toc-section-number">7.1</span> Range minimum query</a></li>
+<li><a href="#sat"><span class="toc-section-number">7.2</span> 2SAT</a></li>
+<li><a href="#kd-tree"><span class="toc-section-number">7.3</span> KD-tree</a></li>
 </ul></li>
 </ul>
 </div>
-<h1 id="data-structures"><a href="#TOC">Data Structures</a></h1>
-<h2 id="binary-indexed-tree"><a href="#TOC">Binary indexed tree</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;algorithm&gt;</span>
-<span class="ot">#include&lt;stdio.h&gt;</span>
-
-<span class="ot">#define Nmax 101010</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">int</span> AIB[Nmax],v[Nmax],M,x,y,z;
+<h1 id="data-structures"><a href="#TOC"><span class="header-section-number">1</span> Data Structures</a></h1>
+<h2 id="binary-indexed-tree"><a href="#TOC"><span class="header-section-number">1.1</span> Binary indexed tree</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> AIB[Nmax],v[Nmax],M,x,y,z;
 <span class="dt">int</span> N,num;
 
 <span class="kw">inline</span> <span class="dt">int</span> zeros(<span class="dt">int</span> x)
@@ -106,12 +99,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
     ret +=AIB[i];
   <span class="kw">return</span> ret;
 }</code></pre>
-<h2 id="segment-tree"><a href="#TOC">Segment tree</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-<span class="ot">#define Nmax 100100</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-<span class="dt">long</span> <span class="dt">long</span> aint[<span class="dv">4</span>*Nmax<span class="dv">+100</span>],v[Nmax],maxim,M,x,z,y,indic;
+<h2 id="segment-tree"><a href="#TOC"><span class="header-section-number">1.2</span> Segment tree</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">long</span> <span class="dt">long</span> aint[<span class="dv">4</span>*Nmax<span class="dv">+100</span>],v[Nmax],maxim,M,x,z,y,indic;
 <span class="dt">long</span> <span class="dt">long</span> up[<span class="dv">4</span>*Nmax<span class="dv">+100</span>];
 <span class="dt">long</span> <span class="dt">long</span> ind[<span class="dv">4</span>*Nmax<span class="dv">+100</span>];
 <span class="dt">long</span> <span class="dt">long</span> SUM,SUMI;
@@ -174,15 +163,8 @@ code > span.er { color: #ff0000; font-weight: bold; }
   }
   <span class="kw">return</span>;
 }</code></pre>
-<h2 id="treap"><a href="#TOC">Treap</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-<span class="ot">#include&lt;cstdlib&gt;</span>
-<span class="ot">#include&lt;iostream&gt;</span>
-<span class="ot">#include&lt;time.h&gt;</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="kw">struct</span> T {
+<h2 id="treap"><a href="#TOC"><span class="header-section-number">1.3</span> Treap</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">struct</span> T {
     <span class="dt">int</span> key, priority,nr;
     T *left, *right;
     T() {}
@@ -288,38 +270,10 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
     balance(n);
 
-}
-
-<span class="dt">int</span> main()
-{
-freopen(<span class="st">&quot;sdo.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
-<span class="co">//freopen(&quot;sdo.out&quot;,&quot;w&quot;,stdout);</span>
-
-init(R);
-<span class="dt">int</span> N,x,k;
-cin&gt;&gt;N&gt;&gt;k;
-
-
-<span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i){
-    cin&gt;&gt;x;
-    insert(R,x,rand()%<span class="dv">10000000</span>);
-}
-cout&lt;&lt;nth(R,k)&lt;&lt;<span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>;
-
-
-<span class="co">//parc(R);</span>
-
-<span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h1 id="maximum-flows"><a href="#TOC">Maximum Flows</a></h1>
-<h2 id="max-flow"><a href="#TOC">Max flow</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-<span class="ot">#include&lt;vector&gt;</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">int</span> flux[<span class="dv">1010</span>][<span class="dv">1010</span>];
+<h1 id="maximum-flows"><a href="#TOC"><span class="header-section-number">2</span> Maximum Flows</a></h1>
+<h2 id="max-flow"><a href="#TOC"><span class="header-section-number">2.1</span> Max flow</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> flux[<span class="dv">1010</span>][<span class="dv">1010</span>];
 <span class="dt">int</span> c[<span class="dv">1010</span>][<span class="dv">1010</span>];
 <span class="dt">int</span> tata[<span class="dv">1010</span>];
 <span class="dt">int</span> viz[<span class="dv">1010</span>],flow;
@@ -397,15 +351,8 @@ vector&lt;<span class="dt">int</span>&gt; g[<span class="dv">1010</span>];
   }
   printf(<span class="st">&quot;%d &quot;</span>,flow);
 }</code></pre>
-<h2 id="min-cost-max-flow"><a href="#TOC">Min cost max flow</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
-
-<span class="ot">#include &lt;queue&gt;</span>
-<span class="ot">#include &lt;vector&gt;</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">351</span>;
+<h2 id="min-cost-max-flow"><a href="#TOC"><span class="header-section-number">2.2</span> Min cost max flow</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">351</span>;
 <span class="dt">const</span> <span class="dt">int</span> INF = <span class="bn">0x3f3f3f3f</span>;
 
 <span class="dt">int</span> N, M, S, D;
@@ -482,36 +429,10 @@ vector&lt;<span class="dt">int</span>&gt; G[MAXN];
   }
 
   <span class="kw">return</span> result;
-}
-
-<span class="dt">int</span> main()
-{
-  freopen(<span class="st">&quot;fmcm.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
-  freopen(<span class="st">&quot;fmcm.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
-
-  scanf(<span class="st">&quot;%d %d %d %d&quot;</span>, &amp;N, &amp;M, &amp;S, &amp;D);
-  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; M; ++i) {
-    <span class="dt">int</span> x, y, c, z;
-    scanf(<span class="st">&quot;%d %d %d %d&quot;</span>, &amp;x, &amp;y, &amp;c, &amp;z);
-
-    G[x].push_back(y);
-    G[y].push_back(x);
-
-    cap[x][y] = c;
-    cost[x][y] = z;
-    cost[y][x] = -z;
-  }
-
-  printf(<span class="st">&quot;%lld</span><span class="ch">\n</span><span class="st">&quot;</span>, mfmc());
-
-  <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h1 id="graphs"><a href="#TOC">Graphs</a></h1>
-<h2 id="bellman-ford"><a href="#TOC">Bellman-Ford</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#define INF 99999999</span>
-<span class="ot">#define Nmax 50500</span>
-<span class="dt">int</span> coad[Nmax*<span class="dv">10</span>],viz[Nmax],nrviz[Nmax],x,y,z,N,M,S=<span class="dv">1</span>,k,st,ok=<span class="dv">1</span>,best[Nmax];
+<h1 id="graphs"><a href="#TOC"><span class="header-section-number">3</span> Graphs</a></h1>
+<h2 id="bellman-ford"><a href="#TOC"><span class="header-section-number">3.1</span> Bellman-Ford</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> coad[Nmax*<span class="dv">10</span>],viz[Nmax],nrviz[Nmax],x,y,z,N,M,S=<span class="dv">1</span>,k,st,ok=<span class="dv">1</span>,best[Nmax];
 <span class="kw">struct</span> Nod{
   <span class="dt">int</span> cost,val,nrmuchie;
   Nod *next;} *l[Nmax];
@@ -543,14 +464,8 @@ vector&lt;<span class="dt">int</span>&gt; G[MAXN];
     }
   }
 }</code></pre>
-<h2 id="euler-cycle"><a href="#TOC">Euler cycle</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;list&gt;</span>
-<span class="ot">#include &lt;stack&gt;</span>
-<span class="ot">#include &lt;queue&gt;</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-list&lt;<span class="dt">int</span>&gt; L,G[<span class="dv">100010</span>];
+<h2 id="euler-cycle"><a href="#TOC"><span class="header-section-number">3.2</span> Euler cycle</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">list&lt;<span class="dt">int</span>&gt; L,G[<span class="dv">100010</span>];
 stack&lt;<span class="dt">int</span>&gt; S;
 <span class="dt">int</span> N, M, deg[<span class="dv">100010</span>], viz[<span class="dv">100010</span>], x, y;
 
@@ -617,12 +532,8 @@ stack&lt;<span class="dt">int</span>&gt; S;
 
   } <span class="kw">while</span>(!S.empty());
 }</code></pre>
-<h2 id="maximum-matching"><a href="#TOC">Maximum matching</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-<span class="ot">#include&lt;vector&gt;</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-<span class="dt">int</span> N,M,K;
+<h2 id="maximum-matching"><a href="#TOC"><span class="header-section-number">3.3</span> Maximum matching</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> N,M,K;
 <span class="dt">int</span> v[<span class="dv">25000</span>],x,p=<span class="dv">0</span>;
 <span class="dt">char</span> car;
 vector &lt;<span class="dt">int</span>&gt; g[<span class="dv">25000</span>];
@@ -652,16 +563,9 @@ vector &lt;<span class="dt">int</span>&gt; g[<span class="dv">25000</span>];
     }
   }
   <span class="kw">return</span> <span class="dv">0</span>;
-
-
-}
-<span class="dt">int</span> L,R,y;</code></pre>
-<h2 id="hamiltonian-path"><a href="#TOC">Hamiltonian path</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;vector&gt;</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">const</span> <span class="dt">int</span> inf = <span class="dv">1000000000</span>;
+}</code></pre>
+<h2 id="hamiltonian-path"><a href="#TOC"><span class="header-section-number">3.4</span> Hamiltonian path</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">const</span> <span class="dt">int</span> inf = <span class="dv">1000000000</span>;
 <span class="dt">int</span> N,M,x,y,z,Sol,b[<span class="dv">262150</span>][<span class="dv">22</span>],c[<span class="dv">22</span>][<span class="dv">22</span>];
 vector&lt;<span class="dt">int</span>&gt; a[<span class="dv">22</span>];
 
@@ -682,58 +586,9 @@ vector&lt;<span class="dt">int</span>&gt; a[<span class="dv">22</span>];
 
   <span class="kw">return</span> b[conf][last];
 
-}
-
-<span class="dt">int</span> main()
-{
-  freopen(<span class="st">&quot;hamilton.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
-  freopen(<span class="st">&quot;hamilton.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
-
-  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
-
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;N;++i)
-    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>;j&lt;N;++j)
-      c[i][j]=inf;
-
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;<span class="dv">262150</span>;++i)
-    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>;j&lt;<span class="dv">20</span>;++j)
-      b[i][j]=-<span class="dv">1</span>;
-
-  b[<span class="dv">1</span>][<span class="dv">0</span>]=<span class="dv">0</span>;
-
-  Sol = inf;
-
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
-  {
-    scanf(<span class="st">&quot;%d%d%d&quot;</span>,&amp;x,&amp;y,&amp;z);
-    c[x][y]=z;
-    a[y].push_back(x);
-  }
-
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;a[<span class="dv">0</span>].size();++i)
-  {
-    <span class="kw">if</span>(c[a[<span class="dv">0</span>][i]][<span class="dv">0</span>] + best((<span class="dv">1</span>&lt;&lt;N)-<span class="dv">1</span> , a[<span class="dv">0</span>][i]) &lt; Sol)
-      Sol = c[a[<span class="dv">0</span>][i]][<span class="dv">0</span>] + best((<span class="dv">1</span>&lt;&lt;N)-<span class="dv">1</span>,a[<span class="dv">0</span>][i]);
-  }
-
-  <span class="kw">if</span>(Sol==inf)
-    printf(<span class="st">&quot;Nu exista solutie</span><span class="ch">\n</span><span class="st">&quot;</span>);
-
-  <span class="kw">else</span>
-    printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>,Sol);
 }</code></pre>
-<h2 id="heavy-path-decomposition"><a href="#TOC">Heavy path decomposition</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp">
-<span class="ot">#include &lt;cstdio&gt;</span>
-<span class="ot">#include &lt;algorithm&gt;</span>
-<span class="ot">#include &lt;vector&gt;</span>
-<span class="ot">#include &lt;utility&gt;</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="ot">#define MAXN 100010</span>
-
-<span class="dt">int</span> N, M, nL;
+<h2 id="heavy-path-decomposition"><a href="#TOC"><span class="header-section-number">3.5</span> Heavy path decomposition</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> N, M, nL;
 <span class="dt">int</span> v[MAXN], fol[MAXN], niv[MAXN], w[MAXN], l[MAXN];
 <span class="dt">int</span> aint[<span class="dv">4</span>*MAXN];
 <span class="dt">int</span> lTata[MAXN], lNiv[MAXN], lDim[MAXN], lPoz[MAXN];
@@ -747,16 +602,14 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
     scanf(<span class="st">&quot;%d&quot;</span>, &amp;v[i]);
 
   <span class="dt">int</span> a, b;
-  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; N; ++i)
-  {
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; N; ++i) {
     scanf(<span class="st">&quot;%d%d&quot;</span>, &amp;a, &amp;b);
     G[a].push_back(b);
     G[b].push_back(a);
   }
 
   <span class="dt">int</span> t, x, y;
-  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= M; ++i)
-  {
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= M; ++i) {
     scanf(<span class="st">&quot;%d%d%d&quot;</span>, &amp;t, &amp;x, &amp;y);
     op[i] = make_pair(t, make_pair(x, y));
   }
@@ -769,8 +622,7 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
 
   <span class="dt">int</span> hN = -<span class="dv">1</span>, frunza = <span class="dv">1</span>;
 
-  <span class="kw">for</span>(vector&lt;<span class="dt">int</span>&gt; :: iterator it = G[nod].begin(); it != G[nod].end(); ++it)
-  {
+  <span class="kw">for</span>(vector&lt;<span class="dt">int</span>&gt; :: iterator it = G[nod].begin(); it != G[nod].end(); ++it) {
     <span class="kw">if</span>(fol[*it])
       <span class="kw">continue</span>;
 
@@ -788,8 +640,7 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
         hN = *it;
   }
 
-  <span class="kw">if</span>(frunza)
-  {
+  <span class="kw">if</span>(frunza) {
     l[nod] = ++nL;
     lDim[nL]=<span class="dv">1</span>;
     P[nL].push_back(nod);
@@ -800,8 +651,7 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
   ++lDim[l[nod]];
   P[l[nod]].push_back(nod);
 
-  <span class="kw">for</span>(vector&lt;<span class="dt">int</span>&gt; :: iterator it = G[nod].begin(); it != G[nod].end(); ++it)
-  {
+  <span class="kw">for</span>(vector&lt;<span class="dt">int</span>&gt; :: iterator it = G[nod].begin(); it != G[nod].end(); ++it) {
     <span class="kw">if</span>((*it) == hN || niv[*it] &lt; niv[nod])
       <span class="kw">continue</span>;
 
@@ -812,8 +662,7 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
 
 <span class="dt">void</span> build(<span class="dt">int</span> nod, <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> decalaj, <span class="dt">int</span> lant)
 {
-  <span class="kw">if</span>(left == right)
-  {
+  <span class="kw">if</span>(left == right) {
     aint[nod + decalaj] = v[ P[lant][left - <span class="dv">1</span>] ];
     <span class="kw">return</span>;
   }
@@ -831,8 +680,7 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
   niv[<span class="dv">1</span>] = <span class="dv">1</span>;
   df(<span class="dv">1</span>);
 
-  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= nL; ++i)
-  {
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= nL; ++i) {
     reverse(P[i].begin(), P[i].end());
 
     <span class="kw">if</span>(i &gt; <span class="dv">1</span>)
@@ -844,8 +692,7 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
 
 <span class="dt">void</span> update(<span class="dt">int</span> nod, <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> poz, <span class="dt">int</span> val, <span class="dt">int</span> decalaj)
 {
-  <span class="kw">if</span>(left == right)
-  {
+  <span class="kw">if</span>(left == right) {
     aint[nod + decalaj] = val;
     <span class="kw">return</span>;
   }
@@ -879,18 +726,14 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
 {
   <span class="dt">int</span> t, x, y, sol = <span class="dv">0</span>;
 
-  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= M; ++i)
-  {
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= M; ++i) {
     t = op[i].first; x = op[i].second.first, y = op[i].second.second;
-    <span class="kw">if</span>(t==<span class="dv">0</span>)
+    <span class="kw">if</span>(t==<span class="dv">0</span>) {
       update(<span class="dv">1</span>, <span class="dv">1</span>, lDim[l[x]], niv[x] - lNiv[l[x]], y, lPoz[l[x]]);
-    <span class="kw">else</span>
-    {
+    } <span class="kw">else</span> {
       sol = <span class="dv">0</span>;
-      <span class="kw">while</span>(<span class="dv">1</span>)
-      {
-        <span class="kw">if</span>(l[x] == l[y])
-        {
+      <span class="kw">while</span>(<span class="dv">1</span>) {
+        <span class="kw">if</span>(l[x] == l[y]) {
           <span class="kw">if</span>(niv[x] &gt; niv[y])
             swap(x, y);
           sol = max(sol, query(<span class="dv">1</span>, <span class="dv">1</span>, lDim[l[x]], niv[x] - lNiv[l[x]], niv[y] - lNiv[l[x]], lPoz[l[x]]) );
@@ -907,26 +750,9 @@ pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span 
       printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, sol);
     }
   }
-}
-
-<span class="dt">int</span> main()
-{
-  freopen(<span class="st">&quot;heavypath.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
-  freopen(<span class="st">&quot;heavypath.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
-
-  citire();
-  make_paths();
-  solve();
-
-  <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h2 id="lowest-common-ancestor"><a href="#TOC">Lowest common ancestor</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;vector&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">int</span> K, N, M, x, y, L[<span class="dv">200010</span>], H[<span class="dv">200010</span>], Lg[<span class="dv">200010</span>], First[<span class="dv">100010</span>], Rmq[<span class="dv">20</span>][<span class="dv">400010</span>];
+<h2 id="lowest-common-ancestor"><a href="#TOC"><span class="header-section-number">3.6</span> Lowest common ancestor</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> K, N, M, x, y, L[<span class="dv">200010</span>], H[<span class="dv">200010</span>], Lg[<span class="dv">200010</span>], First[<span class="dv">100010</span>], Rmq[<span class="dv">20</span>][<span class="dv">400010</span>];
 vector&lt;<span class="dt">int</span>&gt; G[<span class="dv">100010</span>];
 
 <span class="dt">void</span> dfs(<span class="dt">int</span> nod, <span class="dt">int</span> lev)
@@ -977,36 +803,10 @@ vector&lt;<span class="dt">int</span>&gt; G[<span class="dv">100010</span>];
   <span class="kw">if</span>(L[sol] &gt; L[Rmq[l][a + sh]])
     sol = Rmq[l][a + sh];
   <span class="kw">return</span> H[sol];
-}
-
-<span class="dt">int</span> main()
-{
-  freopen(<span class="st">&quot;lca.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
-  freopen(<span class="st">&quot;lca.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
-  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">2</span>;i&lt;=N;++i)
-  {
-    scanf(<span class="st">&quot;%d&quot;</span>,&amp;x);
-    G[x].push_back(i);
-  }
-
-  dfs(<span class="dv">1</span>,<span class="dv">0</span>);
-  rmq();
-
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
-  {
-    scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;x,&amp;y);
-    printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>,lca(x,y));
-  }
-  <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h1 id="mathematics"><a href="#TOC">Mathematics</a></h1>
-<h2 id="number-theoretic-algorithms"><a href="#TOC">Number theoretic algorithms</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// This is a collection of useful code for solving problems that</span>
-<span class="co">// involve modular linear equations.  Note that all of the</span>
-<span class="co">// algorithms described here work on nonnegative integers.</span>
-
-<span class="ot">#include &lt;iostream&gt;</span>
+<h1 id="mathematics"><a href="#TOC"><span class="header-section-number">4</span> Mathematics</a></h1>
+<h2 id="number-theoretic-algorithms"><a href="#TOC"><span class="header-section-number">4.1</span> Number theoretic algorithms</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
 <span class="ot">#include &lt;vector&gt;</span>
 <span class="ot">#include &lt;algorithm&gt;</span>
 
@@ -1015,24 +815,20 @@ vector&lt;<span class="dt">int</span>&gt; G[<span class="dv">100010</span>];
 <span class="kw">typedef</span> vector&lt;<span class="dt">int</span>&gt; VI;
 <span class="kw">typedef</span> pair&lt;<span class="dt">int</span>,<span class="dt">int</span>&gt; PII;
 
-<span class="co">// return a % b (positive value)</span>
 <span class="dt">int</span> mod(<span class="dt">int</span> a, <span class="dt">int</span> b) {
   <span class="kw">return</span> ((a%b)+b)%b;
 }
 
-<span class="co">// computes gcd(a,b)</span>
 <span class="dt">int</span> gcd(<span class="dt">int</span> a, <span class="dt">int</span> b) {
   <span class="dt">int</span> tmp;
   <span class="kw">while</span>(b){a%=b; tmp=a; a=b; b=tmp;}
   <span class="kw">return</span> a;
 }
 
-<span class="co">// computes lcm(a,b)</span>
 <span class="dt">int</span> lcm(<span class="dt">int</span> a, <span class="dt">int</span> b) {
   <span class="kw">return</span> a/gcd(a,b)*b;
 }
 
-<span class="co">// returns d = gcd(a,b); finds x,y such that d = ax + by</span>
 <span class="dt">int</span> extended_euclid(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> &amp;x, <span class="dt">int</span> &amp;y) {  
   <span class="dt">int</span> xx = y = <span class="dv">0</span>;
   <span class="dt">int</span> yy = x = <span class="dv">1</span>;
@@ -1045,7 +841,6 @@ vector&lt;<span class="dt">int</span>&gt; G[<span class="dv">100010</span>];
   <span class="kw">return</span> a;
 }
 
-<span class="co">// finds all solutions to ax = b (mod n)</span>
 VI modular_linear_equation_solver(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> n) {
   <span class="dt">int</span> x, y;
   VI solutions;
@@ -1058,7 +853,6 @@ VI modular_linear_equation_solver(<span class="dt">int</span> a, <span class="dt
   <span class="kw">return</span> solutions;
 }
 
-<span class="co">// computes b such that ab = 1 (mod n), returns -1 on failure</span>
 <span class="dt">int</span> mod_inverse(<span class="dt">int</span> a, <span class="dt">int</span> n) {
   <span class="dt">int</span> x, y;
   <span class="dt">int</span> d = extended_euclid(a, n, x, y);
@@ -1066,9 +860,6 @@ VI modular_linear_equation_solver(<span class="dt">int</span> a, <span class="dt
   <span class="kw">return</span> mod(x,n);
 }
 
-<span class="co">// Chinese remainder theorem (special case): find z such that</span>
-<span class="co">// z % x = a, z % y = b.  Here, z is unique modulo M = lcm(x,y).</span>
-<span class="co">// Return (z,M).  On failure, M = -1.</span>
 PII chinese_remainder_theorem(<span class="dt">int</span> x, <span class="dt">int</span> a, <span class="dt">int</span> y, <span class="dt">int</span> b) {
   <span class="dt">int</span> s, t;
   <span class="dt">int</span> d = extended_euclid(x, y, s, t);
@@ -1076,11 +867,6 @@ PII chinese_remainder_theorem(<span class="dt">int</span> x, <span class="dt">in
   <span class="kw">return</span> make_pair(mod(s*b*x+t*a*y,x*y)/d, x*y/d);
 }
 
-<span class="co">// Chinese remainder theorem: find z such that</span>
-<span class="co">// z % x[i] = a[i] for all i.  Note that the solution is</span>
-<span class="co">// unique modulo M = lcm_i (x[i]).  Return (z,M).  On </span>
-<span class="co">// failure, M = -1.  Note that we do not require the a[i]&#39;s</span>
-<span class="co">// to be relatively prime.</span>
 PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span class="dt">const</span> VI &amp;a) {
   PII ret = make_pair(a[<span class="dv">0</span>], x[<span class="dv">0</span>]);
   <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; x.size(); i++) {
@@ -1090,7 +876,6 @@ PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span cla
   <span class="kw">return</span> ret;
 }
 
-<span class="co">// computes x and y such that ax + by = c; on failure, x = y =-1</span>
 <span class="dt">void</span> linear_diophantine(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> c, <span class="dt">int</span> &amp;x, <span class="dt">int</span> &amp;y) {
   <span class="dt">int</span> d = gcd(a,b);
   <span class="kw">if</span> (c%d) {
@@ -1100,13 +885,8 @@ PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span cla
     y = (c-a*x)/b;
   }
 }</code></pre>
-<h2 id="gaussian-elimination"><a href="#TOC">Gaussian elimination</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-
-<span class="ot">#define EPS 0.0000001</span>
-
-<span class="dt">int</span> i,j,k;
+<h2 id="gaussian-elimination"><a href="#TOC"><span class="header-section-number">4.2</span> Gaussian elimination</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> i,j,k;
 <span class="dt">int</span> N,M;
 <span class="dt">double</span> A[<span class="dv">303</span>][<span class="dv">303</span>];
 <span class="dt">double</span> X[<span class="dv">303</span>];
@@ -1117,26 +897,21 @@ PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span cla
   freopen(<span class="st">&quot;gauss.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
   scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
 
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i)
-  {
-    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=M<span class="dv">+1</span>;++j)
-    {
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i) {
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=M<span class="dv">+1</span>;++j) {
       scanf(<span class="st">&quot;%lf&quot;</span>,&amp;A[i][j]);
     }
   }
   i=<span class="dv">1</span>,j=<span class="dv">1</span>;
-  <span class="kw">while</span>(i&lt;=N &amp;&amp; j&lt;=M)
-  {
+  <span class="kw">while</span>(i&lt;=N &amp;&amp; j&lt;=M) {
     <span class="kw">for</span>(k=i;k&lt;=N;++k)
       <span class="kw">if</span>(A[k][j]&lt;-EPS||A[k][j]&gt;EPS)
         <span class="kw">break</span>;
-    <span class="kw">if</span>(k==N<span class="dv">+1</span>)
-    {
+    <span class="kw">if</span>(k==N<span class="dv">+1</span>) {
       ++j;
       <span class="kw">continue</span>;
     }
-    <span class="kw">if</span>(k!=i)
-    {
+    <span class="kw">if</span>(k!=i) {
       <span class="kw">for</span>(<span class="dt">int</span> q=<span class="dv">1</span>;q&lt;=M<span class="dv">+1</span>;++q)
       {
         <span class="dt">double</span> aux = A[i][q];
@@ -1144,15 +919,12 @@ PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span cla
         A[k][q]= aux;
       }
     }
-    <span class="kw">for</span>(<span class="dt">int</span> q=j<span class="dv">+1</span>;q&lt;=M<span class="dv">+1</span>;++q)
-    {
+    <span class="kw">for</span>(<span class="dt">int</span> q=j<span class="dv">+1</span>;q&lt;=M<span class="dv">+1</span>;++q) {
       A[i][q]=A[i][q]/A[i][j];
     }
     A[i][j]=<span class="dv">1</span>;
-    <span class="kw">for</span>(<span class="dt">int</span> u=i<span class="dv">+1</span>;u&lt;=N;++u)
-    {
-      <span class="kw">for</span>(<span class="dt">int</span> q=j<span class="dv">+1</span>;q&lt;=M<span class="dv">+1</span>;++q)
-      {
+    <span class="kw">for</span>(<span class="dt">int</span> u=i<span class="dv">+1</span>;u&lt;=N;++u) {
+      <span class="kw">for</span>(<span class="dt">int</span> q=j<span class="dv">+1</span>;q&lt;=M<span class="dv">+1</span>;++q) {
         A[u][q]-=A[u][j]*A[i][q];
       }
       A[u][j]=<span class="dv">0</span>;
@@ -1160,35 +932,29 @@ PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span cla
     ++i;++j;
   }
   <span class="kw">for</span>(<span class="dt">int</span> i=N;i&gt;<span class="dv">0</span>;--i)
-    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=M<span class="dv">+1</span>;++j)
-    {
-      <span class="kw">if</span>(A[i][j]&gt;EPS||A[i][j]&lt;-EPS)
-      {
-        <span class="kw">if</span>(j==M<span class="dv">+1</span>)
-        {
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=M<span class="dv">+1</span>;++j) {
+      <span class="kw">if</span>(A[i][j]&gt;EPS||A[i][j]&lt;-EPS) {
+        <span class="kw">if</span>(j==M<span class="dv">+1</span>) {
           printf(<span class="st">&quot;Imposibil</span><span class="ch">\n</span><span class="st">&quot;</span>);
           <span class="kw">return</span> <span class="dv">0</span>;
         }
 
         X[j]=A[i][M<span class="dv">+1</span>];
-        <span class="kw">for</span>(<span class="dt">int</span> k=j<span class="dv">+1</span>;k&lt;=M;++k)
-        {
+        <span class="kw">for</span>(<span class="dt">int</span> k=j<span class="dv">+1</span>;k&lt;=M;++k) {
           X[j]-=X[k]*A[i][k];
         }
         <span class="kw">break</span>;
       }
-
     }
 
-  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
-  {
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i) {
     printf(<span class="st">&quot;%.8lf &quot;</span>,X[i]);
   }
   printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
   <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h1 id="strings"><a href="#TOC">Strings</a></h1>
-<h2 id="knuth-morris-pratt"><a href="#TOC">Knuth-Morris-Pratt</a></h2>
+<h1 id="strings"><a href="#TOC"><span class="header-section-number">5</span> Strings</a></h1>
+<h2 id="knuth-morris-pratt"><a href="#TOC"><span class="header-section-number">5.1</span> Knuth-Morris-Pratt</a></h2>
 <pre class="sourceCode cpp"><code class="sourceCode cpp">vector&lt;<span class="dt">int</span>&gt; prefix(<span class="dt">const</span> string&amp; str)
 {
   vector&lt;<span class="dt">int</span>&gt; pi(str.size(), <span class="dv">0</span>);
@@ -1224,17 +990,8 @@ vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> st
 
   <span class="kw">return</span> matches;
 }</code></pre>
-<h2 id="rabin-karp"><a href="#TOC">Rabin-Karp</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;string.h&gt;</span>
-
-<span class="ot">#define MAXN 2000001</span>
-
-<span class="ot">#define P 73</span>
-<span class="ot">#define MOD1 100007</span>
-<span class="ot">#define MOD2 100021</span>
-
-<span class="dt">char</span> A[MAXN], B[MAXN];
+<h2 id="rabin-karp"><a href="#TOC"><span class="header-section-number">5.2</span> Rabin-Karp</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">char</span> A[MAXN], B[MAXN];
 <span class="dt">int</span> NA, NB;
 
 <span class="dt">int</span> hashA1, hashA2, P1, P2;
@@ -1252,8 +1009,7 @@ vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> st
 
   P1 = P2 = <span class="dv">1</span>;
   hashA1 = hashA2 = <span class="dv">0</span>;
-  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; NA; i++)
-  {
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; NA; i++) {
     hashA1 = (hashA1 * P + A[i]) % MOD1;
     hashA2 = (hashA2 * P + A[i]) % MOD2;
 
@@ -1262,8 +1018,7 @@ vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> st
          P2 = (P2 * P) % MOD2;
   }
 
-  <span class="kw">if</span> (NA &gt; NB)
-  {
+  <span class="kw">if</span> (NA &gt; NB) {
     printf(<span class="st">&quot;0</span><span class="ch">\n</span><span class="st">&quot;</span>);
     <span class="kw">return</span> <span class="dv">0</span>;
   }
@@ -1277,36 +1032,17 @@ vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> st
   <span class="kw">if</span> (hash1 == hashA1 &amp;&amp; hash2 == hashA2)
     match[<span class="dv">0</span>] = <span class="dv">1</span>, Nr++;
 
-  <span class="kw">for</span> (<span class="dt">int</span> i = NA; i &lt; NB; i++)
-  {
+  <span class="kw">for</span> (<span class="dt">int</span> i = NA; i &lt; NB; i++) {
     hash1 = ((hash1 - (B[i - NA] * P1) % MOD1 + MOD1) * P + B[i]) % MOD1;
     hash2 = ((hash2 - (B[i - NA] * P2) % MOD2 + MOD2) * P + B[i]) % MOD2;
 
     <span class="kw">if</span> (hash1 == hashA1 &amp;&amp; hash2 == hashA2)
       match[ i - NA + <span class="dv">1</span> ] = <span class="dv">1</span>, Nr++;
   }
-  printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, Nr);
-
-  Nr = <span class="dv">0</span>;
-  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; NB &amp;&amp; Nr &lt; <span class="dv">1000</span>; i++)
-    <span class="kw">if</span> (match[i])
-      Nr++,
-        printf(<span class="st">&quot;%d &quot;</span>, i);
-  printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
-
   <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h2 id="aho-corasick"><a href="#TOC">Aho-Corasick</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
-<span class="ot">#include &lt;cstring&gt;</span>
-<span class="ot">#include &lt;cctype&gt;</span>
-<span class="ot">#include &lt;vector&gt;</span>
-<span class="ot">#define DL 1000005</span>
-<span class="ot">#define DN 10005</span>
-<span class="ot">#define DA 26</span><span class="co">//dimensiunea alfabetului</span>
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">int</span> lg,n,l,final[DN],ic,sc;
+<h2 id="aho-corasick"><a href="#TOC"><span class="header-section-number">5.3</span> Aho-Corasick</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> lg,n,l,final[DN],ic,sc;
 <span class="dt">char</span> tx[DL],c[DN];
 
 <span class="kw">struct</span> ac {
@@ -1359,17 +1095,8 @@ vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> st
         <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>; j&lt;fr-&gt;nd.size(); ++j) final[fr-&gt;nd[j]]=fr-&gt;n0;
     }
 }</code></pre>
-<h2 id="longest-palindromic-substring"><a href="#TOC">Longest palindromic substring</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
-<span class="ot">#include &lt;cstring&gt;</span>
-
-<span class="ot">#include &lt;algorithm&gt;</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">1000020</span>;
-
-<span class="dt">int</span> N;
+<h2 id="longest-palindromic-substring"><a href="#TOC"><span class="header-section-number">5.4</span> Longest palindromic substring</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> N;
 <span class="dt">char</span> s[MAXN];
 
 <span class="dt">int</span> dp[<span class="dv">2</span>][MAXN];
@@ -1439,15 +1166,8 @@ vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> st
 
   <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h2 id="trie"><a href="#TOC">Trie</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
-<span class="ot">#include &lt;cstdio&gt;</span>
-<span class="ot">#include &lt;cstring&gt;</span>
-<span class="ot">#define ch (*s - &#39;a&#39;)</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="kw">struct</span> Trie {
+<h2 id="trie"><a href="#TOC"><span class="header-section-number">5.5</span> Trie</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">struct</span> Trie {
   <span class="dt">int</span> cnt, nrsons;
   Trie *son[<span class="dv">26</span>];
 
@@ -1505,52 +1225,10 @@ Trie *T = <span class="kw">new</span> Trie;
   <span class="kw">if</span> (*s == &#39;\<span class="dv">0</span>&#39; || node-&gt;son[ch] == <span class="dv">0</span>)
     <span class="kw">return</span> k;
   <span class="kw">return</span> pref(node-&gt;son[ch], s + <span class="dv">1</span>, k + <span class="dv">1</span>);
-}
-
-<span class="dt">int</span> main()
-{
-  <span class="dt">char</span> line[<span class="dv">32</span>];
-  <span class="dt">char</span> word[<span class="dv">32</span>];
-  <span class="dt">int</span> op;
-
-  freopen(<span class="st">&quot;trie.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
-  freopen(<span class="st">&quot;trie.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
-
-  <span class="kw">while</span> (fgets(line, <span class="dv">32</span>, stdin)) {
-    sscanf(line, <span class="st">&quot;%d %s&quot;</span>, &amp;op, word);
-    <span class="kw">switch</span>(op) {
-      <span class="kw">case</span> <span class="dv">0</span>:
-        ins(T, word);
-        <span class="kw">break</span>;
-      <span class="kw">case</span> <span class="dv">1</span>:
-        del(T, word);
-        <span class="kw">break</span>;
-      <span class="kw">case</span> <span class="dv">2</span>:
-        printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, freq(T, word));
-        <span class="kw">break</span>;
-      <span class="kw">case</span> <span class="dv">3</span>:
-        printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, pref(T, word, <span class="dv">0</span>));
-        <span class="kw">break</span>;
-    }
-  }
-
-  <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h1 id="geometry"><a href="#TOC">Geometry</a></h1>
-<h2 id="convex-hull"><a href="#TOC">Convex hull</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
-
-<span class="ot">#include &lt;algorithm&gt;</span>
-<span class="ot">#include &lt;fstream&gt;</span>
-<span class="ot">#include &lt;iomanip&gt;</span>
-<span class="ot">#include &lt;vector&gt;</span>
-
-<span class="ot">#define x first</span>
-<span class="ot">#define y second</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="kw">typedef</span> pair&lt;<span class="dt">double</span>, <span class="dt">double</span>&gt; point;
+<h1 id="geometry"><a href="#TOC"><span class="header-section-number">6</span> Geometry</a></h1>
+<h2 id="convex-hull"><a href="#TOC"><span class="header-section-number">6.1</span> Convex hull</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">typedef</span> pair&lt;<span class="dt">double</span>, <span class="dt">double</span>&gt; point;
 
 <span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">120010</span>;
 
@@ -1593,16 +1271,8 @@ point stack[MAXN];
         stack[++head] = v[i];
     }
 }</code></pre>
-<h2 id="miscellaneous-geometry"><a href="#TOC">Miscellaneous geometry</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cmath&gt;</span>
-<span class="ot">#include &lt;iostream&gt;</span>
-<span class="ot">#include &lt;vector&gt;</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-<span class="dt">const</span> <span class="dt">double</span> EPS = <span class="fl">1e-6</span>;
-
-<span class="kw">struct</span> point {
+<h2 id="miscellaneous-geometry"><a href="#TOC"><span class="header-section-number">6.2</span> Miscellaneous geometry</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">struct</span> point {
     <span class="dt">double</span> x, y;
     point() {}
     point(<span class="dt">double</span> x_, <span class="dt">double</span> y_): x(x_), y(y_) {}
@@ -1761,12 +1431,9 @@ point centroid(<span class="dt">const</span> vector&lt;point&gt;&amp; v) {
     }
     <span class="kw">return</span> <span class="kw">true</span>;
 }</code></pre>
-<h1 id="other"><a href="#TOC">Other</a></h1>
-<h2 id="range-minimum-query"><a href="#TOC">Range minimum query</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
-<span class="ot">#include&lt;algorithm&gt;</span>
-
-<span class="ot">#define log 18</span>
+<h1 id="other"><a href="#TOC"><span class="header-section-number">7</span> Other</a></h1>
+<h2 id="range-minimum-query"><a href="#TOC"><span class="header-section-number">7.1</span> Range minimum query</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#define log 18</span>
 <span class="ot">#define Nmax 100100</span>
 
 <span class="kw">inline</span> <span class="dt">int</span> min(<span class="dt">int</span> a,<span class="dt">int</span> b)
@@ -1811,19 +1478,8 @@ point centroid(<span class="dt">const</span> vector&lt;point&gt;&amp; v) {
     printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>,min(rmq[maxi][x],rmq[maxi][x+sh]));
   }
 }</code></pre>
-<h2 id="sat"><a href="#TOC">2SAT</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;vector&gt;</span>
-<span class="ot">#include &lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;algorithm&gt;</span>
-<span class="ot">#include &lt;vector&gt;</span>
-<span class="ot">#include &lt;iostream&gt;</span>
-<span class="ot">#include &lt;queue&gt;</span>
-
-<span class="ot">#define pb push_back</span>
-
-<span class="kw">using</span> <span class="kw">namespace</span> std;
-
-vector&lt;<span class="dt">int</span>&gt; g[<span class="dv">202020</span>],gx[<span class="dv">202020</span>],last,stackx,viz,iss,low,aux,tare,gr_in;
+<h2 id="sat"><a href="#TOC"><span class="header-section-number">7.2</span> 2SAT</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">vector&lt;<span class="dt">int</span>&gt; g[<span class="dv">202020</span>],gx[<span class="dv">202020</span>],last,stackx,viz,iss,low,aux,tare,gr_in;
 vector&lt;vector&lt;<span class="dt">int</span>&gt; &gt; comp;
 <span class="dt">int</span> N,index=<span class="dv">1</span>,k,Nn,M,x,y;
 <span class="dt">int</span> rez[<span class="dv">201010</span>];
@@ -1951,30 +1607,17 @@ vector&lt;vector&lt;<span class="dt">int</span>&gt; &gt; comp;
     }
     <span class="kw">return</span>;
 }</code></pre>
-<h2 id="kd-tree"><a href="#TOC">KD-tree</a></h2>
-<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// --------------------------------------------------------------------------</span>
-<span class="co">// A straightforward, but probably sub-optimal KD-tree implmentation that&#39;s</span>
-<span class="co">// probably good enough for most things (current it&#39;s a 2D-tree)</span>
-<span class="co">//</span>
-<span class="co">//  - constructs from n points in O(n lg^2 n) time</span>
-<span class="co">//  - handles nearest-neighbor query in O(lg n) if points are well distributed</span>
-<span class="co">//  - worst case for nearest-neighbor may be linear in pathological case</span>
-<span class="co">//</span>
-<span class="co">// Sonny Chan, Stanford University, April 2009</span>
-<span class="co">// --------------------------------------------------------------------------</span>
-
-<span class="ot">#include &lt;iostream&gt;</span>
+<h2 id="kd-tree"><a href="#TOC"><span class="header-section-number">7.3</span> KD-tree</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
 <span class="ot">#include &lt;vector&gt;</span>
 <span class="ot">#include &lt;limits&gt;</span>
 <span class="ot">#include &lt;cstdlib&gt;</span>
 
 <span class="kw">using</span> <span class="kw">namespace</span> std;
 
-<span class="co">// number type for coordinates, and its maximum value</span>
 <span class="kw">typedef</span> <span class="dt">long</span> <span class="dt">long</span> ntype;
 <span class="dt">const</span> ntype sentry = numeric_limits&lt;ntype&gt;::max();
 
-<span class="co">// point structure for 2D-tree, can be extended to 3D</span>
 <span class="kw">struct</span> point {
     ntype x, y;
     point(ntype xx = <span class="dv">0</span>, ntype yy = <span class="dv">0</span>) : x(xx), y(yy) {}
@@ -1985,7 +1628,6 @@ vector&lt;vector&lt;<span class="dt">int</span>&gt; &gt; comp;
     <span class="kw">return</span> a.x == b.x &amp;&amp; a.y == b.y;
 }
 
-<span class="co">// sorts points on x-coordinate</span>
 <span class="dt">bool</span> on_x(<span class="dt">const</span> point &amp;a, <span class="dt">const</span> point &amp;b)
 {
     <span class="kw">return</span> a.x &lt; b.x;

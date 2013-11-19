@@ -1,4 +1,4 @@
-% ACM Notebook
+% UoS ACM Notebook
 
 Data Structures
 ===============
@@ -7,13 +7,6 @@ Binary indexed tree
 -------------------
 
 ~~~{.cpp }
-#include<algorithm>
-#include<stdio.h>
-
-#define Nmax 101010
-
-using namespace std;
-
 int AIB[Nmax],v[Nmax],M,x,y,z;
 int N,num;
 
@@ -44,10 +37,6 @@ Segment tree
 ------------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include<stdio.h>
-#include<algorithm>
-#define Nmax 100100
-using namespace std;
 long long aint[4*Nmax+100],v[Nmax],maxim,M,x,z,y,indic;
 long long up[4*Nmax+100];
 long long ind[4*Nmax+100];
@@ -117,13 +106,6 @@ Treap
 -----
 
 ~~~~~~~~~~~~~{.cpp}
-#include<stdio.h>
-#include<algorithm>
-#include<cstdlib>
-#include<iostream>
-#include<time.h>
-using namespace std;
-
 struct T {
     int key, priority,nr;
     T *left, *right;
@@ -231,28 +213,6 @@ void insert(T* &n, int key, int priority) {
     balance(n);
 
 }
-
-int main()
-{
-freopen("sdo.in","r",stdin);
-//freopen("sdo.out","w",stdout);
-
-init(R);
-int N,x,k;
-cin>>N>>k;
-
-
-for(int i=1;i<=N;++i){
-    cin>>x;
-    insert(R,x,rand()%10000000);
-}
-cout<<nth(R,k)<<"\n\n";
-
-
-//parc(R);
-
-return 0;
-}
 ~~~~~~~~~~~~~~~~~~~
 
 Maximum Flows
@@ -262,12 +222,6 @@ Max flow
 --------
 
 ~~~~~~~~~~~~~~~~~{.cpp}
-#include<stdio.h>
-#include<algorithm>
-#include<vector>
-
-using namespace std;
-
 int flux[1010][1010];
 int c[1010][1010];
 int tata[1010];
@@ -352,13 +306,6 @@ Min cost max flow
 -----------------
 
 ~~~~~~~~~~~~~{.cpp}
-#include <cstdio>
-
-#include <queue>
-#include <vector>
-
-using namespace std;
-
 const int MAXN = 351;
 const int INF = 0x3f3f3f3f;
 
@@ -437,29 +384,6 @@ long long mfmc()
 
   return result;
 }
-
-int main()
-{
-  freopen("fmcm.in", "r", stdin);
-  freopen("fmcm.out", "w", stdout);
-
-  scanf("%d %d %d %d", &N, &M, &S, &D);
-  for (int i = 0; i < M; ++i) {
-    int x, y, c, z;
-    scanf("%d %d %d %d", &x, &y, &c, &z);
-
-    G[x].push_back(y);
-    G[y].push_back(x);
-
-    cap[x][y] = c;
-    cost[x][y] = z;
-    cost[y][x] = -z;
-  }
-
-  printf("%lld\n", mfmc());
-
-  return 0;
-}
 ~~~~~~~~~~~~~~~~~~
 
 Graphs
@@ -468,9 +392,6 @@ Graphs
 Bellman-Ford
 ------------
 ~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include<stdio.h>
-#define INF 99999999
-#define Nmax 50500
 int coad[Nmax*10],viz[Nmax],nrviz[Nmax],x,y,z,N,M,S=1,k,st,ok=1,best[Nmax];
 struct Nod{
   int cost,val,nrmuchie;
@@ -508,12 +429,6 @@ void make_bell(int p)
 Euler cycle
 -----------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include<stdio.h>
-#include <list>
-#include <stack>
-#include <queue>
-using namespace std;
-
 list<int> L,G[100010];
 stack<int> S;
 int N, M, deg[100010], viz[100010], x, y;
@@ -586,10 +501,6 @@ void solve()
 Maximum matching
 ----------------
 ~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include<stdio.h>
-#include<algorithm>
-#include<vector>
-using namespace std;
 int N,M,K;
 int v[25000],x,p=0;
 char car;
@@ -620,19 +531,12 @@ int cupj(int q)
     }
   }
   return 0;
-
-
 }
-int L,R,y;
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Hamiltonian path
 ----------------
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include<stdio.h>
-#include<vector>
-using namespace std;
-
 const int inf = 1000000000;
 int N,M,x,y,z,Sol,b[262150][22],c[22][22];
 vector<int> a[22];
@@ -655,61 +559,12 @@ int best(int conf, int last)
   return b[conf][last];
 
 }
-
-int main()
-{
-  freopen("hamilton.in","r",stdin);
-  freopen("hamilton.out","w",stdout);
-
-  scanf("%d%d",&N,&M);
-
-  for(int i=0;i<N;++i)
-    for(int j=0;j<N;++j)
-      c[i][j]=inf;
-
-  for(int i=0;i<262150;++i)
-    for(int j=0;j<20;++j)
-      b[i][j]=-1;
-
-  b[1][0]=0;
-
-  Sol = inf;
-
-  for(int i=1;i<=M;++i)
-  {
-    scanf("%d%d%d",&x,&y,&z);
-    c[x][y]=z;
-    a[y].push_back(x);
-  }
-
-  for(int i=0;i<a[0].size();++i)
-  {
-    if(c[a[0][i]][0] + best((1<<N)-1 , a[0][i]) < Sol)
-      Sol = c[a[0][i]][0] + best((1<<N)-1,a[0][i]);
-  }
-
-  if(Sol==inf)
-    printf("Nu exista solutie\n");
-
-  else
-    printf("%d\n",Sol);
-}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Heavy path decomposition
 ------------------------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-
-#include <cstdio>
-#include <algorithm>
-#include <vector>
-#include <utility>
-
-using namespace std;
-
-#define MAXN 100010
-
 int N, M, nL;
 int v[MAXN], fol[MAXN], niv[MAXN], w[MAXN], l[MAXN];
 int aint[4*MAXN];
@@ -724,16 +579,14 @@ void citire()
     scanf("%d", &v[i]);
 
   int a, b;
-  for(int i = 1; i < N; ++i)
-  {
+  for(int i = 1; i < N; ++i) {
     scanf("%d%d", &a, &b);
     G[a].push_back(b);
     G[b].push_back(a);
   }
 
   int t, x, y;
-  for(int i = 1; i <= M; ++i)
-  {
+  for(int i = 1; i <= M; ++i) {
     scanf("%d%d%d", &t, &x, &y);
     op[i] = make_pair(t, make_pair(x, y));
   }
@@ -746,8 +599,7 @@ void df(int nod)
 
   int hN = -1, frunza = 1;
 
-  for(vector<int> :: iterator it = G[nod].begin(); it != G[nod].end(); ++it)
-  {
+  for(vector<int> :: iterator it = G[nod].begin(); it != G[nod].end(); ++it) {
     if(fol[*it])
       continue;
 
@@ -765,8 +617,7 @@ void df(int nod)
         hN = *it;
   }
 
-  if(frunza)
-  {
+  if(frunza) {
     l[nod] = ++nL;
     lDim[nL]=1;
     P[nL].push_back(nod);
@@ -777,8 +628,7 @@ void df(int nod)
   ++lDim[l[nod]];
   P[l[nod]].push_back(nod);
 
-  for(vector<int> :: iterator it = G[nod].begin(); it != G[nod].end(); ++it)
-  {
+  for(vector<int> :: iterator it = G[nod].begin(); it != G[nod].end(); ++it) {
     if((*it) == hN || niv[*it] < niv[nod])
       continue;
 
@@ -789,8 +639,7 @@ void df(int nod)
 
 void build(int nod, int left, int right, int decalaj, int lant)
 {
-  if(left == right)
-  {
+  if(left == right) {
     aint[nod + decalaj] = v[ P[lant][left - 1] ];
     return;
   }
@@ -808,8 +657,7 @@ void make_paths()
   niv[1] = 1;
   df(1);
 
-  for(int i = 1; i <= nL; ++i)
-  {
+  for(int i = 1; i <= nL; ++i) {
     reverse(P[i].begin(), P[i].end());
 
     if(i > 1)
@@ -821,8 +669,7 @@ void make_paths()
 
 void update(int nod, int left, int right, int poz, int val, int decalaj)
 {
-  if(left == right)
-  {
+  if(left == right) {
     aint[nod + decalaj] = val;
     return;
   }
@@ -856,18 +703,14 @@ void solve()
 {
   int t, x, y, sol = 0;
 
-  for(int i = 1; i <= M; ++i)
-  {
+  for(int i = 1; i <= M; ++i) {
     t = op[i].first; x = op[i].second.first, y = op[i].second.second;
-    if(t==0)
+    if(t==0) {
       update(1, 1, lDim[l[x]], niv[x] - lNiv[l[x]], y, lPoz[l[x]]);
-    else
-    {
+    } else {
       sol = 0;
-      while(1)
-      {
-        if(l[x] == l[y])
-        {
+      while(1) {
+        if(l[x] == l[y]) {
           if(niv[x] > niv[y])
             swap(x, y);
           sol = max(sol, query(1, 1, lDim[l[x]], niv[x] - lNiv[l[x]], niv[y] - lNiv[l[x]], lPoz[l[x]]) );
@@ -885,30 +728,12 @@ void solve()
     }
   }
 }
-
-int main()
-{
-  freopen("heavypath.in", "r", stdin);
-  freopen("heavypath.out", "w", stdout);
-
-  citire();
-  make_paths();
-  solve();
-
-  return 0;
-}
-
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Lowest common ancestor
 ----------------------
 
 ~~~~~~~~~~~~~~~~~~~~~{.cpp}
-#include<stdio.h>
-#include<vector>
-#include<algorithm>
-using namespace std;
-
 int K, N, M, x, y, L[200010], H[200010], Lg[200010], First[100010], Rmq[20][400010];
 vector<int> G[100010];
 
@@ -961,28 +786,6 @@ int lca(int x, int y)
     sol = Rmq[l][a + sh];
   return H[sol];
 }
-
-int main()
-{
-  freopen("lca.in","r",stdin);
-  freopen("lca.out","w",stdout);
-  scanf("%d%d",&N,&M);
-  for(int i=2;i<=N;++i)
-  {
-    scanf("%d",&x);
-    G[x].push_back(i);
-  }
-
-  dfs(1,0);
-  rmq();
-
-  for(int i=1;i<=M;++i)
-  {
-    scanf("%d%d",&x,&y);
-    printf("%d\n",lca(x,y));
-  }
-  return 0;
-}
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Mathematics
@@ -992,10 +795,6 @@ Number theoretic algorithms
 ---------------------------
 
 ~~~~~~~~~~~~~~~~~~~{.cpp}
-// This is a collection of useful code for solving problems that
-// involve modular linear equations.  Note that all of the
-// algorithms described here work on nonnegative integers.
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -1005,24 +804,20 @@ using namespace std;
 typedef vector<int> VI;
 typedef pair<int,int> PII;
 
-// return a % b (positive value)
 int mod(int a, int b) {
   return ((a%b)+b)%b;
 }
 
-// computes gcd(a,b)
 int gcd(int a, int b) {
   int tmp;
   while(b){a%=b; tmp=a; a=b; b=tmp;}
   return a;
 }
 
-// computes lcm(a,b)
 int lcm(int a, int b) {
   return a/gcd(a,b)*b;
 }
 
-// returns d = gcd(a,b); finds x,y such that d = ax + by
 int extended_euclid(int a, int b, int &x, int &y) {  
   int xx = y = 0;
   int yy = x = 1;
@@ -1035,7 +830,6 @@ int extended_euclid(int a, int b, int &x, int &y) {
   return a;
 }
 
-// finds all solutions to ax = b (mod n)
 VI modular_linear_equation_solver(int a, int b, int n) {
   int x, y;
   VI solutions;
@@ -1048,7 +842,6 @@ VI modular_linear_equation_solver(int a, int b, int n) {
   return solutions;
 }
 
-// computes b such that ab = 1 (mod n), returns -1 on failure
 int mod_inverse(int a, int n) {
   int x, y;
   int d = extended_euclid(a, n, x, y);
@@ -1056,9 +849,6 @@ int mod_inverse(int a, int n) {
   return mod(x,n);
 }
 
-// Chinese remainder theorem (special case): find z such that
-// z % x = a, z % y = b.  Here, z is unique modulo M = lcm(x,y).
-// Return (z,M).  On failure, M = -1.
 PII chinese_remainder_theorem(int x, int a, int y, int b) {
   int s, t;
   int d = extended_euclid(x, y, s, t);
@@ -1066,11 +856,6 @@ PII chinese_remainder_theorem(int x, int a, int y, int b) {
   return make_pair(mod(s*b*x+t*a*y,x*y)/d, x*y/d);
 }
 
-// Chinese remainder theorem: find z such that
-// z % x[i] = a[i] for all i.  Note that the solution is
-// unique modulo M = lcm_i (x[i]).  Return (z,M).  On 
-// failure, M = -1.  Note that we do not require the a[i]'s
-// to be relatively prime.
 PII chinese_remainder_theorem(const VI &x, const VI &a) {
   PII ret = make_pair(a[0], x[0]);
   for (int i = 1; i < x.size(); i++) {
@@ -1080,7 +865,6 @@ PII chinese_remainder_theorem(const VI &x, const VI &a) {
   return ret;
 }
 
-// computes x and y such that ax + by = c; on failure, x = y =-1
 void linear_diophantine(int a, int b, int c, int &x, int &y) {
   int d = gcd(a,b);
   if (c%d) {
@@ -1096,11 +880,6 @@ Gaussian elimination
 --------------------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include<stdio.h>
-#include<algorithm>
-
-#define EPS 0.0000001
-
 int i,j,k;
 int N,M;
 double A[303][303];
@@ -1112,26 +891,21 @@ int main()
   freopen("gauss.out","w",stdout);
   scanf("%d%d",&N,&M);
 
-  for(int i=1;i<=N;++i)
-  {
-    for(int j=1;j<=M+1;++j)
-    {
+  for(int i=1;i<=N;++i) {
+    for(int j=1;j<=M+1;++j) {
       scanf("%lf",&A[i][j]);
     }
   }
   i=1,j=1;
-  while(i<=N && j<=M)
-  {
+  while(i<=N && j<=M) {
     for(k=i;k<=N;++k)
       if(A[k][j]<-EPS||A[k][j]>EPS)
         break;
-    if(k==N+1)
-    {
+    if(k==N+1) {
       ++j;
       continue;
     }
-    if(k!=i)
-    {
+    if(k!=i) {
       for(int q=1;q<=M+1;++q)
       {
         double aux = A[i][q];
@@ -1139,15 +913,12 @@ int main()
         A[k][q]= aux;
       }
     }
-    for(int q=j+1;q<=M+1;++q)
-    {
+    for(int q=j+1;q<=M+1;++q) {
       A[i][q]=A[i][q]/A[i][j];
     }
     A[i][j]=1;
-    for(int u=i+1;u<=N;++u)
-    {
-      for(int q=j+1;q<=M+1;++q)
-      {
+    for(int u=i+1;u<=N;++u) {
+      for(int q=j+1;q<=M+1;++q) {
         A[u][q]-=A[u][j]*A[i][q];
       }
       A[u][j]=0;
@@ -1155,28 +926,22 @@ int main()
     ++i;++j;
   }
   for(int i=N;i>0;--i)
-    for(int j=1;j<=M+1;++j)
-    {
-      if(A[i][j]>EPS||A[i][j]<-EPS)
-      {
-        if(j==M+1)
-        {
+    for(int j=1;j<=M+1;++j) {
+      if(A[i][j]>EPS||A[i][j]<-EPS) {
+        if(j==M+1) {
           printf("Imposibil\n");
           return 0;
         }
 
         X[j]=A[i][M+1];
-        for(int k=j+1;k<=M;++k)
-        {
+        for(int k=j+1;k<=M;++k) {
           X[j]-=X[k]*A[i][k];
         }
         break;
       }
-
     }
 
-  for(int i=1;i<=M;++i)
-  {
+  for(int i=1;i<=M;++i) {
     printf("%.8lf ",X[i]);
   }
   printf("\n");
@@ -1232,15 +997,6 @@ Rabin-Karp
 ----------
 
 ~~~~~~~~~~~{.cpp}
-#include <stdio.h>
-#include <string.h>
-
-#define MAXN 2000001
-
-#define P 73
-#define MOD1 100007
-#define MOD2 100021
-
 char A[MAXN], B[MAXN];
 int NA, NB;
 
@@ -1259,8 +1015,7 @@ int main()
 
   P1 = P2 = 1;
   hashA1 = hashA2 = 0;
-  for (int i = 0; i < NA; i++)
-  {
+  for (int i = 0; i < NA; i++) {
     hashA1 = (hashA1 * P + A[i]) % MOD1;
     hashA2 = (hashA2 * P + A[i]) % MOD2;
 
@@ -1269,8 +1024,7 @@ int main()
          P2 = (P2 * P) % MOD2;
   }
 
-  if (NA > NB)
-  {
+  if (NA > NB) {
     printf("0\n");
     return 0;
   }
@@ -1284,23 +1038,13 @@ int main()
   if (hash1 == hashA1 && hash2 == hashA2)
     match[0] = 1, Nr++;
 
-  for (int i = NA; i < NB; i++)
-  {
+  for (int i = NA; i < NB; i++) {
     hash1 = ((hash1 - (B[i - NA] * P1) % MOD1 + MOD1) * P + B[i]) % MOD1;
     hash2 = ((hash2 - (B[i - NA] * P2) % MOD2 + MOD2) * P + B[i]) % MOD2;
 
     if (hash1 == hashA1 && hash2 == hashA2)
       match[ i - NA + 1 ] = 1, Nr++;
   }
-  printf("%d\n", Nr);
-
-  Nr = 0;
-  for (int i = 0; i < NB && Nr < 1000; i++)
-    if (match[i])
-      Nr++,
-        printf("%d ", i);
-  printf("\n");
-
   return 0;
 }
 ~~~~~~~~~~~~~~~~
@@ -1309,15 +1053,6 @@ Aho-Corasick
 ------------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include <cstdio>
-#include <cstring>
-#include <cctype>
-#include <vector>
-#define DL 1000005
-#define DN 10005
-#define DA 26//dimensiunea alfabetului
-using namespace std;
-
 int lg,n,l,final[DN],ic,sc;
 char tx[DL],c[DN];
 
@@ -1377,15 +1112,6 @@ Longest palindromic substring
 -----------------------------
 
 ~~~~~~~~~~~~~~~~~~~~{.cpp}
-#include <cstdio>
-#include <cstring>
-
-#include <algorithm>
-
-using namespace std;
-
-const int MAXN = 1000020;
-
 int N;
 char s[MAXN];
 
@@ -1462,13 +1188,6 @@ Trie
 ----
 
 ~~~~~~~~~~{.cpp}
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#define ch (*s - 'a')
-
-using namespace std;
-
 struct Trie {
   int cnt, nrsons;
   Trie *son[26];
@@ -1528,36 +1247,6 @@ int pref(Trie *node, char *s, int k)
     return k;
   return pref(node->son[ch], s + 1, k + 1);
 }
-
-int main()
-{
-  char line[32];
-  char word[32];
-  int op;
-
-  freopen("trie.in", "r", stdin);
-  freopen("trie.out", "w", stdout);
-
-  while (fgets(line, 32, stdin)) {
-    sscanf(line, "%d %s", &op, word);
-    switch(op) {
-      case 0:
-        ins(T, word);
-        break;
-      case 1:
-        del(T, word);
-        break;
-      case 2:
-        printf("%d\n", freq(T, word));
-        break;
-      case 3:
-        printf("%d\n", pref(T, word, 0));
-        break;
-    }
-  }
-
-  return 0;
-}
 ~~~~~~~~~~~~~~~~
 
 Geometry
@@ -1567,18 +1256,6 @@ Convex hull
 -----------
 
 ~~~~~~~~~~~~~~{.cpp}
-#include <cstdio>
-
-#include <algorithm>
-#include <fstream>
-#include <iomanip>
-#include <vector>
-
-#define x first
-#define y second
-
-using namespace std;
-
 typedef pair<double, double> point;
 
 const int MAXN = 120010;
@@ -1628,14 +1305,6 @@ Miscellaneous geometry
 ----------------------
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include <cmath>
-#include <iostream>
-#include <vector>
-
-using namespace std;
-
-const double EPS = 1e-6;
-
 struct point {
     double x, y;
     point() {}
@@ -1804,9 +1473,6 @@ Range minimum query
 -------------------
 
 ~~~~~~~~~~~~~~~~~~{.cpp}
-#include<stdio.h>
-#include<algorithm>
-
 #define log 18
 #define Nmax 100100
 
@@ -1858,17 +1524,6 @@ int main()
 ----
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~{.cpp }
-#include <vector>
-#include <stdio.h>
-#include <algorithm>
-#include <vector>
-#include <iostream>
-#include <queue>
-
-#define pb push_back
-
-using namespace std;
-
 vector<int> g[202020],gx[202020],last,stackx,viz,iss,low,aux,tare,gr_in;
 vector<vector<int> > comp;
 int N,index=1,k,Nn,M,x,y;
@@ -2003,17 +1658,6 @@ KD-tree
 -------
 
 ~~~~~~~~~~~~~~~~~{.cpp}
-// --------------------------------------------------------------------------
-// A straightforward, but probably sub-optimal KD-tree implmentation that's
-// probably good enough for most things (current it's a 2D-tree)
-//
-//  - constructs from n points in O(n lg^2 n) time
-//  - handles nearest-neighbor query in O(lg n) if points are well distributed
-//  - worst case for nearest-neighbor may be linear in pathological case
-//
-// Sonny Chan, Stanford University, April 2009
-// --------------------------------------------------------------------------
-
 #include <iostream>
 #include <vector>
 #include <limits>
@@ -2021,11 +1665,9 @@ KD-tree
 
 using namespace std;
 
-// number type for coordinates, and its maximum value
 typedef long long ntype;
 const ntype sentry = numeric_limits<ntype>::max();
 
-// point structure for 2D-tree, can be extended to 3D
 struct point {
     ntype x, y;
     point(ntype xx = 0, ntype yy = 0) : x(xx), y(yy) {}
@@ -2036,7 +1678,6 @@ bool operator==(const point &a, const point &b)
     return a.x == b.x && a.y == b.y;
 }
 
-// sorts points on x-coordinate
 bool on_x(const point &a, const point &b)
 {
     return a.x < b.x;
