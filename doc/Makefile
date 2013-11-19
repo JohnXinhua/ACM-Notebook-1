@@ -1,2 +1,2 @@
 notebook.html: notebook.txt
-	pandoc notebook.txt -s --highlight-style pygments -o notebook.html
+	pandoc -s -S --toc -B header.html --highlight-style pygments notebook.txt -o notebook.html

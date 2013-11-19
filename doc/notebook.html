@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta http-equiv="Content-Style-Type" content="text/css" />
   <meta name="generator" content="pandoc" />
-  <title></title>
+  <title>ACM Notebook</title>
   <style type="text/css">
 table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
   margin: 0; padding: 0; vertical-align: baseline; border: none; }
@@ -26,116 +26,1575 @@ code > span.er { color: #ff0000; font-weight: bold; }
   </style>
 </head>
 <body>
-<table class="sourceCode cpp numberLines"><tr class="sourceCode"><td class="lineNumbers"><pre>1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
-15
-16
-17
-18
-19
-20
-21
-22
-23
-24
-25
-26
-27
-28
-29
-30
-31
-32
-33
-34
-35
-36
-37
-38
-39
-40
-41
-42
-43
-44
-45
-46
-47
-48
-49
-50
-51
-52
-53
-54
-55
-56
-57
-58
-59
-60
-61
-62
-63
-64
-65
-66
-67
-68
-69
-70
-71
-72
-73
-74
-75
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91
-92
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-</pre></td><td class="sourceCode"><pre><code class="sourceCode cpp"><span class="co">// Geometry routines</span>
+<div id="header" style="text-align:right">
+  University of Southampton
+</div>
+<div id="header">
+<h1 class="title">ACM Notebook</h1>
+</div>
+<div id="TOC">
+<ul>
+<li><a href="#data-structures">Data Structures</a><ul>
+<li><a href="#binary-indexed-tree">Binary indexed tree</a></li>
+<li><a href="#segment-tree">Segment tree</a></li>
+<li><a href="#treap">Treap</a></li>
+</ul></li>
+<li><a href="#maximum-flows">Maximum Flows</a><ul>
+<li><a href="#max-flow">Max flow</a></li>
+<li><a href="#min-cost-max-flow">Min cost max flow</a></li>
+</ul></li>
+<li><a href="#graphs">Graphs</a><ul>
+<li><a href="#bellman-ford">Bellman-Ford</a></li>
+<li><a href="#euler-cycle">Euler cycle</a></li>
+<li><a href="#maximum-matching">Maximum matching</a></li>
+<li><a href="#hamiltonian-path">Hamiltonian path</a></li>
+<li><a href="#heavy-path-decomposition">Heavy path decomposition</a></li>
+<li><a href="#lowest-common-ancestor">Lowest common ancestor</a></li>
+</ul></li>
+<li><a href="#mathematics">Mathematics</a><ul>
+<li><a href="#number-theoretic-algorithms">Number theoretic algorithms</a></li>
+<li><a href="#gaussian-elimination">Gaussian elimination</a></li>
+</ul></li>
+<li><a href="#strings">Strings</a><ul>
+<li><a href="#knuth-morris-pratt">Knuth-Morris-Pratt</a></li>
+<li><a href="#rabin-karp">Rabin-Karp</a></li>
+<li><a href="#aho-corasick">Aho-Corasick</a></li>
+<li><a href="#longest-palindromic-substring">Longest palindromic substring</a></li>
+<li><a href="#trie">Trie</a></li>
+</ul></li>
+<li><a href="#geometry">Geometry</a><ul>
+<li><a href="#convex-hull">Convex hull</a></li>
+<li><a href="#miscellaneous-geometry">Miscellaneous geometry</a></li>
+</ul></li>
+<li><a href="#other">Other</a><ul>
+<li><a href="#range-minimum-query">Range minimum query</a></li>
+<li><a href="#sat">2SAT</a></li>
+<li><a href="#kd-tree">KD-tree</a></li>
+</ul></li>
+</ul>
+</div>
+<h1 id="data-structures"><a href="#TOC">Data Structures</a></h1>
+<h2 id="binary-indexed-tree"><a href="#TOC">Binary indexed tree</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;algorithm&gt;</span>
+<span class="ot">#include&lt;stdio.h&gt;</span>
 
-<span class="ot">#include &lt;cmath&gt;</span>
+<span class="ot">#define Nmax 101010</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">int</span> AIB[Nmax],v[Nmax],M,x,y,z;
+<span class="dt">int</span> N,num;
+
+<span class="kw">inline</span> <span class="dt">int</span> zeros(<span class="dt">int</span> x)
+{
+  <span class="kw">return</span> ((x ^ (x - <span class="dv">1</span>)) &amp; x );
+}
+
+<span class="kw">inline</span> <span class="dt">void</span> Add(<span class="dt">int</span> x, <span class="dt">int</span> q)
+{
+  <span class="dt">int</span> i;
+
+  <span class="kw">for</span> (i = x; i &lt;= N; i += zeros(i))
+    AIB[i]+=q;
+}
+
+<span class="kw">inline</span> <span class="dt">int</span> comp(<span class="dt">int</span> x)
+{
+  <span class="dt">int</span> i, ret = <span class="dv">0</span>;
+
+  <span class="kw">for</span> (i = x; i &gt; <span class="dv">0</span>; i -= zeros(i))
+    ret +=AIB[i];
+  <span class="kw">return</span> ret;
+}</code></pre>
+<h2 id="segment-tree"><a href="#TOC">Segment tree</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+<span class="ot">#define Nmax 100100</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+<span class="dt">long</span> <span class="dt">long</span> aint[<span class="dv">4</span>*Nmax<span class="dv">+100</span>],v[Nmax],maxim,M,x,z,y,indic;
+<span class="dt">long</span> <span class="dt">long</span> up[<span class="dv">4</span>*Nmax<span class="dv">+100</span>];
+<span class="dt">long</span> <span class="dt">long</span> ind[<span class="dv">4</span>*Nmax<span class="dv">+100</span>];
+<span class="dt">long</span> <span class="dt">long</span> SUM,SUMI;
+<span class="dt">long</span> <span class="dt">long</span> N;
+<span class="dt">long</span> <span class="dt">long</span> inf = (<span class="dt">long</span> <span class="dt">long</span>)<span class="dv">101010000</span>*<span class="dv">100</span>;
+
+<span class="kw">inline</span> <span class="dt">void</span> relax(<span class="dt">int</span> nod,<span class="dt">int</span> st,<span class="dt">int</span> dr)
+{
+  <span class="dt">long</span> <span class="dt">long</span> mij=(st+dr)/<span class="dv">2</span>;
+  <span class="dt">long</span> <span class="dt">long</span> val=up[nod];
+  <span class="kw">if</span>(st!=dr)
+  {
+    up[<span class="dv">2</span>*nod]+=val;
+    up[<span class="dv">2</span>*nod<span class="dv">+1</span>]+=val;
+  }
+  <span class="kw">if</span>(st==dr)
+    ind[nod]=st;
+  aint[nod]+=up[nod];
+  up[nod]=<span class="dv">0</span>;
+}
+<span class="dt">void</span> update(<span class="dt">int</span> nod,<span class="dt">int</span> ist,<span class="dt">int</span> idr,<span class="dt">int</span> st,<span class="dt">int</span> dr,<span class="dt">long</span> <span class="dt">long</span> val)
+{
+  <span class="kw">if</span>(ist&lt;=st&amp;&amp;idr&gt;=dr)
+  {
+    aint[nod]+=val;
+    <span class="kw">if</span>(st!=dr)
+    {
+    up[<span class="dv">2</span>*nod]+=val;
+    up[<span class="dv">2</span>*nod<span class="dv">+1</span>]+=val;
+    }
+    <span class="kw">else</span> ind[nod]=ist;
+  }
+  <span class="kw">else</span>
+  {
+    <span class="kw">if</span>(aint[nod]&gt;<span class="dv">0</span>)
+      relax(nod,st,dr);
+
+    <span class="dt">long</span> <span class="dt">long</span> mij=(st+dr)/<span class="dv">2</span>;
+
+    <span class="kw">if</span>(ist&lt;=mij)
+      update(<span class="dv">2</span>*nod,ist,idr,st,mij,val);
+
+    <span class="kw">if</span>(idr&gt;mij)
+      update(<span class="dv">2</span>*nod<span class="dv">+1</span>,ist,idr,mij<span class="dv">+1</span>,dr,val);
+
+    <span class="kw">if</span>(up[nod*<span class="dv">2</span>])
+      relax(nod*<span class="dv">2</span>,st,mij);
+    <span class="kw">if</span>(up[nod*<span class="dv">2+1</span>])
+      relax(nod*<span class="dv">2+1</span>,mij<span class="dv">+1</span>,dr);
+    <span class="kw">if</span>(aint[nod*<span class="dv">2</span>]&gt;aint[nod*<span class="dv">2+1</span>])
+    {
+      aint[nod]=aint[<span class="dv">2</span>*nod<span class="dv">+1</span>];
+      ind[nod]=ind[<span class="dv">2</span>*nod<span class="dv">+1</span>];
+    }
+    <span class="kw">else</span>
+    {
+      aint[nod]=aint[<span class="dv">2</span>*nod];
+      ind[nod]=ind[<span class="dv">2</span>*nod];
+    }
+  }
+  <span class="kw">return</span>;
+}</code></pre>
+<h2 id="treap"><a href="#TOC">Treap</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+<span class="ot">#include&lt;cstdlib&gt;</span>
+<span class="ot">#include&lt;iostream&gt;</span>
+<span class="ot">#include&lt;time.h&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="kw">struct</span> T {
+    <span class="dt">int</span> key, priority,nr;
+    T *left, *right;
+    T() {}
+    T(<span class="dt">int</span> key, <span class="dt">int</span> priority, T* left, T* right) {
+        <span class="kw">this</span>-&gt;key = key;
+        <span class="kw">this</span>-&gt;priority = priority;
+        <span class="kw">this</span>-&gt;left = left, <span class="kw">this</span>-&gt;right = right;
+        <span class="kw">this</span>-&gt;nr = <span class="dv">0</span>;
+    }
+} *R, *nil; <span class="co">// nil indica un nod &#39;gol&#39;</span>
+
+<span class="dt">void</span> init(T* &amp;R) {
+    srand(<span class="dt">unsigned</span>(time(<span class="dv">0</span>)));
+    R = nil = <span class="kw">new</span> T(<span class="dv">0</span>, <span class="dv">0</span>, NULL, NULL);
+}
+
+<span class="dt">void</span> parc(T* n){
+    <span class="kw">if</span>(n== nil)
+        <span class="kw">return</span>;
+
+    <span class="co">//printf(&quot;%d %d %d %d\n&quot;,n-&gt;key,n-&gt;nr,n-&gt;left-&gt;key,n-&gt;right-&gt;key);</span>
+    parc(n-&gt;left);
+    parc(n-&gt;right);
+}
+<span class="kw">inline</span> <span class="dt">void</span> update(T* &amp;n){
+    <span class="kw">if</span>(n==nil)
+        <span class="kw">return</span>;
+    n-&gt;nr = n-&gt;left-&gt;nr + n-&gt;right-&gt;nr + <span class="dv">1</span>;
+
+}
+<span class="dt">int</span> search(T* n, <span class="dt">int</span> key) {
+    <span class="kw">if</span> (n == nil) <span class="kw">return</span> <span class="dv">0</span>;
+    <span class="kw">if</span> (key == n-&gt;key) <span class="kw">return</span> <span class="dv">1</span>;
+    <span class="kw">if</span> (key &lt; n-&gt;key)
+        <span class="kw">return</span> search(n-&gt;left, key);
+    <span class="kw">else</span>
+        <span class="kw">return</span> search(n-&gt;right, key);
+    update(n-&gt;right);
+    update(n-&gt;left);
+    update(n);
+}
+
+<span class="dt">void</span> rotleft(T* &amp;n) {
+    T *t = n-&gt;left;
+    n-&gt;left = t-&gt;right, t-&gt;right = n;
+    n = t;
+    update(t-&gt;right);
+    update(t-&gt;left);
+    update(t);
+    update(n-&gt;right);
+    update(n);
+}
+
+<span class="dt">void</span> rotright(T* &amp;n) {
+
+    T *t = n-&gt;right;
+    n-&gt;right = t-&gt;left, t-&gt;left = n;
+    n = t;
+    update(t-&gt;right);
+    update(t-&gt;left);
+    update(t);
+    update(n-&gt;left);
+    update(n);
+}
+
+<span class="dt">int</span> nth(T* &amp;n,<span class="dt">int</span> nr){
+
+    <span class="kw">if</span>(n==nil)
+    <span class="kw">return</span> -<span class="dv">1</span>;
+    <span class="kw">if</span>(nr==<span class="dv">0</span>)
+        <span class="kw">return</span> n-&gt;key;
+    <span class="dt">int</span> leftval = n-&gt;left-&gt;nr;
+   <span class="co">// cout&lt;&lt; n-&gt;nr &lt;&lt;&quot; &quot;&lt;&lt;n-&gt;key&lt;&lt;&quot; &quot;&lt;&lt;leftval&lt;&lt;&quot; &quot;&lt;&lt;nr&lt;&lt;&quot;\n&quot;;</span>
+    <span class="kw">if</span>(nr-leftval == <span class="dv">1</span>)
+        <span class="kw">return</span> n-&gt;key;
+    <span class="kw">if</span>(leftval &gt;= nr)
+        <span class="kw">return</span> nth(n-&gt;left,nr);
+    <span class="kw">return</span> nth(n-&gt;right,nr-leftval<span class="dv">-1</span>);
+}
+
+<span class="dt">void</span> balance(T* &amp;n) {
+    <span class="kw">if</span> (n-&gt;left-&gt;priority &gt; n-&gt;priority)
+        rotleft(n);
+    <span class="kw">else</span> <span class="kw">if</span> (n-&gt;right-&gt;priority &gt; n-&gt;priority)
+        rotright(n);
+
+    update(n-&gt;right);
+    update(n-&gt;left);
+    update(n);
+}
+
+<span class="dt">void</span> insert(T* &amp;n, <span class="dt">int</span> key, <span class="dt">int</span> priority) {
+    <span class="kw">if</span> (n == nil) {
+        n = <span class="kw">new</span> T(key, priority, nil, nil);
+        n-&gt;nr=<span class="dv">1</span>;
+        <span class="kw">return</span>;
+    }
+    (n-&gt;nr)++;
+    <span class="kw">if</span> (key &lt;= n-&gt;key)
+        insert(n-&gt;left, key, priority);
+    <span class="kw">else</span> <span class="kw">if</span> (key &gt; n-&gt;key)
+        insert(n-&gt;right, key, priority);
+
+    balance(n);
+
+}
+
+<span class="dt">int</span> main()
+{
+freopen(<span class="st">&quot;sdo.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
+<span class="co">//freopen(&quot;sdo.out&quot;,&quot;w&quot;,stdout);</span>
+
+init(R);
+<span class="dt">int</span> N,x,k;
+cin&gt;&gt;N&gt;&gt;k;
+
+
+<span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i){
+    cin&gt;&gt;x;
+    insert(R,x,rand()%<span class="dv">10000000</span>);
+}
+cout&lt;&lt;nth(R,k)&lt;&lt;<span class="st">&quot;</span><span class="ch">\n\n</span><span class="st">&quot;</span>;
+
+
+<span class="co">//parc(R);</span>
+
+<span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h1 id="maximum-flows"><a href="#TOC">Maximum Flows</a></h1>
+<h2 id="max-flow"><a href="#TOC">Max flow</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+<span class="ot">#include&lt;vector&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">int</span> flux[<span class="dv">1010</span>][<span class="dv">1010</span>];
+<span class="dt">int</span> c[<span class="dv">1010</span>][<span class="dv">1010</span>];
+<span class="dt">int</span> tata[<span class="dv">1010</span>];
+<span class="dt">int</span> viz[<span class="dv">1010</span>],flow;
+<span class="dt">int</span> coad[<span class="dv">1015</span>];
+<span class="dt">int</span> Q,x,y,z,N,act,M,flow_min;
+
+vector&lt;<span class="dt">int</span>&gt; g[<span class="dv">1010</span>];
+
+<span class="dt">int</span> BF()
+{
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i) {
+    viz[i]=<span class="dv">0</span>;
+  }
+  coad[<span class="dv">0</span>]=<span class="dv">1</span>;
+  <span class="dt">int</span> st=<span class="dv">0</span>,dr=<span class="dv">1</span>;
+  viz[<span class="dv">1</span>]=<span class="dv">1</span>;
+  <span class="kw">while</span>(st&lt;dr)
+  {
+    <span class="co">// printf(&quot;!&quot;);</span>
+    act=coad[st];
+    <span class="kw">if</span>(act!=N)
+      <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;g[act].size();++i)
+      {
+
+        Q = g[act][i];
+        <span class="kw">if</span>(c[act][Q] == flux[act][Q] || viz[Q])
+          <span class="kw">continue</span>;
+        viz[Q]=<span class="dv">1</span>;
+        coad[dr++]=Q;
+        tata[Q]=act;
+
+      }
+    ++st;
+  }
+  <span class="kw">return</span> viz[N];
+}
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;maxflow.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
+  freopen(<span class="st">&quot;maxflow.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
+  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
+  {
+    scanf(<span class="st">&quot;%d%d%d&quot;</span>,&amp;x,&amp;y,&amp;z);
+    c[x][y]+=z;
+    g[x].push_back(y);
+    g[y].push_back(x);
+
+  }
+
+  <span class="kw">for</span>(flow=<span class="dv">0</span>; BF();)
+  {<span class="co">//printf(&quot;!&quot;);</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;g[N].size();++i)
+    {
+      <span class="co">// printf(&quot;%d\n&quot;,flux);</span>
+      act=g[N][i];
+      <span class="kw">if</span>(flux[act][N]==c[act][N] ||!viz[act])
+        <span class="kw">continue</span>;
+      tata[N]=act;
+
+      flow_min=<span class="dv">10101000</span>;
+      <span class="kw">for</span>(<span class="dt">int</span> nod=N;nod!=<span class="dv">1</span>;nod=tata[nod])
+        flow_min=min(flow_min,c[tata[nod]][nod]-flux[tata[nod]][nod]);
+      <span class="kw">if</span>(flow_min==<span class="dv">0</span>)
+        <span class="kw">continue</span>;
+      <span class="co">//   printf(&quot;%d\n&quot;,flow_min);</span>
+      <span class="kw">for</span>(<span class="dt">int</span> nod=N;nod!=<span class="dv">1</span>;nod=tata[nod])
+      {
+        flux[tata[nod]][nod]+=flow_min;
+        flux[nod][tata[nod]]-=flow_min;
+      }
+      flow+=flow_min;
+    }
+  }
+  printf(<span class="st">&quot;%d &quot;</span>,flow);
+}</code></pre>
+<h2 id="min-cost-max-flow"><a href="#TOC">Min cost max flow</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
+
+<span class="ot">#include &lt;queue&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">351</span>;
+<span class="dt">const</span> <span class="dt">int</span> INF = <span class="bn">0x3f3f3f3f</span>;
+
+<span class="dt">int</span> N, M, S, D;
+vector&lt;<span class="dt">int</span>&gt; G[MAXN];
+
+<span class="dt">int</span> cap[MAXN][MAXN];
+<span class="dt">int</span> cost[MAXN][MAXN];
+<span class="dt">int</span> flow[MAXN][MAXN];
+
+<span class="dt">int</span> d[MAXN];
+<span class="dt">int</span> prev[MAXN];
+
+<span class="dt">bool</span> found;
+
+<span class="dt">int</span> bellman_ford()
+{
+  vector&lt;<span class="dt">bool</span>&gt; inqueue(N + <span class="dv">1</span>, <span class="kw">false</span>);
+
+  queue&lt;<span class="dt">int</span>&gt; q;
+  q.push(S);
+  inqueue[S] = <span class="kw">true</span>;
+
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= N; ++i) {
+    prev[i] = -<span class="dv">1</span>;
+    d[i] = INF;
+  }
+  d[S] = <span class="dv">0</span>;
+
+  <span class="kw">while</span> (!q.empty()) {
+    <span class="dt">int</span> node = q.front();
+    q.pop();
+    inqueue[node] = <span class="kw">false</span>;
+
+    vector&lt;<span class="dt">int</span>&gt;::iterator it;
+    <span class="kw">for</span> (it = G[node].begin(); it != G[node].end(); ++it) {
+      <span class="kw">if</span> (cap[node][*it] - flow[node][*it] &lt;= <span class="dv">0</span>)
+        <span class="kw">continue</span>;
+      <span class="kw">if</span> (cost[node][*it] + d[node] &lt; d[*it]) {
+        prev[*it] = node;
+        d[*it] = cost[node][*it] + d[node];
+        <span class="kw">if</span> (!inqueue[*it]) {
+          q.push(*it);
+          inqueue[*it] = <span class="kw">true</span>;
+        }
+      }
+    }
+  }
+
+  <span class="kw">if</span> (d[D] &lt; INF / <span class="dv">2</span>) {
+    found = <span class="kw">true</span>;
+
+    <span class="dt">int</span> fmin = INF;
+    <span class="kw">for</span> (<span class="dt">int</span> node = D; node != S; node = prev[node])
+      fmin = min(fmin, cap[prev[node]][node] - flow[prev[node]][node]);
+    <span class="kw">for</span> (<span class="dt">int</span> node = D; node != S; node = prev[node]) {
+      flow[prev[node]][node] += fmin;
+      flow[node][prev[node]] -= fmin;
+    }
+
+    <span class="kw">return</span> d[D] * fmin;
+  } 
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}
+
+<span class="dt">long</span> <span class="dt">long</span> mfmc()
+{
+  <span class="dt">long</span> <span class="dt">long</span> result = <span class="dv">0</span>;
+  found = <span class="kw">true</span>;
+
+  <span class="kw">while</span> (found) {
+    found = <span class="kw">false</span>;
+    result += bellman_ford();
+  }
+
+  <span class="kw">return</span> result;
+}
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;fmcm.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
+  freopen(<span class="st">&quot;fmcm.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
+
+  scanf(<span class="st">&quot;%d %d %d %d&quot;</span>, &amp;N, &amp;M, &amp;S, &amp;D);
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; M; ++i) {
+    <span class="dt">int</span> x, y, c, z;
+    scanf(<span class="st">&quot;%d %d %d %d&quot;</span>, &amp;x, &amp;y, &amp;c, &amp;z);
+
+    G[x].push_back(y);
+    G[y].push_back(x);
+
+    cap[x][y] = c;
+    cost[x][y] = z;
+    cost[y][x] = -z;
+  }
+
+  printf(<span class="st">&quot;%lld</span><span class="ch">\n</span><span class="st">&quot;</span>, mfmc());
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h1 id="graphs"><a href="#TOC">Graphs</a></h1>
+<h2 id="bellman-ford"><a href="#TOC">Bellman-Ford</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#define INF 99999999</span>
+<span class="ot">#define Nmax 50500</span>
+<span class="dt">int</span> coad[Nmax*<span class="dv">10</span>],viz[Nmax],nrviz[Nmax],x,y,z,N,M,S=<span class="dv">1</span>,k,st,ok=<span class="dv">1</span>,best[Nmax];
+<span class="kw">struct</span> Nod{
+  <span class="dt">int</span> cost,val,nrmuchie;
+  Nod *next;} *l[Nmax];
+<span class="dt">void</span> adauga(<span class="dt">int</span> x,<span class="dt">int</span> y,<span class="dt">int</span> z)
+{
+  Nod *q=<span class="kw">new</span> Nod;
+  q-&gt;val=y;
+  q-&gt;cost=z;
+  q-&gt;next=l[x];
+  l[x]=q;
+}
+<span class="dt">void</span> make_bell(<span class="dt">int</span> p)
+{
+  viz[p]=<span class="dv">0</span>;
+  <span class="kw">for</span>(Nod *it=l[p];it!=NULL;it=it-&gt;next)
+  {
+
+    <span class="kw">if</span>(best[it-&gt;val]&gt;best[p]+(it-&gt;cost))
+    {
+      best[it-&gt;val]=best[p]+it-&gt;cost;
+      <span class="kw">if</span>(viz[it-&gt;val]==<span class="dv">0</span>)
+      {
+        viz[it-&gt;val]=<span class="dv">1</span>;
+        coad[k++]=it-&gt;val;
+        ++nrviz[it-&gt;val];
+        <span class="kw">if</span>(nrviz[it-&gt;val]==N<span class="dv">+1</span>)
+          ok=<span class="dv">0</span>;
+      }
+    }
+  }
+}</code></pre>
+<h2 id="euler-cycle"><a href="#TOC">Euler cycle</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;list&gt;</span>
+<span class="ot">#include &lt;stack&gt;</span>
+<span class="ot">#include &lt;queue&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+list&lt;<span class="dt">int</span>&gt; L,G[<span class="dv">100010</span>];
+stack&lt;<span class="dt">int</span>&gt; S;
+<span class="dt">int</span> N, M, deg[<span class="dv">100010</span>], viz[<span class="dv">100010</span>], x, y;
+
+<span class="dt">void</span> DFS(<span class="dt">int</span> v)
+{
+  viz[v]=<span class="dv">1</span>;
+
+  <span class="kw">for</span>(list&lt;<span class="dt">int</span>&gt;::iterator it = G[v].begin(); it!=G[v].end();++it)
+    <span class="kw">if</span>(viz[*it]==<span class="dv">0</span>)
+      DFS(*it);
+}
+
+<span class="dt">bool</span> conex()
+{
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+  <span class="kw">return</span> <span class="dv">1</span>;
+}
+
+<span class="dt">bool</span> eulerian()
+{
+  DFS(<span class="dv">1</span>);
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i)
+    <span class="kw">if</span>(deg[i]%<span class="dv">2</span>==<span class="dv">1</span> || viz[i]==<span class="dv">0</span>)
+      <span class="kw">return</span> <span class="dv">0</span>;
+
+  <span class="kw">return</span> <span class="dv">1</span>;
+}
+
+<span class="dt">void</span> sterg(<span class="dt">int</span> v, <span class="dt">int</span> w)
+{
+  --deg[v];
+  --deg[w];
+  G[v].pop_front();
+  <span class="kw">for</span>(list&lt;<span class="dt">int</span>&gt;::iterator it = G[w].begin(); it!=G[w].end();++it)
+    <span class="kw">if</span>(*it==v)
+    {
+      G[w].erase(it);
+      <span class="kw">break</span>;
+    }
+}
+
+<span class="dt">void</span> euler(<span class="dt">int</span> v)
+{
+  <span class="kw">while</span>(!G[v].empty())
+  {
+    <span class="dt">int</span> w = G[v].front();
+    S.push(v);
+    sterg(v,w);
+    v=w;
+  }
+}
+
+<span class="dt">void</span> solve()
+{
+  <span class="dt">int</span> v=<span class="dv">1</span>;
+  <span class="kw">do</span>
+  {
+    euler(v);
+    v=S.top();
+    S.pop();
+    L.push_back(v);
+
+  } <span class="kw">while</span>(!S.empty());
+}</code></pre>
+<h2 id="maximum-matching"><a href="#TOC">Maximum matching</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+<span class="ot">#include&lt;vector&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+<span class="dt">int</span> N,M,K;
+<span class="dt">int</span> v[<span class="dv">25000</span>],x,p=<span class="dv">0</span>;
+<span class="dt">char</span> car;
+vector &lt;<span class="dt">int</span>&gt; g[<span class="dv">25000</span>];
+<span class="dt">int</span> l[<span class="dv">25000</span>],r[<span class="dv">25000</span>],u[<span class="dv">25000</span>],was[<span class="dv">25000</span>],S;
+<span class="dt">int</span> cupj(<span class="dt">int</span> q)
+{
+  <span class="kw">if</span>(was[q])
+    <span class="kw">return</span> <span class="dv">0</span>;
+  was[q]=<span class="dv">1</span>;
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;g[q].size();++i)
+  {
+    <span class="kw">if</span>(!r[g[q][i]])
+    {
+
+      l[q]=g[q][i];
+      r[g[q][i]]=q;
+      <span class="kw">return</span> <span class="dv">1</span>;
+    }
+  }
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;g[q].size();++i)
+  {
+    <span class="kw">if</span>(cupj(r[g[q][i]]))
+    {
+      l[q]=g[q][i];
+      r[g[q][i]]=q;
+      <span class="kw">return</span> <span class="dv">1</span>;
+    }
+  }
+  <span class="kw">return</span> <span class="dv">0</span>;
+
+
+}
+<span class="dt">int</span> L,R,y;</code></pre>
+<h2 id="hamiltonian-path"><a href="#TOC">Hamiltonian path</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;vector&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">const</span> <span class="dt">int</span> inf = <span class="dv">1000000000</span>;
+<span class="dt">int</span> N,M,x,y,z,Sol,b[<span class="dv">262150</span>][<span class="dv">22</span>],c[<span class="dv">22</span>][<span class="dv">22</span>];
+vector&lt;<span class="dt">int</span>&gt; a[<span class="dv">22</span>];
+
+<span class="dt">int</span> best(<span class="dt">int</span> conf, <span class="dt">int</span> last)
+{
+  <span class="kw">if</span>(b[conf][last]&gt;=<span class="dv">0</span>)
+    <span class="kw">return</span> b[conf][last];
+
+  b[conf][last]=inf;
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;a[last].size();++i)
+    <span class="kw">if</span>(conf &amp; (<span class="dv">1</span>&lt;&lt;a[last][i]))
+    {
+      <span class="kw">if</span>(a[last][i]==<span class="dv">0</span> &amp;&amp; conf!=(<span class="dv">1</span>&lt;&lt;last)+<span class="dv">1</span>)
+        <span class="kw">continue</span>;
+      <span class="kw">if</span>(b[conf][last] &gt; best(conf^(<span class="dv">1</span>&lt;&lt;last),a[last][i])+c[a[last][i]][last])
+        b[conf][last] = best(conf^(<span class="dv">1</span>&lt;&lt;last),a[last][i])+c[a[last][i]][last];
+    }
+
+  <span class="kw">return</span> b[conf][last];
+
+}
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;hamilton.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
+  freopen(<span class="st">&quot;hamilton.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
+
+  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;N;++i)
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>;j&lt;N;++j)
+      c[i][j]=inf;
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;<span class="dv">262150</span>;++i)
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>;j&lt;<span class="dv">20</span>;++j)
+      b[i][j]=-<span class="dv">1</span>;
+
+  b[<span class="dv">1</span>][<span class="dv">0</span>]=<span class="dv">0</span>;
+
+  Sol = inf;
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
+  {
+    scanf(<span class="st">&quot;%d%d%d&quot;</span>,&amp;x,&amp;y,&amp;z);
+    c[x][y]=z;
+    a[y].push_back(x);
+  }
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;a[<span class="dv">0</span>].size();++i)
+  {
+    <span class="kw">if</span>(c[a[<span class="dv">0</span>][i]][<span class="dv">0</span>] + best((<span class="dv">1</span>&lt;&lt;N)-<span class="dv">1</span> , a[<span class="dv">0</span>][i]) &lt; Sol)
+      Sol = c[a[<span class="dv">0</span>][i]][<span class="dv">0</span>] + best((<span class="dv">1</span>&lt;&lt;N)-<span class="dv">1</span>,a[<span class="dv">0</span>][i]);
+  }
+
+  <span class="kw">if</span>(Sol==inf)
+    printf(<span class="st">&quot;Nu exista solutie</span><span class="ch">\n</span><span class="st">&quot;</span>);
+
+  <span class="kw">else</span>
+    printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>,Sol);
+}</code></pre>
+<h2 id="heavy-path-decomposition"><a href="#TOC">Heavy path decomposition</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">
+<span class="ot">#include &lt;cstdio&gt;</span>
+<span class="ot">#include &lt;algorithm&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+<span class="ot">#include &lt;utility&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="ot">#define MAXN 100010</span>
+
+<span class="dt">int</span> N, M, nL;
+<span class="dt">int</span> v[MAXN], fol[MAXN], niv[MAXN], w[MAXN], l[MAXN];
+<span class="dt">int</span> aint[<span class="dv">4</span>*MAXN];
+<span class="dt">int</span> lTata[MAXN], lNiv[MAXN], lDim[MAXN], lPoz[MAXN];
+vector&lt;<span class="dt">int</span>&gt; G[MAXN], P[MAXN];
+pair&lt;<span class="dt">int</span>, pair&lt;<span class="dt">int</span>, <span class="dt">int</span>&gt; &gt; op[MAXN];
+
+<span class="dt">void</span> citire()
+{
+  scanf(<span class="st">&quot;%d%d&quot;</span>, &amp;N, &amp;M);
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= N; ++i)
+    scanf(<span class="st">&quot;%d&quot;</span>, &amp;v[i]);
+
+  <span class="dt">int</span> a, b;
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; N; ++i)
+  {
+    scanf(<span class="st">&quot;%d%d&quot;</span>, &amp;a, &amp;b);
+    G[a].push_back(b);
+    G[b].push_back(a);
+  }
+
+  <span class="dt">int</span> t, x, y;
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= M; ++i)
+  {
+    scanf(<span class="st">&quot;%d%d%d&quot;</span>, &amp;t, &amp;x, &amp;y);
+    op[i] = make_pair(t, make_pair(x, y));
+  }
+}
+
+<span class="dt">void</span> df(<span class="dt">int</span> nod)
+{
+  fol[nod] = <span class="dv">1</span>;
+  w[nod] = <span class="dv">1</span>;
+
+  <span class="dt">int</span> hN = -<span class="dv">1</span>, frunza = <span class="dv">1</span>;
+
+  <span class="kw">for</span>(vector&lt;<span class="dt">int</span>&gt; :: iterator it = G[nod].begin(); it != G[nod].end(); ++it)
+  {
+    <span class="kw">if</span>(fol[*it])
+      <span class="kw">continue</span>;
+
+    frunza = <span class="dv">0</span>;
+    niv[*it] = niv[nod] + <span class="dv">1</span>;
+
+    df(*it);
+
+    w[nod] += w[*it];
+
+    <span class="kw">if</span>(hN == -<span class="dv">1</span>)
+      hN = *it;
+    <span class="kw">else</span>
+      <span class="kw">if</span>(w[hN] &lt; w[*it])
+        hN = *it;
+  }
+
+  <span class="kw">if</span>(frunza)
+  {
+    l[nod] = ++nL;
+    lDim[nL]=<span class="dv">1</span>;
+    P[nL].push_back(nod);
+    <span class="kw">return</span>;
+  }
+
+  l[nod] = l[hN];
+  ++lDim[l[nod]];
+  P[l[nod]].push_back(nod);
+
+  <span class="kw">for</span>(vector&lt;<span class="dt">int</span>&gt; :: iterator it = G[nod].begin(); it != G[nod].end(); ++it)
+  {
+    <span class="kw">if</span>((*it) == hN || niv[*it] &lt; niv[nod])
+      <span class="kw">continue</span>;
+
+    lTata[l[*it]] = nod;
+    lNiv[l[*it]] = niv[nod];
+  }
+}
+
+<span class="dt">void</span> build(<span class="dt">int</span> nod, <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> decalaj, <span class="dt">int</span> lant)
+{
+  <span class="kw">if</span>(left == right)
+  {
+    aint[nod + decalaj] = v[ P[lant][left - <span class="dv">1</span>] ];
+    <span class="kw">return</span>;
+  }
+
+  <span class="dt">int</span> med = (left + right) / <span class="dv">2</span>;
+
+  build(nod * <span class="dv">2</span>, left, med, decalaj, lant);
+  build(nod * <span class="dv">2</span> + <span class="dv">1</span>, med<span class="dv">+1</span>, right, decalaj, lant);
+
+  aint[nod + decalaj] = max(aint[nod * <span class="dv">2</span> + decalaj], aint[nod * <span class="dv">2</span> + <span class="dv">1</span> + decalaj]);
+}
+
+<span class="dt">void</span> make_paths()
+{
+  niv[<span class="dv">1</span>] = <span class="dv">1</span>;
+  df(<span class="dv">1</span>);
+
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= nL; ++i)
+  {
+    reverse(P[i].begin(), P[i].end());
+
+    <span class="kw">if</span>(i &gt; <span class="dv">1</span>)
+      lPoz[i] = lPoz[i<span class="dv">-1</span>] + lDim[i<span class="dv">-1</span>] * <span class="dv">4</span>;
+
+    build(<span class="dv">1</span>, <span class="dv">1</span>, lDim[i], lPoz[i], i);
+  }
+}
+
+<span class="dt">void</span> update(<span class="dt">int</span> nod, <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> poz, <span class="dt">int</span> val, <span class="dt">int</span> decalaj)
+{
+  <span class="kw">if</span>(left == right)
+  {
+    aint[nod + decalaj] = val;
+    <span class="kw">return</span>;
+  }
+
+  <span class="dt">int</span> med = (left + right) / <span class="dv">2</span>;
+
+  <span class="kw">if</span>(poz&lt;=med)
+    update(nod * <span class="dv">2</span>, left, med, poz, val, decalaj);
+  <span class="kw">else</span>
+    update(nod * <span class="dv">2</span> + <span class="dv">1</span>, med<span class="dv">+1</span>, right, poz, val, decalaj);
+
+  aint[nod + decalaj] = max(aint[nod * <span class="dv">2</span> + decalaj], aint[nod * <span class="dv">2</span> + <span class="dv">1</span> + decalaj]);
+}
+
+<span class="dt">int</span> query(<span class="dt">int</span> nod, <span class="dt">int</span> left, <span class="dt">int</span> right, <span class="dt">int</span> qleft, <span class="dt">int</span> qright, <span class="dt">int</span> decalaj)
+{
+  <span class="kw">if</span>(qleft &lt;= left &amp;&amp; right &lt;= qright)
+    <span class="kw">return</span> aint[nod + decalaj];
+
+  <span class="dt">int</span> med = (left + right) / <span class="dv">2</span>, rez = <span class="dv">0</span>;
+
+  <span class="kw">if</span>(qleft &lt;= med)
+    rez = max(rez, query(nod * <span class="dv">2</span>, left, med, qleft, qright, decalaj) );
+  <span class="kw">if</span>(med &lt; qright)
+    rez = max(rez, query(nod * <span class="dv">2</span> + <span class="dv">1</span>, med + <span class="dv">1</span>, right, qleft, qright, decalaj) );
+
+  <span class="kw">return</span> rez;
+}
+
+<span class="dt">void</span> solve()
+{
+  <span class="dt">int</span> t, x, y, sol = <span class="dv">0</span>;
+
+  <span class="kw">for</span>(<span class="dt">int</span> i = <span class="dv">1</span>; i &lt;= M; ++i)
+  {
+    t = op[i].first; x = op[i].second.first, y = op[i].second.second;
+    <span class="kw">if</span>(t==<span class="dv">0</span>)
+      update(<span class="dv">1</span>, <span class="dv">1</span>, lDim[l[x]], niv[x] - lNiv[l[x]], y, lPoz[l[x]]);
+    <span class="kw">else</span>
+    {
+      sol = <span class="dv">0</span>;
+      <span class="kw">while</span>(<span class="dv">1</span>)
+      {
+        <span class="kw">if</span>(l[x] == l[y])
+        {
+          <span class="kw">if</span>(niv[x] &gt; niv[y])
+            swap(x, y);
+          sol = max(sol, query(<span class="dv">1</span>, <span class="dv">1</span>, lDim[l[x]], niv[x] - lNiv[l[x]], niv[y] - lNiv[l[x]], lPoz[l[x]]) );
+          <span class="kw">break</span>;
+        }
+
+        <span class="kw">if</span>(lNiv[l[x]] &lt; lNiv[l[y]])
+          swap(x, y);
+
+        sol = max(sol, query(<span class="dv">1</span>, <span class="dv">1</span>, lDim[l[x]], <span class="dv">1</span>, niv[x] - lNiv[l[x]], lPoz[l[x]]) );
+
+        x = lTata[l[x]];
+      }
+      printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, sol);
+    }
+  }
+}
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;heavypath.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
+  freopen(<span class="st">&quot;heavypath.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
+
+  citire();
+  make_paths();
+  solve();
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="lowest-common-ancestor"><a href="#TOC">Lowest common ancestor</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;vector&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">int</span> K, N, M, x, y, L[<span class="dv">200010</span>], H[<span class="dv">200010</span>], Lg[<span class="dv">200010</span>], First[<span class="dv">100010</span>], Rmq[<span class="dv">20</span>][<span class="dv">400010</span>];
+vector&lt;<span class="dt">int</span>&gt; G[<span class="dv">100010</span>];
+
+<span class="dt">void</span> dfs(<span class="dt">int</span> nod, <span class="dt">int</span> lev)
+{
+  H[++K] = nod;
+  L[K] = lev;
+  First[nod] = K;
+
+  <span class="dt">int</span> z = G[nod].size();
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;z;++i)
+  {
+    dfs(G[nod][i],lev<span class="dv">+1</span>);
+    H[++K] = nod;
+    L[K] = lev;
+  }
+}
+
+<span class="dt">void</span> rmq()
+{
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">2</span>;i&lt;=K;++i)
+    Lg[i] = Lg[i/<span class="dv">2</span>]+<span class="dv">1</span>;
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=K;++i)
+    Rmq[<span class="dv">0</span>][i]=i;
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;(<span class="dv">1</span>&lt;&lt;i) &lt; K; ++i)
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=K-(<span class="dv">1</span>&lt;&lt;i);++j)
+    {
+      <span class="dt">int</span> l = <span class="dv">1</span>&lt;&lt; (i<span class="dv">-1</span>);
+      Rmq[i][j] = Rmq[i<span class="dv">-1</span>][j];
+      <span class="kw">if</span>(L[Rmq[i<span class="dv">-1</span>][j + l]] &lt; L[Rmq[i][j]])
+        Rmq[i][j] = Rmq[i<span class="dv">-1</span>][j + l];
+    }
+}
+
+<span class="dt">int</span> lca(<span class="dt">int</span> x, <span class="dt">int</span> y)
+{
+  <span class="dt">int</span> a = First[x], b = First[y];
+  <span class="kw">if</span>(a&gt;b)
+  {
+    <span class="dt">int</span> c=a;
+    a=b;
+    b=c;
+  }
+  <span class="dt">int</span> diff = b - a + <span class="dv">1</span>;
+  <span class="dt">int</span> l = Lg[diff];
+  <span class="dt">int</span> sol = Rmq[l][a];
+  <span class="dt">int</span> sh = diff - (<span class="dv">1</span> &lt;&lt; l);
+  <span class="kw">if</span>(L[sol] &gt; L[Rmq[l][a + sh]])
+    sol = Rmq[l][a + sh];
+  <span class="kw">return</span> H[sol];
+}
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;lca.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
+  freopen(<span class="st">&quot;lca.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
+  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">2</span>;i&lt;=N;++i)
+  {
+    scanf(<span class="st">&quot;%d&quot;</span>,&amp;x);
+    G[x].push_back(i);
+  }
+
+  dfs(<span class="dv">1</span>,<span class="dv">0</span>);
+  rmq();
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
+  {
+    scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;x,&amp;y);
+    printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>,lca(x,y));
+  }
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h1 id="mathematics"><a href="#TOC">Mathematics</a></h1>
+<h2 id="number-theoretic-algorithms"><a href="#TOC">Number theoretic algorithms</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// This is a collection of useful code for solving problems that</span>
+<span class="co">// involve modular linear equations.  Note that all of the</span>
+<span class="co">// algorithms described here work on nonnegative integers.</span>
+
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+<span class="ot">#include &lt;algorithm&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="kw">typedef</span> vector&lt;<span class="dt">int</span>&gt; VI;
+<span class="kw">typedef</span> pair&lt;<span class="dt">int</span>,<span class="dt">int</span>&gt; PII;
+
+<span class="co">// return a % b (positive value)</span>
+<span class="dt">int</span> mod(<span class="dt">int</span> a, <span class="dt">int</span> b) {
+  <span class="kw">return</span> ((a%b)+b)%b;
+}
+
+<span class="co">// computes gcd(a,b)</span>
+<span class="dt">int</span> gcd(<span class="dt">int</span> a, <span class="dt">int</span> b) {
+  <span class="dt">int</span> tmp;
+  <span class="kw">while</span>(b){a%=b; tmp=a; a=b; b=tmp;}
+  <span class="kw">return</span> a;
+}
+
+<span class="co">// computes lcm(a,b)</span>
+<span class="dt">int</span> lcm(<span class="dt">int</span> a, <span class="dt">int</span> b) {
+  <span class="kw">return</span> a/gcd(a,b)*b;
+}
+
+<span class="co">// returns d = gcd(a,b); finds x,y such that d = ax + by</span>
+<span class="dt">int</span> extended_euclid(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> &amp;x, <span class="dt">int</span> &amp;y) {  
+  <span class="dt">int</span> xx = y = <span class="dv">0</span>;
+  <span class="dt">int</span> yy = x = <span class="dv">1</span>;
+  <span class="kw">while</span> (b) {
+    <span class="dt">int</span> q = a/b;
+    <span class="dt">int</span> t = b; b = a%b; a = t;
+    t = xx; xx = x-q*xx; x = t;
+    t = yy; yy = y-q*yy; y = t;
+  }
+  <span class="kw">return</span> a;
+}
+
+<span class="co">// finds all solutions to ax = b (mod n)</span>
+VI modular_linear_equation_solver(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> n) {
+  <span class="dt">int</span> x, y;
+  VI solutions;
+  <span class="dt">int</span> d = extended_euclid(a, n, x, y);
+  <span class="kw">if</span> (!(b%d)) {
+    x = mod (x*(b/d), n);
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; d; i++)
+      solutions.push_back(mod(x + i*(n/d), n));
+  }
+  <span class="kw">return</span> solutions;
+}
+
+<span class="co">// computes b such that ab = 1 (mod n), returns -1 on failure</span>
+<span class="dt">int</span> mod_inverse(<span class="dt">int</span> a, <span class="dt">int</span> n) {
+  <span class="dt">int</span> x, y;
+  <span class="dt">int</span> d = extended_euclid(a, n, x, y);
+  <span class="kw">if</span> (d &gt; <span class="dv">1</span>) <span class="kw">return</span> -<span class="dv">1</span>;
+  <span class="kw">return</span> mod(x,n);
+}
+
+<span class="co">// Chinese remainder theorem (special case): find z such that</span>
+<span class="co">// z % x = a, z % y = b.  Here, z is unique modulo M = lcm(x,y).</span>
+<span class="co">// Return (z,M).  On failure, M = -1.</span>
+PII chinese_remainder_theorem(<span class="dt">int</span> x, <span class="dt">int</span> a, <span class="dt">int</span> y, <span class="dt">int</span> b) {
+  <span class="dt">int</span> s, t;
+  <span class="dt">int</span> d = extended_euclid(x, y, s, t);
+  <span class="kw">if</span> (a%d != b%d) <span class="kw">return</span> make_pair(<span class="dv">0</span>, -<span class="dv">1</span>);
+  <span class="kw">return</span> make_pair(mod(s*b*x+t*a*y,x*y)/d, x*y/d);
+}
+
+<span class="co">// Chinese remainder theorem: find z such that</span>
+<span class="co">// z % x[i] = a[i] for all i.  Note that the solution is</span>
+<span class="co">// unique modulo M = lcm_i (x[i]).  Return (z,M).  On </span>
+<span class="co">// failure, M = -1.  Note that we do not require the a[i]&#39;s</span>
+<span class="co">// to be relatively prime.</span>
+PII chinese_remainder_theorem(<span class="dt">const</span> VI &amp;x, <span class="dt">const</span> VI &amp;a) {
+  PII ret = make_pair(a[<span class="dv">0</span>], x[<span class="dv">0</span>]);
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; x.size(); i++) {
+    ret = chinese_remainder_theorem(ret.second, ret.first, x[i], a[i]);
+    <span class="kw">if</span> (ret.second == -<span class="dv">1</span>) <span class="kw">break</span>;
+  }
+  <span class="kw">return</span> ret;
+}
+
+<span class="co">// computes x and y such that ax + by = c; on failure, x = y =-1</span>
+<span class="dt">void</span> linear_diophantine(<span class="dt">int</span> a, <span class="dt">int</span> b, <span class="dt">int</span> c, <span class="dt">int</span> &amp;x, <span class="dt">int</span> &amp;y) {
+  <span class="dt">int</span> d = gcd(a,b);
+  <span class="kw">if</span> (c%d) {
+    x = y = -<span class="dv">1</span>;
+  } <span class="kw">else</span> {
+    x = c/d * mod_inverse(a/d, b/d);
+    y = (c-a*x)/b;
+  }
+}</code></pre>
+<h2 id="gaussian-elimination"><a href="#TOC">Gaussian elimination</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+
+<span class="ot">#define EPS 0.0000001</span>
+
+<span class="dt">int</span> i,j,k;
+<span class="dt">int</span> N,M;
+<span class="dt">double</span> A[<span class="dv">303</span>][<span class="dv">303</span>];
+<span class="dt">double</span> X[<span class="dv">303</span>];
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;gauss.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
+  freopen(<span class="st">&quot;gauss.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
+  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i)
+  {
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=M<span class="dv">+1</span>;++j)
+    {
+      scanf(<span class="st">&quot;%lf&quot;</span>,&amp;A[i][j]);
+    }
+  }
+  i=<span class="dv">1</span>,j=<span class="dv">1</span>;
+  <span class="kw">while</span>(i&lt;=N &amp;&amp; j&lt;=M)
+  {
+    <span class="kw">for</span>(k=i;k&lt;=N;++k)
+      <span class="kw">if</span>(A[k][j]&lt;-EPS||A[k][j]&gt;EPS)
+        <span class="kw">break</span>;
+    <span class="kw">if</span>(k==N<span class="dv">+1</span>)
+    {
+      ++j;
+      <span class="kw">continue</span>;
+    }
+    <span class="kw">if</span>(k!=i)
+    {
+      <span class="kw">for</span>(<span class="dt">int</span> q=<span class="dv">1</span>;q&lt;=M<span class="dv">+1</span>;++q)
+      {
+        <span class="dt">double</span> aux = A[i][q];
+        A[i][q]= A[k][q];
+        A[k][q]= aux;
+      }
+    }
+    <span class="kw">for</span>(<span class="dt">int</span> q=j<span class="dv">+1</span>;q&lt;=M<span class="dv">+1</span>;++q)
+    {
+      A[i][q]=A[i][q]/A[i][j];
+    }
+    A[i][j]=<span class="dv">1</span>;
+    <span class="kw">for</span>(<span class="dt">int</span> u=i<span class="dv">+1</span>;u&lt;=N;++u)
+    {
+      <span class="kw">for</span>(<span class="dt">int</span> q=j<span class="dv">+1</span>;q&lt;=M<span class="dv">+1</span>;++q)
+      {
+        A[u][q]-=A[u][j]*A[i][q];
+      }
+      A[u][j]=<span class="dv">0</span>;
+    }
+    ++i;++j;
+  }
+  <span class="kw">for</span>(<span class="dt">int</span> i=N;i&gt;<span class="dv">0</span>;--i)
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j&lt;=M<span class="dv">+1</span>;++j)
+    {
+      <span class="kw">if</span>(A[i][j]&gt;EPS||A[i][j]&lt;-EPS)
+      {
+        <span class="kw">if</span>(j==M<span class="dv">+1</span>)
+        {
+          printf(<span class="st">&quot;Imposibil</span><span class="ch">\n</span><span class="st">&quot;</span>);
+          <span class="kw">return</span> <span class="dv">0</span>;
+        }
+
+        X[j]=A[i][M<span class="dv">+1</span>];
+        <span class="kw">for</span>(<span class="dt">int</span> k=j<span class="dv">+1</span>;k&lt;=M;++k)
+        {
+          X[j]-=X[k]*A[i][k];
+        }
+        <span class="kw">break</span>;
+      }
+
+    }
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
+  {
+    printf(<span class="st">&quot;%.8lf &quot;</span>,X[i]);
+  }
+  printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h1 id="strings"><a href="#TOC">Strings</a></h1>
+<h2 id="knuth-morris-pratt"><a href="#TOC">Knuth-Morris-Pratt</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">vector&lt;<span class="dt">int</span>&gt; prefix(<span class="dt">const</span> string&amp; str)
+{
+  vector&lt;<span class="dt">int</span>&gt; pi(str.size(), <span class="dv">0</span>);
+
+  <span class="dt">int</span> k = <span class="dv">0</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">1</span>; i &lt; str.size(); ++i) {
+    <span class="kw">while</span> (k &gt; <span class="dv">0</span> &amp;&amp; str[i] != str[k])
+      k = pi[k - <span class="dv">1</span>];
+
+    <span class="kw">if</span> (str[i] == str[k])
+      ++k;
+    pi[i] = k;
+  }
+
+  <span class="kw">return</span> pi;
+}
+ 
+vector&lt;<span class="dt">int</span>&gt; match(<span class="dt">const</span> string&amp; str, <span class="dt">const</span> string&amp; patt)
+{
+  vector&lt;<span class="dt">int</span>&gt; matches;
+  vector&lt;<span class="dt">int</span>&gt; pi = prefix(patt);
+
+  <span class="dt">int</span> k = <span class="dv">0</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; str.size(); ++i) {
+    <span class="kw">while</span> (k &gt; <span class="dv">0</span> &amp;&amp; str[i] != patt[k])
+      k = pi[k - <span class="dv">1</span>];
+
+    <span class="kw">if</span> (str[i] == patt[k])
+      ++k;
+    <span class="kw">if</span> (k == patt.size())
+      matches.push_back(i - patt.size() + <span class="dv">1</span>);
+  }
+
+  <span class="kw">return</span> matches;
+}</code></pre>
+<h2 id="rabin-karp"><a href="#TOC">Rabin-Karp</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
+
+<span class="ot">#define MAXN 2000001</span>
+
+<span class="ot">#define P 73</span>
+<span class="ot">#define MOD1 100007</span>
+<span class="ot">#define MOD2 100021</span>
+
+<span class="dt">char</span> A[MAXN], B[MAXN];
+<span class="dt">int</span> NA, NB;
+
+<span class="dt">int</span> hashA1, hashA2, P1, P2;
+
+<span class="dt">char</span> match[MAXN];
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;strmatch.in&quot;</span>, <span class="st">&quot;rt&quot;</span>, stdin);
+  freopen(<span class="st">&quot;strmatch.out&quot;</span>, <span class="st">&quot;wt&quot;</span>, stdout);
+
+  scanf(<span class="st">&quot;%s %s&quot;</span>, A, B);
+  NA = strlen(A);
+  NB = strlen(B);
+
+  P1 = P2 = <span class="dv">1</span>;
+  hashA1 = hashA2 = <span class="dv">0</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; NA; i++)
+  {
+    hashA1 = (hashA1 * P + A[i]) % MOD1;
+    hashA2 = (hashA2 * P + A[i]) % MOD2;
+
+    <span class="kw">if</span> (i != <span class="dv">0</span>)
+      P1 = (P1 * P) % MOD1,
+         P2 = (P2 * P) % MOD2;
+  }
+
+  <span class="kw">if</span> (NA &gt; NB)
+  {
+    printf(<span class="st">&quot;0</span><span class="ch">\n</span><span class="st">&quot;</span>);
+    <span class="kw">return</span> <span class="dv">0</span>;
+  }
+
+  <span class="dt">int</span> hash1 = <span class="dv">0</span>, hash2 = <span class="dv">0</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; NA; i++)
+    hash1 = (hash1 * P + B[i]) % MOD1,
+          hash2 = (hash2 * P + B[i]) % MOD2;
+
+  <span class="dt">int</span> Nr = <span class="dv">0</span>;
+  <span class="kw">if</span> (hash1 == hashA1 &amp;&amp; hash2 == hashA2)
+    match[<span class="dv">0</span>] = <span class="dv">1</span>, Nr++;
+
+  <span class="kw">for</span> (<span class="dt">int</span> i = NA; i &lt; NB; i++)
+  {
+    hash1 = ((hash1 - (B[i - NA] * P1) % MOD1 + MOD1) * P + B[i]) % MOD1;
+    hash2 = ((hash2 - (B[i - NA] * P2) % MOD2 + MOD2) * P + B[i]) % MOD2;
+
+    <span class="kw">if</span> (hash1 == hashA1 &amp;&amp; hash2 == hashA2)
+      match[ i - NA + <span class="dv">1</span> ] = <span class="dv">1</span>, Nr++;
+  }
+  printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, Nr);
+
+  Nr = <span class="dv">0</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; NB &amp;&amp; Nr &lt; <span class="dv">1000</span>; i++)
+    <span class="kw">if</span> (match[i])
+      Nr++,
+        printf(<span class="st">&quot;%d &quot;</span>, i);
+  printf(<span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>);
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="aho-corasick"><a href="#TOC">Aho-Corasick</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
+<span class="ot">#include &lt;cstring&gt;</span>
+<span class="ot">#include &lt;cctype&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+<span class="ot">#define DL 1000005</span>
+<span class="ot">#define DN 10005</span>
+<span class="ot">#define DA 26</span><span class="co">//dimensiunea alfabetului</span>
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">int</span> lg,n,l,final[DN],ic,sc;
+<span class="dt">char</span> tx[DL],c[DN];
+
+<span class="kw">struct</span> ac {
+    vector&lt;<span class="dt">int</span>&gt; nd;<span class="co">//sirurile care se termina in nodul curent</span>
+    <span class="dt">int</span> n0;<span class="co">//numarul de potriviri din nodul curent sau din fii lui</span>
+    ac *f[DA],*fail;
+    ac() {
+        n0=<span class="dv">0</span>;
+        fail=NULL;
+        memset(f,<span class="dv">0</span>,<span class="kw">sizeof</span>(f));
+    }
+} *q[DN*DN],*t,*p;
+
+
+<span class="dt">void</span> ins(ac *t,<span class="dt">char</span> *p,<span class="dt">int</span> i) {<span class="co">//inserarea se face ca si la trie</span>
+    <span class="kw">if</span>(!isalpha(*p)) {
+        t-&gt;nd.push_back(i);
+        <span class="kw">return</span>;
+    }
+    <span class="dt">int</span> urm=*p-&#39;a&#39;;
+    <span class="kw">if</span>(<span class="dv">0</span>==t-&gt;f[urm]) t-&gt;f[urm]=<span class="kw">new</span> ac;
+    ins(t-&gt;f[urm],p<span class="dv">+1</span>,i);
+}
+
+<span class="dt">void</span> bfs(ac *t) {
+    ac *dolar;<span class="co">//unde o sa mearga fail-ul fiecarui nod</span>
+    t-&gt;fail=t;
+    <span class="kw">for</span>(q[ic=sc=<span class="dv">1</span>]=t;ic&lt;=sc;++ic) {
+        ac *fr=q[ic];
+        <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>; i&lt;DA; ++i) <span class="kw">if</span>(fr-&gt;f[i]!=NULL) {<span class="co">//nodul caruia ii cautam fail-ul</span>
+            <span class="co">//ne ducem in fail pana gasim un nod care are ca fiu ultima litera a nodului sau pana ajungem in radacina</span>
+            <span class="kw">for</span>(dolar=fr-&gt;fail;dolar!=t &amp;&amp; dolar-&gt;f[i]==NULL;dolar=dolar-&gt;fail);
+
+            <span class="kw">if</span>(dolar-&gt;f[i]!=NULL &amp;&amp; dolar-&gt;f[i]!=fr-&gt;f[i]) dolar=dolar-&gt;f[i];
+            fr-&gt;f[i]-&gt;fail=dolar;
+            q[++sc]=fr-&gt;f[i];
+        }
+    }
+    t-&gt;fail=NULL;
+}
+
+
+<span class="dt">void</span> antibfs(ac *t) {
+    <span class="co">//parcurgem nodurile in ordinea inversa a bfs-ului astfel fiecare nod va fi parcurs dupa ce au</span>
+    <span class="co">//fost parcursi toti fii lui si astfel putem calcula n0</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i=sc; i&gt;<span class="dv">0</span>; --i) {
+        ac *fr=q[i];
+        <span class="kw">if</span>(fr-&gt;fail!=NULL) fr-&gt;fail-&gt;n0+=fr-&gt;n0;
+        <span class="co">//parcurgem toate cuvintele care se termina in nodul curent si actualizam solutia</span>
+        <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>; j&lt;fr-&gt;nd.size(); ++j) final[fr-&gt;nd[j]]=fr-&gt;n0;
+    }
+}</code></pre>
+<h2 id="longest-palindromic-substring"><a href="#TOC">Longest palindromic substring</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
+<span class="ot">#include &lt;cstring&gt;</span>
+
+<span class="ot">#include &lt;algorithm&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">1000020</span>;
+
+<span class="dt">int</span> N;
+<span class="dt">char</span> s[MAXN];
+
+<span class="dt">int</span> dp[<span class="dv">2</span>][MAXN];
+<span class="dt">long</span> <span class="dt">long</span> res = <span class="dv">0</span>;
+
+<span class="dt">int</span> explode(<span class="dt">int</span> l, <span class="dt">int</span> r)
+{
+  <span class="dt">int</span> len = <span class="dv">0</span>;
+  <span class="kw">for</span> (; l &gt;= <span class="dv">0</span> &amp;&amp; r &lt; N &amp;&amp; s[l] == s[r]; --l, ++r, ++len);
+
+  <span class="kw">return</span> len;
+}
+
+<span class="dt">void</span> odd_center()
+{
+  <span class="dt">int</span> last = -<span class="dv">1</span>, right = -<span class="dv">1</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; N; ++i) {
+    <span class="kw">if</span> (right &gt;= i)
+      dp[<span class="dv">0</span>][i] = min(dp[<span class="dv">0</span>][<span class="dv">2</span> * last - i], right - i);
+
+    <span class="dt">int</span> l = i - dp[<span class="dv">0</span>][i];
+    <span class="dt">int</span> r = i + dp[<span class="dv">0</span>][i];
+    dp[<span class="dv">0</span>][i] += explode(l, r);
+
+    <span class="kw">if</span> (i + dp[<span class="dv">0</span>][i] &gt; right) {
+      last = i;
+      right = i + dp[<span class="dv">0</span>][i];
+    }
+    res += (<span class="dt">long</span> <span class="dt">long</span>) dp[<span class="dv">0</span>][i];
+  }
+}
+
+<span class="dt">void</span> even_center()
+{
+  <span class="dt">int</span> last = -<span class="dv">1</span>, right = -<span class="dv">1</span>;
+  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; N; ++i) {
+    <span class="kw">if</span> (s[i] != s[i + <span class="dv">1</span>])
+      <span class="kw">continue</span>;
+
+    <span class="kw">if</span> (right &gt; i)
+      dp[<span class="dv">1</span>][i] = min(dp[<span class="dv">1</span>][<span class="dv">2</span> * last - i], right - i - <span class="dv">1</span>);
+
+    <span class="dt">int</span> l = i - dp[<span class="dv">1</span>][i];
+    <span class="dt">int</span> r = i + dp[<span class="dv">1</span>][i] + <span class="dv">1</span>;
+    dp[<span class="dv">1</span>][i] += explode(l, r);
+
+    <span class="kw">if</span> (i + dp[<span class="dv">1</span>][i] + <span class="dv">1</span> &gt; right) {
+      last = i;
+      right = i + dp[<span class="dv">1</span>][i] + <span class="dv">1</span>;
+    }
+    res += (<span class="dt">long</span> <span class="dt">long</span>) dp[<span class="dv">1</span>][i];
+  }
+}
+
+<span class="dt">int</span> main()
+{
+  freopen(<span class="st">&quot;pscpld.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
+  freopen(<span class="st">&quot;pscpld.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
+
+  scanf(<span class="st">&quot;%s&quot;</span>, s);
+  N = strlen(s);
+
+  odd_center();
+  even_center();
+
+  printf(<span class="st">&quot;%lld</span><span class="ch">\n</span><span class="st">&quot;</span>, res);
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="trie"><a href="#TOC">Trie</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &lt;cstdio&gt;</span>
+<span class="ot">#include &lt;cstring&gt;</span>
+<span class="ot">#define ch (*s - &#39;a&#39;)</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="kw">struct</span> Trie {
+  <span class="dt">int</span> cnt, nrsons;
+  Trie *son[<span class="dv">26</span>];
+
+  Trie() {
+    cnt = nrsons = <span class="dv">0</span>;
+    memset(son, <span class="dv">0</span>, <span class="kw">sizeof</span>(son));
+  }
+};
+
+Trie *T = <span class="kw">new</span> Trie;
+
+<span class="dt">void</span> ins(Trie *node, <span class="dt">char</span> *s)
+{
+  <span class="kw">if</span> (*s == &#39;\<span class="dv">0</span>&#39;) {
+    node-&gt;cnt++;
+    <span class="kw">return</span>;
+  }
+
+  <span class="kw">if</span> (node-&gt;son[ch] == <span class="dv">0</span>) {
+    node-&gt;son[ch] = <span class="kw">new</span> Trie;
+    node-&gt;nrsons++;
+  }
+
+  ins(node-&gt;son[ch], s + <span class="dv">1</span>);
+}
+
+<span class="dt">int</span> del(Trie *node, <span class="dt">char</span> *s)
+{
+  <span class="kw">if</span> (*s == &#39;\<span class="dv">0</span>&#39;)
+    node-&gt;cnt--;
+  <span class="kw">else</span> <span class="kw">if</span> (del(node-&gt;son[ch], s + <span class="dv">1</span>)) {
+    node-&gt;son[ch] = <span class="dv">0</span>;
+    node-&gt;nrsons--;
+  }
+
+  <span class="kw">if</span> (node-&gt;cnt == <span class="dv">0</span> &amp;&amp; node-&gt;nrsons == <span class="dv">0</span> &amp;&amp; node != T) {
+    <span class="kw">delete</span> node;
+    <span class="kw">return</span> <span class="dv">1</span>;
+  }
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}
+
+<span class="dt">int</span> freq(Trie *node, <span class="dt">char</span> *s)
+{
+  <span class="kw">if</span> (*s == &#39;\<span class="dv">0</span>&#39;)
+    <span class="kw">return</span> node-&gt;cnt;
+  <span class="kw">if</span> (node-&gt;son[ch])
+    <span class="kw">return</span> freq(node-&gt;son[ch], s + <span class="dv">1</span>);
+  <span class="kw">return</span> <span class="dv">0</span>;
+}
+
+<span class="dt">int</span> pref(Trie *node, <span class="dt">char</span> *s, <span class="dt">int</span> k)
+{
+  <span class="kw">if</span> (*s == &#39;\<span class="dv">0</span>&#39; || node-&gt;son[ch] == <span class="dv">0</span>)
+    <span class="kw">return</span> k;
+  <span class="kw">return</span> pref(node-&gt;son[ch], s + <span class="dv">1</span>, k + <span class="dv">1</span>);
+}
+
+<span class="dt">int</span> main()
+{
+  <span class="dt">char</span> line[<span class="dv">32</span>];
+  <span class="dt">char</span> word[<span class="dv">32</span>];
+  <span class="dt">int</span> op;
+
+  freopen(<span class="st">&quot;trie.in&quot;</span>, <span class="st">&quot;r&quot;</span>, stdin);
+  freopen(<span class="st">&quot;trie.out&quot;</span>, <span class="st">&quot;w&quot;</span>, stdout);
+
+  <span class="kw">while</span> (fgets(line, <span class="dv">32</span>, stdin)) {
+    sscanf(line, <span class="st">&quot;%d %s&quot;</span>, &amp;op, word);
+    <span class="kw">switch</span>(op) {
+      <span class="kw">case</span> <span class="dv">0</span>:
+        ins(T, word);
+        <span class="kw">break</span>;
+      <span class="kw">case</span> <span class="dv">1</span>:
+        del(T, word);
+        <span class="kw">break</span>;
+      <span class="kw">case</span> <span class="dv">2</span>:
+        printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, freq(T, word));
+        <span class="kw">break</span>;
+      <span class="kw">case</span> <span class="dv">3</span>:
+        printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>, pref(T, word, <span class="dv">0</span>));
+        <span class="kw">break</span>;
+    }
+  }
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h1 id="geometry"><a href="#TOC">Geometry</a></h1>
+<h2 id="convex-hull"><a href="#TOC">Convex hull</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cstdio&gt;</span>
+
+<span class="ot">#include &lt;algorithm&gt;</span>
+<span class="ot">#include &lt;fstream&gt;</span>
+<span class="ot">#include &lt;iomanip&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+
+<span class="ot">#define x first</span>
+<span class="ot">#define y second</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="kw">typedef</span> pair&lt;<span class="dt">double</span>, <span class="dt">double</span>&gt; point;
+
+<span class="dt">const</span> <span class="dt">int</span> MAXN = <span class="dv">120010</span>;
+
+<span class="dt">int</span> n;
+point v[MAXN];
+
+<span class="dt">int</span> head;
+point stack[MAXN];
+
+<span class="kw">inline</span> <span class="dt">double</span> cross_prod(<span class="dt">const</span> point&amp; A, <span class="dt">const</span> point&amp; B, <span class="dt">const</span> point&amp; C)
+{
+    <span class="kw">return</span> (B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x);
+}
+
+<span class="kw">inline</span> <span class="dt">bool</span> comp(<span class="dt">const</span> point&amp; A, <span class="dt">const</span> point&amp; B)
+{
+    <span class="kw">return</span> cross_prod(v[<span class="dv">1</span>], A, B) &lt; <span class="dv">0</span>;
+}
+
+<span class="dt">void</span> sort_points()
+{
+    <span class="dt">int</span> pos = <span class="dv">1</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">2</span>; i &lt;= n; ++i)
+        <span class="kw">if</span> (v[i] &lt; v[pos])
+            pos = i;
+    swap(v[<span class="dv">1</span>], v[pos]);
+    sort(v + <span class="dv">2</span>, v + n + <span class="dv">1</span>, comp);
+}
+
+<span class="dt">void</span> convex_hull()
+{
+    sort_points();
+
+    stack[<span class="dv">1</span>] = v[<span class="dv">1</span>];
+    stack[<span class="dv">2</span>] = v[<span class="dv">2</span>];
+    head = <span class="dv">2</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">3</span>; i &lt;= n; ++i) {
+        <span class="kw">while</span> (head &gt;= <span class="dv">2</span> &amp;&amp; cross_prod(stack[head - <span class="dv">1</span>], stack[head], v[i]) &gt; <span class="dv">0</span>)
+            --head;
+        stack[++head] = v[i];
+    }
+}</code></pre>
+<h2 id="miscellaneous-geometry"><a href="#TOC">Miscellaneous geometry</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;cmath&gt;</span>
 <span class="ot">#include &lt;iostream&gt;</span>
 <span class="ot">#include &lt;vector&gt;</span>
 
@@ -144,16 +1603,19 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="dt">const</span> <span class="dt">double</span> EPS = <span class="fl">1e-6</span>;
 
 <span class="kw">struct</span> point {
-  <span class="dt">double</span> x, y;
-  point() {}
-  point(<span class="dt">double</span> x_, <span class="dt">double</span> y_): x(x_), y(y_) {}
-  point(<span class="dt">const</span> point&amp; p): x(p.x), y(p.y) {}
+    <span class="dt">double</span> x, y;
+    point() {}
+    point(<span class="dt">double</span> x_, <span class="dt">double</span> y_): x(x_), y(y_) {}
+    point(<span class="dt">const</span> point&amp; p): x(p.x), y(p.y) {}
 
-  point <span class="kw">operator</span>+(<span class="dt">const</span> point&amp; p) <span class="dt">const</span> { <span class="kw">return</span> point(x + p.x, y + p.y); }
-  point <span class="kw">operator</span>-(<span class="dt">const</span> point&amp; p) <span class="dt">const</span> { <span class="kw">return</span> point(x - p.x, y - p.y); }
-  point <span class="kw">operator</span>*(<span class="dt">double</span> c) <span class="dt">const</span> { <span class="kw">return</span> point(x * c, y * c); }
-  point <span class="kw">operator</span>/(<span class="dt">double</span> c) <span class="dt">const</span> { <span class="kw">return</span> point(x / c, y / c); }
+    point <span class="kw">operator</span>+(<span class="dt">const</span> point&amp; p) <span class="dt">const</span> { <span class="kw">return</span> point(x + p.x, y + p.y); }
+    point <span class="kw">operator</span>-(<span class="dt">const</span> point&amp; p) <span class="dt">const</span> { <span class="kw">return</span> point(x - p.x, y - p.y); }
+    point <span class="kw">operator</span>*(<span class="dt">double</span> c) <span class="dt">const</span> { <span class="kw">return</span> point(x * c, y * c); }
+    point <span class="kw">operator</span>/(<span class="dt">double</span> c) <span class="dt">const</span> { <span class="kw">return</span> point(x / c, y / c); }
 };
+ostream &amp;<span class="kw">operator</span>&lt;&lt;(ostream &amp;os, <span class="dt">const</span> point&amp; p) {
+    os &lt;&lt; <span class="st">&quot;(&quot;</span> &lt;&lt; p.x &lt;&lt; <span class="st">&quot;,&quot;</span> &lt;&lt; p.y &lt;&lt; <span class="st">&quot;)&quot;</span>;
+}
 
 <span class="dt">double</span> dot(point p, point q) { <span class="kw">return</span> p.x * q.x + p.y * q.y; }
 <span class="dt">double</span> dist2(point p, point q) { <span class="kw">return</span> dot(p - q, p - q); }
@@ -163,82 +1625,513 @@ code > span.er { color: #ff0000; font-weight: bold; }
 <span class="co">// test if point c is Left | On | Right of line through a, b</span>
 <span class="co">// returns &gt; 0 if left, = 0 if on, &lt; 0 if right</span>
 <span class="dt">double</span> is_left(point a, point b, point c) {
-  <span class="kw">return</span> cross(b - a, c - a);
+    <span class="kw">return</span> cross(b - a, c - a);
 }
+
+point rotate_cw_90(point p) { <span class="kw">return</span> point(p.y, -p.x); }
+point rotate_ccw_90(point p) { <span class="kw">return</span> point(-p.y, p.x); }
 <span class="co">// rotate point counter-clockwise around origin</span>
 point rotate(point p, <span class="dt">double</span> a) {
-  <span class="kw">return</span> point(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));
+    <span class="kw">return</span> point(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));
 }
 
 <span class="co">// project c on line through a and b (a != b)</span>
 point project_point_line(point a, point b, point c) {
-  <span class="kw">return</span> a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
+    <span class="kw">return</span> a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);
 }
 <span class="co">// project point c onto line segment through a and b</span>
 point project_point_segment(point a, point b, point c) {
-  <span class="dt">double</span> d = dot(b - a, b - a);
-  <span class="kw">if</span> (abs(d) &lt; EPS) <span class="kw">return</span> a;
-  d = dot(c - a, b - a) / d;
-  <span class="kw">if</span> (d &lt; <span class="dv">0</span>) <span class="kw">return</span> a;
-  <span class="kw">if</span> (d &gt; <span class="dv">1</span>) <span class="kw">return</span> b;
-  <span class="kw">return</span> a + (b - a) * d;
+    <span class="dt">double</span> d = dot(b - a, b - a);
+    <span class="kw">if</span> (abs(d) &lt; EPS) <span class="kw">return</span> a;
+    d = dot(c - a, b - a) / d;
+    <span class="kw">if</span> (d &lt; <span class="dv">0</span>) <span class="kw">return</span> a;
+    <span class="kw">if</span> (d &gt; <span class="dv">1</span>) <span class="kw">return</span> b;
+    <span class="kw">return</span> a + (b - a) * d;
 }
 
 <span class="co">// compute distance from c to segment between a and b</span>
 <span class="dt">double</span> distance_point_segment(point a, point b, point c) {
-  <span class="kw">return</span> sqrt(dist2(c, project_point_segment(a, b, c)));
+    <span class="kw">return</span> sqrt(dist2(c, project_point_segment(a, b, c)));
 }
 <span class="co">// compute distance between point (x, y, z) and plane ax + by + cz = d</span>
 <span class="dt">double</span> distance_point_plane(<span class="dt">double</span> x, <span class="dt">double</span> y, <span class="dt">double</span> z,
-    <span class="dt">double</span> a, <span class="dt">double</span> b, <span class="dt">double</span> c, <span class="dt">double</span> d) {
-  <span class="kw">return</span> abs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);
+        <span class="dt">double</span> a, <span class="dt">double</span> b, <span class="dt">double</span> c, <span class="dt">double</span> d) {
+    <span class="kw">return</span> abs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);
 }
 
 <span class="co">// determine if lines a - b and c - d are parallel or collinear</span>
 <span class="dt">bool</span> lines_parallel(point a, point b, point c, point d) {
-  <span class="kw">return</span> abs(cross(b - a, c - d)) &lt; EPS;
+    <span class="kw">return</span> abs(cross(b - a, c - d)) &lt; EPS;
 }
 <span class="dt">bool</span> lines_collinear(point a, point b, point c, point d) {
-  <span class="kw">return</span> lines_parallel(a, b, c, d) &amp;&amp;
-    abs(cross(a - b, a - c)) &lt; EPS &amp;&amp;
-    abs(cross(c - d, c - a)) &lt; EPS;
+    <span class="kw">return</span> lines_parallel(a, b, c, d) &amp;&amp;
+        abs(cross(a - b, a - c)) &lt; EPS &amp;&amp;
+        abs(cross(c - d, c - a)) &lt; EPS;
+}
+
+<span class="co">// check if line segment a - b intersects line segment c - d</span>
+<span class="dt">bool</span> segments_intersect(point a, point b, point c, point d) {
+    <span class="kw">if</span> (lines_collinear(a, b, c, d)) {
+        <span class="kw">if</span> (dist2(a, c) &lt; EPS || dist2(a, d) &lt; EPS ||
+                dist2(b, c) &lt; EPS || dist2(b, d) &lt; EPS) <span class="kw">return</span> <span class="kw">true</span>;
+        <span class="kw">if</span> (dot(c - a, c - b) &gt; <span class="dv">0</span> &amp;&amp; dot(d - a, d - b) &gt; <span class="dv">0</span> &amp;&amp;
+                dot(c - b, d - b) &gt; <span class="dv">0</span>) <span class="kw">return</span> <span class="kw">false</span>;
+        <span class="kw">return</span> <span class="kw">true</span>;
+    }
+    <span class="kw">if</span> (cross(d - a, b - a) * cross(c - a, b - a) &gt; <span class="dv">0</span>) <span class="kw">return</span> <span class="kw">false</span>;
+    <span class="kw">if</span> (cross(a - c, d - c) * cross(b - c, d - c) &gt; <span class="dv">0</span>) <span class="kw">return</span> <span class="kw">false</span>;
+    <span class="kw">return</span> <span class="kw">true</span>;
+}
+point compute_line_intersection(point a, point b, point c, point d) {
+    b = b - a; d = c - d; c = c - a;
+    <span class="kw">return</span> a + b * cross(c, d) / cross(b, d);
+}
+
+<span class="co">// compute center of circle given three points</span>
+point compute_circle_center(point a, point b, point c) {
+    b = (a + b) / <span class="dv">2</span>;
+    c = (a + c) / <span class="dv">2</span>;
+    <span class="kw">return</span> compute_line_intersection(b, b + rotate_cw_90(a - b),
+            c, c + rotate_cw_90(a - c));
 }
 
 <span class="co">// test if point p is in polygon (use winding number test)</span>
-<span class="dt">bool</span> point_in_poly(point p, vector&lt;point&gt;&amp; v) {
-  v.push_back(v[<span class="dv">0</span>]);
-  <span class="dt">int</span> wn = <span class="dv">0</span>;
-  <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
-  <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
-    <span class="kw">if</span> (v[i].y &lt;= p.y) {
-      <span class="kw">if</span> (v[i + <span class="dv">1</span>].y &gt; p.y &amp;&amp; is_left(v[i], v[i + <span class="dv">1</span>], p) &gt; <span class="dv">0</span>)
-        ++wn;
-    } <span class="kw">else</span> {
-      <span class="kw">if</span> (v[i + <span class="dv">1</span>].y &lt;= p.y &amp;&amp; is_left(v[i], v[i + <span class="dv">1</span>], p) &lt; <span class="dv">0</span>)
-        --wn;
+<span class="dt">bool</span> point_in_poly(point p, <span class="dt">const</span> vector&lt;point&gt;&amp; v) {
+    <span class="dt">int</span> wn = <span class="dv">0</span>;
+    <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
+        <span class="dt">int</span> j = (i + <span class="dv">1</span>) % n;
+        <span class="kw">if</span> (v[i].y &lt;= p.y) {
+            <span class="kw">if</span> (v[j].y &gt; p.y &amp;&amp; is_left(v[i], v[j], p) &gt; <span class="dv">0</span>)
+                ++wn;
+        } <span class="kw">else</span> {
+            <span class="kw">if</span> (v[j].y &lt;= p.y &amp;&amp; is_left(v[i], v[j], p) &lt; <span class="dv">0</span>)
+                --wn;
+        }
     }
-  }
-  v.pop_back();
 
-  <span class="kw">return</span> wn != <span class="dv">0</span>;
+    <span class="kw">return</span> wn != <span class="dv">0</span>;
+}
+<span class="dt">bool</span> point_on_polygon(point p, <span class="dt">const</span> vector&lt;point&gt;&amp; v) {
+    <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
+        <span class="dt">int</span> j = (i + <span class="dv">1</span>) % n;
+        <span class="kw">if</span> (dist2(project_point_segment(v[i], v[j], p), p) &lt; EPS)
+            <span class="kw">return</span> <span class="kw">true</span>;
+    }
+    <span class="kw">return</span> <span class="kw">false</span>;
 }
 
+<span class="co">// compute signed area of polygon</span>
+<span class="dt">double</span> signed_area(<span class="dt">const</span> vector&lt;point&gt;&amp; v) {
+    <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
+    <span class="dt">double</span> area = <span class="dv">0</span>;
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
+        <span class="dt">int</span> j = (i + <span class="dv">1</span>) % n;
+        area += v[i].x * v[j].y - v[j].x * v[i].y;
+    }
+    <span class="kw">return</span> area / <span class="fl">2.0</span>;
+}
+<span class="dt">double</span> area(<span class="dt">const</span> vector&lt;point&gt;&amp; v) {
+    <span class="kw">return</span> abs(signed_area(v));
+}
+
+<span class="co">// compute centroid of polygon</span>
+point centroid(<span class="dt">const</span> vector&lt;point&gt;&amp; v) {
+    <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
+    point c(<span class="dv">0</span>, <span class="dv">0</span>);
+    <span class="dt">double</span> scale = <span class="fl">6.0</span> * signed_area(v);
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
+        <span class="dt">int</span> j = (i + <span class="dv">1</span>) % n;
+        c = c + (v[i] + v[j]) * (v[i].x * v[j].y - v[j].x * v[i].y);
+    }
+    <span class="kw">return</span> c / scale;
+}
+
+<span class="dt">bool</span> is_simple(<span class="dt">const</span> vector&lt;point&gt;&amp; v) {
+    <span class="dt">int</span> n = <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(v.size());
+    <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; ++i) {
+        <span class="kw">for</span> (<span class="dt">int</span> k = i + <span class="dv">1</span>; k &lt; n; ++k) {
+            <span class="dt">int</span> j = (i + <span class="dv">1</span>) % n;
+            <span class="dt">int</span> l = (k + <span class="dv">1</span>) % n;
+            <span class="kw">if</span> (i == l || j == k) <span class="kw">continue</span>;
+            <span class="kw">if</span> (segments_intersect(v[i], v[j], v[k], v[l]))
+                <span class="kw">return</span> <span class="kw">false</span>;
+        }
+    }
+    <span class="kw">return</span> <span class="kw">true</span>;
+}</code></pre>
+<h1 id="other"><a href="#TOC">Other</a></h1>
+<h2 id="range-minimum-query"><a href="#TOC">Range minimum query</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include&lt;stdio.h&gt;</span>
+<span class="ot">#include&lt;algorithm&gt;</span>
+
+<span class="ot">#define log 18</span>
+<span class="ot">#define Nmax 100100</span>
+
+<span class="kw">inline</span> <span class="dt">int</span> min(<span class="dt">int</span> a,<span class="dt">int</span> b)
+{
+  <span class="kw">if</span>(a&lt;b)
+    <span class="kw">return</span> a;
+  <span class="kw">return</span> b;
+}
+
+<span class="dt">int</span> rmq[log][Nmax],x,y,maxi,sh;
+<span class="dt">int</span> v[Nmax];
+<span class="dt">int</span> lg[Nmax],N,M;
 <span class="dt">int</span> main()
 {
-  vector&lt;point&gt; v;
-  v.push_back(point(<span class="dv">0</span>, <span class="dv">0</span>));
-  v.push_back(point(<span class="dv">5</span>, <span class="dv">0</span>));
-  v.push_back(point(<span class="dv">5</span>, <span class="dv">5</span>));
-  v.push_back(point(<span class="dv">0</span>, <span class="dv">5</span>));
+  freopen(<span class="st">&quot;rmq.in&quot;</span>,<span class="st">&quot;r&quot;</span>,stdin);
+  freopen(<span class="st">&quot;rmq.out&quot;</span>,<span class="st">&quot;w&quot;</span>,stdout);
 
-  <span class="co">// expected 1 1 1 0 0</span>
-  cerr &lt;&lt; point_in_poly(point(<span class="dv">2</span>, <span class="dv">2</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
-       &lt;&lt; point_in_poly(point(<span class="dv">2</span>, <span class="dv">0</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
-       &lt;&lt; point_in_poly(point(<span class="dv">0</span>, <span class="dv">2</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
-       &lt;&lt; point_in_poly(point(<span class="dv">5</span>, <span class="dv">2</span>), v) &lt;&lt; <span class="st">&quot; &quot;</span>
-       &lt;&lt; point_in_poly(point(<span class="dv">2</span>, <span class="dv">5</span>), v) &lt;&lt; endl;
+  scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;N,&amp;M);
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i)
+    scanf(<span class="st">&quot;%d&quot;</span>,&amp;v[i]);
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">2</span>;i&lt;=N;++i)
+    lg[i]=lg[i/<span class="dv">2</span>]+<span class="dv">1</span>;
 
-  <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre></td></tr></table>
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i)
+    rmq[<span class="dv">0</span>][i]=v[i];
+  v[<span class="dv">0</span>]=-<span class="dv">1</span>;
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;(<span class="dv">1</span>&lt;&lt;i)&lt;=N;++i)
+  {
+    <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">1</span>;j+(<span class="dv">1</span>&lt;&lt;i)-<span class="dv">1</span>&lt;=N;++j)
+    {
+      maxi=<span class="dv">1</span>&lt;&lt;(i<span class="dv">-1</span>);
+      rmq[i][j]=min(rmq[i<span class="dv">-1</span>][j],rmq[i<span class="dv">-1</span>][j+maxi]);
+    }
+  }
+
+  <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=M;++i)
+  {
+    scanf(<span class="st">&quot;%d%d&quot;</span>,&amp;x,&amp;y);
+    maxi=lg[y-x<span class="dv">+1</span>];
+    sh=y-x<span class="dv">+1</span>-(<span class="dv">1</span>&lt;&lt;maxi);
+    printf(<span class="st">&quot;%d</span><span class="ch">\n</span><span class="st">&quot;</span>,min(rmq[maxi][x],rmq[maxi][x+sh]));
+  }
+}</code></pre>
+<h2 id="sat"><a href="#TOC">2SAT</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;vector&gt;</span>
+<span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;algorithm&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &lt;queue&gt;</span>
+
+<span class="ot">#define pb push_back</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+vector&lt;<span class="dt">int</span>&gt; g[<span class="dv">202020</span>],gx[<span class="dv">202020</span>],last,stackx,viz,iss,low,aux,tare,gr_in;
+vector&lt;vector&lt;<span class="dt">int</span>&gt; &gt; comp;
+<span class="dt">int</span> N,index=<span class="dv">1</span>,k,Nn,M,x,y;
+<span class="dt">int</span> rez[<span class="dv">201010</span>];
+<span class="dt">int</span> notn(<span class="dt">int</span> x){
+    <span class="kw">if</span>(x&lt;=N){
+        <span class="kw">return</span> x + N;
+    }
+    <span class="kw">return</span> x-N;
+}
+
+<span class="dt">void</span> df(<span class="dt">int</span> x){
+
+    viz[x] = index;
+    low[x] = index;
+    stackx[++k] = x;
+    iss[x] = <span class="dv">1</span>;
+    ++index;
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;g[x].size();++i){
+        <span class="kw">if</span>(viz[g[x][i]] == <span class="dv">0</span>){
+            df(g[x][i]);
+            low[x] = min(low[x],low[g[x][i]]);
+        }
+        <span class="kw">else</span>{
+            <span class="kw">if</span>(iss[g[x][i]]){
+                low[x] = min(low[x],low[g[x][i]]);
+            }
+        }
+    }
+    <span class="kw">if</span>(low[x] == viz[x]){
+
+        aux.clear();
+
+        <span class="kw">do</span>{
+            aux.pb(stackx[k]);
+            iss[stackx[k]] = <span class="dv">0</span>;
+            --k;
+        }<span class="kw">while</span>(stackx[k<span class="dv">+1</span>] != x);
+
+        comp.pb(aux);
+    }
+}
+
+<span class="dt">void</span> init(){
+    index = <span class="dv">1</span>;
+    stackx.resize(Nn<span class="dv">+10</span>);
+    viz.resize(Nn<span class="dv">+10</span>);
+    iss.resize(Nn<span class="dv">+10</span>);
+    low.resize(Nn<span class="dv">+10</span>);
+    tare.resize(Nn<span class="dv">+10</span>);
+    last.resize(Nn<span class="dv">+10</span>);
+    gr_in.resize(Nn<span class="dv">+10</span>);
+}
+
+<span class="dt">void</span> make_ctc(){
+    Nn=<span class="dv">2</span>*N;
+    init();
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=Nn;++i){
+        <span class="kw">if</span>(viz[i]==<span class="dv">0</span>){
+            df(i);
+            <span class="co">//  printf(&quot;%d\n&quot;,i);</span>
+        }
+    }
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;comp.size();++i){
+        <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>;j&lt;comp[i].size();++j){
+            tare[comp[i][j]] = i<span class="dv">+1</span>;
+        }
+    }
+}
+
+<span class="dt">void</span> solve(){
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i){
+        <span class="kw">if</span>(tare[i] == tare[notn(i)]){
+            printf(<span class="st">&quot;-1</span><span class="ch">\n</span><span class="st">&quot;</span>);
+            <span class="kw">return</span>;
+        }
+    }
+
+    <span class="dt">int</span> nod;
+
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;comp.size();++i){
+        <span class="kw">for</span>(<span class="dt">int</span> j=<span class="dv">0</span>;j&lt;comp[i].size();++j){
+            nod = comp[i][j];
+
+            <span class="kw">for</span>(<span class="dt">int</span> k=<span class="dv">0</span>;k&lt;g[nod].size();++k){
+                <span class="dt">int</span> compv = tare[g[nod][k]];
+                <span class="kw">if</span> ( last[compv] != i<span class="dv">+1</span> &amp;&amp; compv != i<span class="dv">+1</span> ){
+                    gx[i<span class="dv">+1</span>].pb(compv);
+                    ++gr_in[compv];
+                    last[compv]=i<span class="dv">+1</span>;
+                }
+            }
+        }
+    }
+    queue&lt;<span class="dt">int</span>&gt; Q;
+    <span class="co">//printf(&quot;%d\n\n&quot;,comp.size());</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=comp.size();++i){
+        <span class="kw">if</span>(gr_in[i]==<span class="dv">0</span>){
+            Q.push(i);
+            <span class="co">// printf(&quot;%d!\n&quot;,i);</span>
+        }
+    }
+    <span class="dt">int</span> nr = <span class="dv">0</span>;
+    <span class="kw">while</span>(!Q.empty()){
+        ++nr;
+        nod = Q.front(); Q.pop();
+        <span class="co">// printf(&quot;%d\n&quot;,nod);</span>
+        <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;gx[nod].size();++i){
+            <span class="dt">int</span> nodv = gx[nod][i];
+            --gr_in[nodv];
+            <span class="kw">if</span> (gr_in[nodv]==<span class="dv">0</span>)
+                Q.push(nodv);
+        }
+        <span class="kw">if</span> ( last[nod] == -<span class="dv">1</span> )  <span class="kw">continue</span> ;
+
+        <span class="kw">for</span> (<span class="dt">int</span> i=<span class="dv">0</span>;i&lt;comp[nod<span class="dv">-1</span>].size();++i){
+            rez[comp[nod<span class="dv">-1</span>][i]] = <span class="dv">0</span>;
+            rez[notn(comp[nod<span class="dv">-1</span>][i])] = <span class="dv">1</span>;
+        }
+        nod = tare[notn(comp[nod<span class="dv">-1</span>][<span class="dv">0</span>])];
+        last[nod] = -<span class="dv">1</span>;
+    }
+    <span class="co">//printf(&quot;\n\n%d\n\n&quot;,nr);</span>
+    <span class="kw">for</span>(<span class="dt">int</span> i=<span class="dv">1</span>;i&lt;=N;++i){
+        printf(<span class="st">&quot;%d &quot;</span>,rez[i]);
+    }
+    <span class="kw">return</span>;
+}</code></pre>
+<h2 id="kd-tree"><a href="#TOC">KD-tree</a></h2>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="co">// --------------------------------------------------------------------------</span>
+<span class="co">// A straightforward, but probably sub-optimal KD-tree implmentation that&#39;s</span>
+<span class="co">// probably good enough for most things (current it&#39;s a 2D-tree)</span>
+<span class="co">//</span>
+<span class="co">//  - constructs from n points in O(n lg^2 n) time</span>
+<span class="co">//  - handles nearest-neighbor query in O(lg n) if points are well distributed</span>
+<span class="co">//  - worst case for nearest-neighbor may be linear in pathological case</span>
+<span class="co">//</span>
+<span class="co">// Sonny Chan, Stanford University, April 2009</span>
+<span class="co">// --------------------------------------------------------------------------</span>
+
+<span class="ot">#include &lt;iostream&gt;</span>
+<span class="ot">#include &lt;vector&gt;</span>
+<span class="ot">#include &lt;limits&gt;</span>
+<span class="ot">#include &lt;cstdlib&gt;</span>
+
+<span class="kw">using</span> <span class="kw">namespace</span> std;
+
+<span class="co">// number type for coordinates, and its maximum value</span>
+<span class="kw">typedef</span> <span class="dt">long</span> <span class="dt">long</span> ntype;
+<span class="dt">const</span> ntype sentry = numeric_limits&lt;ntype&gt;::max();
+
+<span class="co">// point structure for 2D-tree, can be extended to 3D</span>
+<span class="kw">struct</span> point {
+    ntype x, y;
+    point(ntype xx = <span class="dv">0</span>, ntype yy = <span class="dv">0</span>) : x(xx), y(yy) {}
+};
+
+<span class="dt">bool</span> <span class="kw">operator</span>==(<span class="dt">const</span> point &amp;a, <span class="dt">const</span> point &amp;b)
+{
+    <span class="kw">return</span> a.x == b.x &amp;&amp; a.y == b.y;
+}
+
+<span class="co">// sorts points on x-coordinate</span>
+<span class="dt">bool</span> on_x(<span class="dt">const</span> point &amp;a, <span class="dt">const</span> point &amp;b)
+{
+    <span class="kw">return</span> a.x &lt; b.x;
+}
+
+<span class="co">// sorts points on y-coordinate</span>
+<span class="dt">bool</span> on_y(<span class="dt">const</span> point &amp;a, <span class="dt">const</span> point &amp;b)
+{
+    <span class="kw">return</span> a.y &lt; b.y;
+}
+
+<span class="co">// squared distance between points</span>
+ntype pdist2(<span class="dt">const</span> point &amp;a, <span class="dt">const</span> point &amp;b)
+{
+    ntype dx = a.x-b.x, dy = a.y-b.y;
+    <span class="kw">return</span> dx*dx + dy*dy;
+}
+
+<span class="co">// bounding box for a set of points</span>
+<span class="kw">struct</span> bbox
+{
+    ntype x0, x1, y0, y1;
+    
+    bbox() : x0(sentry), x1(-sentry), y0(sentry), y1(-sentry) {}
+    
+    <span class="co">// computes bounding box from a bunch of points</span>
+    <span class="dt">void</span> compute(<span class="dt">const</span> vector&lt;point&gt; &amp;v) {
+        <span class="kw">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; v.size(); ++i) {
+            x0 = min(x0, v[i].x);   x1 = max(x1, v[i].x);
+            y0 = min(y0, v[i].y);   y1 = max(y1, v[i].y);
+        }
+    }
+    
+    <span class="co">// squared distance between a point and this bbox, 0 if inside</span>
+    ntype distance(<span class="dt">const</span> point &amp;p) {
+        <span class="kw">if</span> (p.x &lt; x0) {
+            <span class="kw">if</span> (p.y &lt; y0)       <span class="kw">return</span> pdist2(point(x0, y0), p);
+            <span class="kw">else</span> <span class="kw">if</span> (p.y &gt; y1)  <span class="kw">return</span> pdist2(point(x0, y1), p);
+            <span class="kw">else</span>                <span class="kw">return</span> pdist2(point(x0, p.y), p);
+        }
+        <span class="kw">else</span> <span class="kw">if</span> (p.x &gt; x1) {
+            <span class="kw">if</span> (p.y &lt; y0)       <span class="kw">return</span> pdist2(point(x1, y0), p);
+            <span class="kw">else</span> <span class="kw">if</span> (p.y &gt; y1)  <span class="kw">return</span> pdist2(point(x1, y1), p);
+            <span class="kw">else</span>                <span class="kw">return</span> pdist2(point(x1, p.y), p);
+        }
+        <span class="kw">else</span> {
+            <span class="kw">if</span> (p.y &lt; y0)       <span class="kw">return</span> pdist2(point(p.x, y0), p);
+            <span class="kw">else</span> <span class="kw">if</span> (p.y &gt; y1)  <span class="kw">return</span> pdist2(point(p.x, y1), p);
+            <span class="kw">else</span>                <span class="kw">return</span> <span class="dv">0</span>;
+        }
+    }
+};
+
+<span class="co">// stores a single node of the kd-tree, either internal or leaf</span>
+<span class="kw">struct</span> kdnode 
+{
+    <span class="dt">bool</span> leaf;      <span class="co">// true if this is a leaf node (has one point)</span>
+    point pt;       <span class="co">// the single point of this is a leaf</span>
+    bbox bound;     <span class="co">// bounding box for set of points in children</span>
+    
+    kdnode *first, *second; <span class="co">// two children of this kd-node</span>
+    
+    kdnode() : leaf(<span class="kw">false</span>), first(<span class="dv">0</span>), second(<span class="dv">0</span>) {}
+    ~kdnode() { <span class="kw">if</span> (first) <span class="kw">delete</span> first; <span class="kw">if</span> (second) <span class="kw">delete</span> second; }
+    
+    <span class="co">// intersect a point with this node (returns squared distance)</span>
+    ntype intersect(<span class="dt">const</span> point &amp;p) {
+        <span class="kw">return</span> bound.distance(p);
+    }
+    
+    <span class="co">// recursively builds a kd-tree from a given cloud of points</span>
+    <span class="dt">void</span> construct(vector&lt;point&gt; &amp;vp)
+    {
+        <span class="co">// compute bounding box for points at this node</span>
+        bound.compute(vp);
+        
+        <span class="co">// if we&#39;re down to one point, then we&#39;re a leaf node</span>
+        <span class="kw">if</span> (vp.size() == <span class="dv">1</span>) {
+            leaf = <span class="kw">true</span>;
+            pt = vp[<span class="dv">0</span>];
+        }
+        <span class="kw">else</span> {
+            <span class="co">// split on x if the bbox is wider than high (not best heuristic...)</span>
+            <span class="kw">if</span> (bound.x1-bound.x0 &gt;= bound.y1-bound.y0)
+                sort(vp.begin(), vp.end(), on_x);
+            <span class="co">// otherwise split on y-coordinate</span>
+            <span class="kw">else</span>
+                sort(vp.begin(), vp.end(), on_y);
+            
+            <span class="co">// divide by taking half the array for each child</span>
+            <span class="co">// (not best performance if many duplicates in the middle)</span>
+            <span class="dt">int</span> half = vp.size()/<span class="dv">2</span>;
+            vector&lt;point&gt; vl(vp.begin(), vp.begin()+half);
+            vector&lt;point&gt; vr(vp.begin()+half, vp.end());
+            first = <span class="kw">new</span> kdnode();   first-&gt;construct(vl);
+            second = <span class="kw">new</span> kdnode();  second-&gt;construct(vr);            
+        }
+    }
+};
+
+<span class="co">// simple kd-tree class to hold the tree and handle queries</span>
+<span class="kw">struct</span> kdtree
+{
+    kdnode *root;
+    
+    <span class="co">// constructs a kd-tree from a points (copied here, as it sorts them)</span>
+    kdtree(<span class="dt">const</span> vector&lt;point&gt; &amp;vp) {
+        vector&lt;point&gt; v(vp.begin(), vp.end());
+        root = <span class="kw">new</span> kdnode();
+        root-&gt;construct(v);
+    }
+    ~kdtree() { <span class="kw">delete</span> root; }
+    
+    <span class="co">// recursive search method returns squared distance to nearest point</span>
+    ntype search(kdnode *node, <span class="dt">const</span> point &amp;p)
+    {
+        <span class="kw">if</span> (node-&gt;leaf) {
+            <span class="co">// commented special case tells a point not to find itself</span>
+<span class="co">//            if (p == node-&gt;pt) return sentry;</span>
+<span class="co">//            else               </span>
+                <span class="kw">return</span> pdist2(p, node-&gt;pt);
+        }
+        
+        ntype bfirst = node-&gt;first-&gt;intersect(p);
+        ntype bsecond = node-&gt;second-&gt;intersect(p);
+        
+        <span class="co">// choose the side with the closest bounding box to search first</span>
+        <span class="co">// (note that the other side is also searched if needed)</span>
+        <span class="kw">if</span> (bfirst &lt; bsecond) {
+            ntype best = search(node-&gt;first, p);
+            <span class="kw">if</span> (bsecond &lt; best)
+                best = min(best, search(node-&gt;second, p));
+            <span class="kw">return</span> best;
+        }
+        <span class="kw">else</span> {
+            ntype best = search(node-&gt;second, p);
+            <span class="kw">if</span> (bfirst &lt; best)
+                best = min(best, search(node-&gt;first, p));
+            <span class="kw">return</span> best;
+        }
+    }
+    
+    <span class="co">// squared distance to the nearest </span>
+    ntype nearest(<span class="dt">const</span> point &amp;p) {
+        <span class="kw">return</span> search(root, p);
+    }
+};</code></pre>
 </body>
 </html>
