@@ -1,5 +1,5 @@
 \documentclass[10pt,]{article}
-\usepackage{fullpage}
+\usepackage{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
@@ -7,16 +7,39 @@
 \usepackage{fixltx2e} % provides \textsubscript
 % use microtype if available
 \IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[utf8]{inputenc}
+
+\geometry{
+    top=1.0in,
+    inner=1.0in,
+    outer=1.0in,
+    bottom=1.0in,
+    headheight=3ex,
+    headsep=2ex,
+}
+
 \else % if luatex or xelatex
   \usepackage{fontspec}
   \ifxetex
     \usepackage{xltxtra,xunicode}
   \fi
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
-  \newcommand{\euro}{€}
+  \newcommand{\euro}{â‚¬}
 \fi
+
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\pagenumbering{arabic}
+\lhead{University of Southampton}
+\chead{}
+\rhead{\thepage}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+
 \usepackage{color}
 \usepackage{fancyvrb}
 \DefineShortVerb[commandchars=\\\{\}]{\|}
@@ -63,10 +86,6 @@
 \begin{document}
 \maketitle
 
-{
-\hypersetup{linkcolor=black}
-\tableofcontents
-}
 \section{Data Structures}
 
 \subsection{Binary indexed tree}
@@ -76,23 +95,15 @@
 \DataTypeTok{int} \NormalTok{AIB[Nmax],v[Nmax],M,x,y,z;}
 \DataTypeTok{int} \NormalTok{N,num;}
 
-\KeywordTok{inline} \DataTypeTok{int} \NormalTok{zeros(}\DataTypeTok{int} \NormalTok{x)}
-\NormalTok{\{}
+\KeywordTok{inline} \DataTypeTok{int} \NormalTok{zeros(}\DataTypeTok{int} \NormalTok{x) \{}
   \KeywordTok{return} \NormalTok{((x ^ (x - }\DecValTok{1}\NormalTok{)) & x );}
 \NormalTok{\}}
-
-\KeywordTok{inline} \DataTypeTok{void} \NormalTok{Add(}\DataTypeTok{int} \NormalTok{x, }\DataTypeTok{int} \NormalTok{q)}
-\NormalTok{\{}
-  \DataTypeTok{int} \NormalTok{i;}
-
-  \KeywordTok{for} \NormalTok{(i = x; i <= N; i += zeros(i))}
+\KeywordTok{inline} \DataTypeTok{void} \NormalTok{Add(}\DataTypeTok{int} \NormalTok{x, }\DataTypeTok{int} \NormalTok{q) \{}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = x; i <= N; i += zeros(i))}
     \NormalTok{AIB[i]+=q;}
 \NormalTok{\}}
-
-\KeywordTok{inline} \DataTypeTok{int} \NormalTok{comp(}\DataTypeTok{int} \NormalTok{x)}
-\NormalTok{\{}
+\KeywordTok{inline} \DataTypeTok{int} \NormalTok{comp(}\DataTypeTok{int} \NormalTok{x) \{}
   \DataTypeTok{int} \NormalTok{i, ret = }\DecValTok{0}\NormalTok{;}
-
   \KeywordTok{for} \NormalTok{(i = x; i > }\DecValTok{0}\NormalTok{; i -= zeros(i))}
     \NormalTok{ret +=AIB[i];}
   \KeywordTok{return} \NormalTok{ret;}
@@ -111,12 +122,10 @@
 \DataTypeTok{long} \DataTypeTok{long} \NormalTok{N;}
 \DataTypeTok{long} \DataTypeTok{long} \NormalTok{inf = (}\DataTypeTok{long} \DataTypeTok{long}\NormalTok{)}\DecValTok{101010000}\NormalTok{*}\DecValTok{100}\NormalTok{;}
 
-\KeywordTok{inline} \DataTypeTok{void} \NormalTok{relax(}\DataTypeTok{int} \NormalTok{nod,}\DataTypeTok{int} \NormalTok{st,}\DataTypeTok{int} \NormalTok{dr)}
-\NormalTok{\{}
+\KeywordTok{inline} \DataTypeTok{void} \NormalTok{relax(}\DataTypeTok{int} \NormalTok{nod,}\DataTypeTok{int} \NormalTok{st,}\DataTypeTok{int} \NormalTok{dr) \{}
   \DataTypeTok{long} \DataTypeTok{long} \NormalTok{mij=(st+dr)/}\DecValTok{2}\NormalTok{;}
   \DataTypeTok{long} \DataTypeTok{long} \NormalTok{val=up[nod];}
-  \KeywordTok{if}\NormalTok{(st!=dr)}
-  \NormalTok{\{}
+  \KeywordTok{if}\NormalTok{(st!=dr) \{}
     \NormalTok{up[}\DecValTok{2}\NormalTok{*nod]+=val;}
     \NormalTok{up[}\DecValTok{2}\NormalTok{*nod}\DecValTok{+1}\NormalTok{]+=val;}
   \NormalTok{\}}
@@ -125,47 +134,35 @@
   \NormalTok{aint[nod]+=up[nod];}
   \NormalTok{up[nod]=}\DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
-\DataTypeTok{void} \NormalTok{update(}\DataTypeTok{int} \NormalTok{nod,}\DataTypeTok{int} \NormalTok{ist,}\DataTypeTok{int} \NormalTok{idr,}\DataTypeTok{int} \NormalTok{st,}\DataTypeTok{int} \NormalTok{dr,}\DataTypeTok{long} \DataTypeTok{long} \NormalTok{val)}
-\NormalTok{\{}
-  \KeywordTok{if}\NormalTok{(ist<=st&&idr>=dr)}
-  \NormalTok{\{}
+\DataTypeTok{void} \NormalTok{update(}\DataTypeTok{int} \NormalTok{nod,}\DataTypeTok{int} \NormalTok{ist,}\DataTypeTok{int} \NormalTok{idr,}\DataTypeTok{int} \NormalTok{st,}\DataTypeTok{int} \NormalTok{dr,}\DataTypeTok{long} \DataTypeTok{long} \NormalTok{val) \{}
+  \KeywordTok{if}\NormalTok{(ist<=st&&idr>=dr) \{}
     \NormalTok{aint[nod]+=val;}
-    \KeywordTok{if}\NormalTok{(st!=dr)}
-    \NormalTok{\{}
-    \NormalTok{up[}\DecValTok{2}\NormalTok{*nod]+=val;}
-    \NormalTok{up[}\DecValTok{2}\NormalTok{*nod}\DecValTok{+1}\NormalTok{]+=val;}
+    \KeywordTok{if}\NormalTok{(st!=dr) \{}
+      \NormalTok{up[}\DecValTok{2}\NormalTok{*nod]+=val;}
+      \NormalTok{up[}\DecValTok{2}\NormalTok{*nod}\DecValTok{+1}\NormalTok{]+=val;}
     \NormalTok{\}}
     \KeywordTok{else} \NormalTok{ind[nod]=ist;}
-  \NormalTok{\}}
-  \KeywordTok{else}
-  \NormalTok{\{}
+  \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
     \KeywordTok{if}\NormalTok{(aint[nod]>}\DecValTok{0}\NormalTok{)}
       \NormalTok{relax(nod,st,dr);}
-
     \DataTypeTok{long} \DataTypeTok{long} \NormalTok{mij=(st+dr)/}\DecValTok{2}\NormalTok{;}
 
     \KeywordTok{if}\NormalTok{(ist<=mij)}
       \NormalTok{update(}\DecValTok{2}\NormalTok{*nod,ist,idr,st,mij,val);}
-
     \KeywordTok{if}\NormalTok{(idr>mij)}
       \NormalTok{update(}\DecValTok{2}\NormalTok{*nod}\DecValTok{+1}\NormalTok{,ist,idr,mij}\DecValTok{+1}\NormalTok{,dr,val);}
-
     \KeywordTok{if}\NormalTok{(up[nod*}\DecValTok{2}\NormalTok{])}
       \NormalTok{relax(nod*}\DecValTok{2}\NormalTok{,st,mij);}
     \KeywordTok{if}\NormalTok{(up[nod*}\DecValTok{2+1}\NormalTok{])}
       \NormalTok{relax(nod*}\DecValTok{2+1}\NormalTok{,mij}\DecValTok{+1}\NormalTok{,dr);}
-    \KeywordTok{if}\NormalTok{(aint[nod*}\DecValTok{2}\NormalTok{]>aint[nod*}\DecValTok{2+1}\NormalTok{])}
-    \NormalTok{\{}
+    \KeywordTok{if}\NormalTok{(aint[nod*}\DecValTok{2}\NormalTok{]>aint[nod*}\DecValTok{2+1}\NormalTok{]) \{}
       \NormalTok{aint[nod]=aint[}\DecValTok{2}\NormalTok{*nod}\DecValTok{+1}\NormalTok{];}
       \NormalTok{ind[nod]=ind[}\DecValTok{2}\NormalTok{*nod}\DecValTok{+1}\NormalTok{];}
-    \NormalTok{\}}
-    \KeywordTok{else}
-    \NormalTok{\{}
+    \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
       \NormalTok{aint[nod]=aint[}\DecValTok{2}\NormalTok{*nod];}
       \NormalTok{ind[nod]=ind[}\DecValTok{2}\NormalTok{*nod];}
     \NormalTok{\}}
   \NormalTok{\}}
-  \KeywordTok{return}\NormalTok{;}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -175,111 +172,97 @@
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{struct} \NormalTok{T \{}
-    \DataTypeTok{int} \NormalTok{key, priority,nr;}
-    \NormalTok{T *left, *right;}
-    \NormalTok{T() \{\}}
-    \NormalTok{T(}\DataTypeTok{int} \NormalTok{key, }\DataTypeTok{int} \NormalTok{priority, T* left, T* right) \{}
-        \KeywordTok{this}\NormalTok{->key = key;}
-        \KeywordTok{this}\NormalTok{->priority = priority;}
-        \KeywordTok{this}\NormalTok{->left = left, }\KeywordTok{this}\NormalTok{->right = right;}
-        \KeywordTok{this}\NormalTok{->nr = }\DecValTok{0}\NormalTok{;}
-    \NormalTok{\}}
+  \DataTypeTok{int} \NormalTok{key, priority,nr;}
+  \NormalTok{T *left, *right;}
+  \NormalTok{T() \{\}}
+  \NormalTok{T(}\DataTypeTok{int} \NormalTok{key, }\DataTypeTok{int} \NormalTok{priority, T* left, T* right) \{}
+    \KeywordTok{this}\NormalTok{->key = key;}
+    \KeywordTok{this}\NormalTok{->priority = priority;}
+    \KeywordTok{this}\NormalTok{->left = left, }\KeywordTok{this}\NormalTok{->right = right;}
+    \KeywordTok{this}\NormalTok{->nr = }\DecValTok{0}\NormalTok{;}
+  \NormalTok{\}}
 \NormalTok{\} *R, *nil; }\CommentTok{// nil indica un nod 'gol'}
 
 \DataTypeTok{void} \NormalTok{init(T* &R) \{}
-    \NormalTok{srand(}\DataTypeTok{unsigned}\NormalTok{(time(}\DecValTok{0}\NormalTok{)));}
-    \NormalTok{R = nil = }\KeywordTok{new} \NormalTok{T(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, NULL, NULL);}
+  \NormalTok{srand(}\DataTypeTok{unsigned}\NormalTok{(time(}\DecValTok{0}\NormalTok{)));}
+  \NormalTok{R = nil = }\KeywordTok{new} \NormalTok{T(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{, NULL, NULL);}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{parc(T* n)\{}
-    \KeywordTok{if}\NormalTok{(n== nil)}
-        \KeywordTok{return}\NormalTok{;}
-
-    \CommentTok{//printf("%d %d %d %d\textbackslash{}n",n->key,n->nr,n->left->key,n->right->key);}
-    \NormalTok{parc(n->left);}
-    \NormalTok{parc(n->right);}
+  \KeywordTok{if}\NormalTok{(n== nil)}
+    \KeywordTok{return}\NormalTok{;}
+  \NormalTok{parc(n->left);}
+  \NormalTok{parc(n->right);}
 \NormalTok{\}}
 \KeywordTok{inline} \DataTypeTok{void} \NormalTok{update(T* &n)\{}
-    \KeywordTok{if}\NormalTok{(n==nil)}
-        \KeywordTok{return}\NormalTok{;}
-    \NormalTok{n->nr = n->left->nr + n->right->nr + }\DecValTok{1}\NormalTok{;}
+  \KeywordTok{if}\NormalTok{(n==nil)}
+    \KeywordTok{return}\NormalTok{;}
+  \NormalTok{n->nr = n->left->nr + n->right->nr + }\DecValTok{1}\NormalTok{;}
 
 \NormalTok{\}}
 \DataTypeTok{int} \NormalTok{search(T* n, }\DataTypeTok{int} \NormalTok{key) \{}
-    \KeywordTok{if} \NormalTok{(n == nil) }\KeywordTok{return} \DecValTok{0}\NormalTok{;}
-    \KeywordTok{if} \NormalTok{(key == n->key) }\KeywordTok{return} \DecValTok{1}\NormalTok{;}
-    \KeywordTok{if} \NormalTok{(key < n->key)}
-        \KeywordTok{return} \NormalTok{search(n->left, key);}
-    \KeywordTok{else}
-        \KeywordTok{return} \NormalTok{search(n->right, key);}
-    \NormalTok{update(n->right);}
-    \NormalTok{update(n->left);}
-    \NormalTok{update(n);}
+  \KeywordTok{if} \NormalTok{(n == nil) }\KeywordTok{return} \DecValTok{0}\NormalTok{;}
+  \KeywordTok{if} \NormalTok{(key == n->key) }\KeywordTok{return} \DecValTok{1}\NormalTok{;}
+  \KeywordTok{if} \NormalTok{(key < n->key)}
+    \KeywordTok{return} \NormalTok{search(n->left, key);}
+  \KeywordTok{else}
+    \KeywordTok{return} \NormalTok{search(n->right, key);}
+  \NormalTok{update(n->right);}
+  \NormalTok{update(n->left);}
+  \NormalTok{update(n);}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{rotleft(T* &n) \{}
-    \NormalTok{T *t = n->left;}
-    \NormalTok{n->left = t->right, t->right = n;}
-    \NormalTok{n = t;}
-    \NormalTok{update(t->right);}
-    \NormalTok{update(t->left);}
-    \NormalTok{update(t);}
-    \NormalTok{update(n->right);}
-    \NormalTok{update(n);}
+  \NormalTok{T *t = n->left;}
+  \NormalTok{n->left = t->right, t->right = n;}
+  \NormalTok{n = t;}
+  \NormalTok{update(t->right);}
+  \NormalTok{update(t->left);}
+  \NormalTok{update(t);}
+  \NormalTok{update(n->right);}
+  \NormalTok{update(n);}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{rotright(T* &n) \{}
-
-    \NormalTok{T *t = n->right;}
-    \NormalTok{n->right = t->left, t->left = n;}
-    \NormalTok{n = t;}
-    \NormalTok{update(t->right);}
-    \NormalTok{update(t->left);}
-    \NormalTok{update(t);}
-    \NormalTok{update(n->left);}
-    \NormalTok{update(n);}
+  \NormalTok{T *t = n->right;}
+  \NormalTok{n->right = t->left, t->left = n;}
+  \NormalTok{n = t;}
+  \NormalTok{update(t->right);}
+  \NormalTok{update(t->left);}
+  \NormalTok{update(t);}
+  \NormalTok{update(n->left);}
+  \NormalTok{update(n);}
 \NormalTok{\}}
-
 \DataTypeTok{int} \NormalTok{nth(T* &n,}\DataTypeTok{int} \NormalTok{nr)\{}
-
-    \KeywordTok{if}\NormalTok{(n==nil)}
+  \KeywordTok{if}\NormalTok{(n==nil)}
     \KeywordTok{return} \NormalTok{-}\DecValTok{1}\NormalTok{;}
-    \KeywordTok{if}\NormalTok{(nr==}\DecValTok{0}\NormalTok{)}
-        \KeywordTok{return} \NormalTok{n->key;}
-    \DataTypeTok{int} \NormalTok{leftval = n->left->nr;}
-   \CommentTok{// cout<< n->nr <<" "<<n->key<<" "<<leftval<<" "<<nr<<"\textbackslash{}n";}
-    \KeywordTok{if}\NormalTok{(nr-leftval == }\DecValTok{1}\NormalTok{)}
-        \KeywordTok{return} \NormalTok{n->key;}
-    \KeywordTok{if}\NormalTok{(leftval >= nr)}
-        \KeywordTok{return} \NormalTok{nth(n->left,nr);}
-    \KeywordTok{return} \NormalTok{nth(n->right,nr-leftval}\DecValTok{-1}\NormalTok{);}
+  \KeywordTok{if}\NormalTok{(nr==}\DecValTok{0}\NormalTok{)}
+    \KeywordTok{return} \NormalTok{n->key;}
+  \DataTypeTok{int} \NormalTok{leftval = n->left->nr;}
+  \KeywordTok{if}\NormalTok{(nr-leftval == }\DecValTok{1}\NormalTok{)}
+    \KeywordTok{return} \NormalTok{n->key;}
+  \KeywordTok{if}\NormalTok{(leftval >= nr)}
+    \KeywordTok{return} \NormalTok{nth(n->left,nr);}
+  \KeywordTok{return} \NormalTok{nth(n->right,nr-leftval}\DecValTok{-1}\NormalTok{);}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{balance(T* &n) \{}
-    \KeywordTok{if} \NormalTok{(n->left->priority > n->priority)}
-        \NormalTok{rotleft(n);}
-    \KeywordTok{else} \KeywordTok{if} \NormalTok{(n->right->priority > n->priority)}
-        \NormalTok{rotright(n);}
-
-    \NormalTok{update(n->right);}
-    \NormalTok{update(n->left);}
-    \NormalTok{update(n);}
+  \KeywordTok{if} \NormalTok{(n->left->priority > n->priority)}
+    \NormalTok{rotleft(n);}
+  \KeywordTok{else} \KeywordTok{if} \NormalTok{(n->right->priority > n->priority)}
+    \NormalTok{rotright(n);}
+  \NormalTok{update(n->right);}
+  \NormalTok{update(n->left);}
+  \NormalTok{update(n);}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{insert(T* &n, }\DataTypeTok{int} \NormalTok{key, }\DataTypeTok{int} \NormalTok{priority) \{}
-    \KeywordTok{if} \NormalTok{(n == nil) \{}
-        \NormalTok{n = }\KeywordTok{new} \NormalTok{T(key, priority, nil, nil);}
-        \NormalTok{n->nr=}\DecValTok{1}\NormalTok{;}
-        \KeywordTok{return}\NormalTok{;}
-    \NormalTok{\}}
-    \NormalTok{(n->nr)++;}
-    \KeywordTok{if} \NormalTok{(key <= n->key)}
-        \NormalTok{insert(n->left, key, priority);}
-    \KeywordTok{else} \KeywordTok{if} \NormalTok{(key > n->key)}
-        \NormalTok{insert(n->right, key, priority);}
-
-    \NormalTok{balance(n);}
-
+  \KeywordTok{if} \NormalTok{(n == nil) \{}
+    \NormalTok{n = }\KeywordTok{new} \NormalTok{T(key, priority, nil, nil);}
+    \NormalTok{n->nr=}\DecValTok{1}\NormalTok{;}
+    \KeywordTok{return}\NormalTok{;}
+  \NormalTok{\}}
+  \NormalTok{(n->nr)++;}
+  \KeywordTok{if} \NormalTok{(key <= n->key)}
+    \NormalTok{insert(n->left, key, priority);}
+  \KeywordTok{else} \KeywordTok{if} \NormalTok{(key > n->key)}
+    \NormalTok{insert(n->right, key, priority);}
+  \NormalTok{balance(n);}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -299,54 +282,31 @@
 
 \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> g[}\DecValTok{1010}\NormalTok{];}
 
-\DataTypeTok{int} \NormalTok{BF()}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{BF() \{}
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i) \{}
     \NormalTok{viz[i]=}\DecValTok{0}\NormalTok{;}
   \NormalTok{\}}
   \NormalTok{coad[}\DecValTok{0}\NormalTok{]=}\DecValTok{1}\NormalTok{;}
   \DataTypeTok{int} \NormalTok{st=}\DecValTok{0}\NormalTok{,dr=}\DecValTok{1}\NormalTok{;}
   \NormalTok{viz[}\DecValTok{1}\NormalTok{]=}\DecValTok{1}\NormalTok{;}
-  \KeywordTok{while}\NormalTok{(st<dr)}
-  \NormalTok{\{}
-    \CommentTok{// printf("!");}
+  \KeywordTok{while}\NormalTok{(st<dr) \{}
     \NormalTok{act=coad[st];}
     \KeywordTok{if}\NormalTok{(act!=N)}
-      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[act].size();++i)}
-      \NormalTok{\{}
-
+      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[act].size();++i) \{}
         \NormalTok{Q = g[act][i];}
         \KeywordTok{if}\NormalTok{(c[act][Q] == flux[act][Q] \textbar{}\textbar{} viz[Q])}
           \KeywordTok{continue}\NormalTok{;}
         \NormalTok{viz[Q]=}\DecValTok{1}\NormalTok{;}
         \NormalTok{coad[dr++]=Q;}
         \NormalTok{tata[Q]=act;}
-
       \NormalTok{\}}
     \NormalTok{++st;}
   \NormalTok{\}}
   \KeywordTok{return} \NormalTok{viz[N];}
 \NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{main()}
-\NormalTok{\{}
-  \NormalTok{freopen(}\StringTok{"maxflow.in"}\NormalTok{,}\StringTok{"r"}\NormalTok{,stdin);}
-  \NormalTok{freopen(}\StringTok{"maxflow.out"}\NormalTok{,}\StringTok{"w"}\NormalTok{,stdout);}
-  \NormalTok{scanf(}\StringTok{"%d%d"}\NormalTok{,&N,&M);}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=M;++i)}
-  \NormalTok{\{}
-    \NormalTok{scanf(}\StringTok{"%d%d%d"}\NormalTok{,&x,&y,&z);}
-    \NormalTok{c[x][y]+=z;}
-    \NormalTok{g[x].push_back(y);}
-    \NormalTok{g[y].push_back(x);}
-
-  \NormalTok{\}}
-
-  \KeywordTok{for}\NormalTok{(flow=}\DecValTok{0}\NormalTok{; BF();)}
-  \NormalTok{\{}\CommentTok{//printf("!");}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[N].size();++i)}
-    \NormalTok{\{}
-      \CommentTok{// printf("%d\textbackslash{}n",flux);}
+\DataTypeTok{int} \NormalTok{main() \{}
+  \KeywordTok{for}\NormalTok{(flow=}\DecValTok{0}\NormalTok{; BF();) \{}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[N].size();++i) \{}
       \NormalTok{act=g[N][i];}
       \KeywordTok{if}\NormalTok{(flux[act][N]==c[act][N] \textbar{}\textbar{}!viz[act])}
         \KeywordTok{continue}\NormalTok{;}
@@ -357,16 +317,13 @@
         \NormalTok{flow_min=min(flow_min,c[tata[nod]][nod]-flux[tata[nod]][nod]);}
       \KeywordTok{if}\NormalTok{(flow_min==}\DecValTok{0}\NormalTok{)}
         \KeywordTok{continue}\NormalTok{;}
-      \CommentTok{//   printf("%d\textbackslash{}n",flow_min);}
-      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{nod=N;nod!=}\DecValTok{1}\NormalTok{;nod=tata[nod])}
-      \NormalTok{\{}
+      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{nod=N;nod!=}\DecValTok{1}\NormalTok{;nod=tata[nod]) \{}
         \NormalTok{flux[tata[nod]][nod]+=flow_min;}
         \NormalTok{flux[nod][tata[nod]]-=flow_min;}
       \NormalTok{\}}
       \NormalTok{flow+=flow_min;}
     \NormalTok{\}}
   \NormalTok{\}}
-  \NormalTok{printf(}\StringTok{"%d "}\NormalTok{,flow);}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -375,9 +332,6 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DataTypeTok{const} \DataTypeTok{int} \NormalTok{MAXN = }\DecValTok{351}\NormalTok{;}
-\DataTypeTok{const} \DataTypeTok{int} \NormalTok{INF = }\BaseNTok{0x3f3f3f3f}\NormalTok{;}
-
 \DataTypeTok{int} \NormalTok{N, M, S, D;}
 \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> G[MAXN];}
 
@@ -387,17 +341,13 @@
 
 \DataTypeTok{int} \NormalTok{d[MAXN];}
 \DataTypeTok{int} \NormalTok{prev[MAXN];}
-
 \DataTypeTok{bool} \NormalTok{found;}
 
-\DataTypeTok{int} \NormalTok{bellman_ford()}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{bellman_ford() \{}
   \NormalTok{vector<}\DataTypeTok{bool}\NormalTok{> inqueue(N + }\DecValTok{1}\NormalTok{, }\KeywordTok{false}\NormalTok{);}
-
   \NormalTok{queue<}\DataTypeTok{int}\NormalTok{> q;}
   \NormalTok{q.push(S);}
   \NormalTok{inqueue[S] = }\KeywordTok{true}\NormalTok{;}
-
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i <= N; ++i) \{}
     \NormalTok{prev[i] = -}\DecValTok{1}\NormalTok{;}
     \NormalTok{d[i] = INF;}
@@ -408,7 +358,6 @@
     \DataTypeTok{int} \NormalTok{node = q.front();}
     \NormalTok{q.pop();}
     \NormalTok{inqueue[node] = }\KeywordTok{false}\NormalTok{;}
-
     \NormalTok{vector<}\DataTypeTok{int}\NormalTok{>::iterator it;}
     \KeywordTok{for} \NormalTok{(it = G[node].begin(); it != G[node].end(); ++it) \{}
       \KeywordTok{if} \NormalTok{(cap[node][*it] - flow[node][*it] <= }\DecValTok{0}\NormalTok{)}
@@ -426,7 +375,6 @@
 
   \KeywordTok{if} \NormalTok{(d[D] < INF / }\DecValTok{2}\NormalTok{) \{}
     \NormalTok{found = }\KeywordTok{true}\NormalTok{;}
-
     \DataTypeTok{int} \NormalTok{fmin = INF;}
     \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{node = D; node != S; node = prev[node])}
       \NormalTok{fmin = min(fmin, cap[prev[node]][node] - flow[prev[node]][node]);}
@@ -434,23 +382,17 @@
       \NormalTok{flow[prev[node]][node] += fmin;}
       \NormalTok{flow[node][prev[node]] -= fmin;}
     \NormalTok{\}}
-
     \KeywordTok{return} \NormalTok{d[D] * fmin;}
-  \NormalTok{\} }
-
+  \NormalTok{\}}
   \KeywordTok{return} \DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
-
-\DataTypeTok{long} \DataTypeTok{long} \NormalTok{mfmc()}
-\NormalTok{\{}
+\DataTypeTok{long} \DataTypeTok{long} \NormalTok{mfmc() \{}
   \DataTypeTok{long} \DataTypeTok{long} \NormalTok{result = }\DecValTok{0}\NormalTok{;}
   \NormalTok{found = }\KeywordTok{true}\NormalTok{;}
-
   \KeywordTok{while} \NormalTok{(found) \{}
     \NormalTok{found = }\KeywordTok{false}\NormalTok{;}
     \NormalTok{result += bellman_ford();}
   \NormalTok{\}}
-
   \KeywordTok{return} \NormalTok{result;}
 \NormalTok{\}}
 \end{Highlighting}
@@ -462,37 +404,34 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DataTypeTok{int} \NormalTok{coad[Nmax*}\DecValTok{10}\NormalTok{],viz[Nmax],nrviz[Nmax],x,y,z,N,M,S=}\DecValTok{1}\NormalTok{,k,st,ok=}\DecValTok{1}\NormalTok{,best[Nmax];}
-\KeywordTok{struct} \NormalTok{Nod\{}
-  \DataTypeTok{int} \NormalTok{cost,val,nrmuchie;}
-  \NormalTok{Nod *next;\} *l[Nmax];}
-\DataTypeTok{void} \NormalTok{adauga(}\DataTypeTok{int} \NormalTok{x,}\DataTypeTok{int} \NormalTok{y,}\DataTypeTok{int} \NormalTok{z)}
-\NormalTok{\{}
-  \NormalTok{Nod *q=}\KeywordTok{new} \NormalTok{Nod;}
-  \NormalTok{q->val=y;}
-  \NormalTok{q->cost=z;}
-  \NormalTok{q->next=l[x];}
-  \NormalTok{l[x]=q;}
-\NormalTok{\}}
-\DataTypeTok{void} \NormalTok{make_bell(}\DataTypeTok{int} \NormalTok{p)}
-\NormalTok{\{}
-  \NormalTok{viz[p]=}\DecValTok{0}\NormalTok{;}
-  \KeywordTok{for}\NormalTok{(Nod *it=l[p];it!=NULL;it=it->next)}
-  \NormalTok{\{}
+\DataTypeTok{int} \NormalTok{bellmanford() \{}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i <= n; ++i)}
+      \NormalTok{dist[i] = INF;}
+  \NormalTok{dist[}\DecValTok{1}\NormalTok{] = }\DecValTok{0}\NormalTok{;}
 
-    \KeywordTok{if}\NormalTok{(best[it->val]>best[p]+(it->cost))}
-    \NormalTok{\{}
-      \NormalTok{best[it->val]=best[p]+it->cost;}
-      \KeywordTok{if}\NormalTok{(viz[it->val]==}\DecValTok{0}\NormalTok{)}
-      \NormalTok{\{}
-        \NormalTok{viz[it->val]=}\DecValTok{1}\NormalTok{;}
-        \NormalTok{coad[k++]=it->val;}
-        \NormalTok{++nrviz[it->val];}
-        \KeywordTok{if}\NormalTok{(nrviz[it->val]==N}\DecValTok{+1}\NormalTok{)}
-          \NormalTok{ok=}\DecValTok{0}\NormalTok{;}
+  \NormalTok{queue<}\DataTypeTok{int}\NormalTok{> q;}
+  \NormalTok{q.push(}\DecValTok{1}\NormalTok{);}
+  \NormalTok{inqueue[}\DecValTok{1}\NormalTok{] = }\KeywordTok{true}\NormalTok{;}
+  \NormalTok{cnt[}\DecValTok{1}\NormalTok{] = }\DecValTok{1}\NormalTok{;}
+  \KeywordTok{while} \NormalTok{(!q.empty()) \{}
+    \DataTypeTok{int} \NormalTok{node = q.front();}
+    \NormalTok{q.pop();}
+    \NormalTok{inqueue[node] = }\KeywordTok{false}\NormalTok{;}
+    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < G[node].size(); ++i) \{}
+      \DataTypeTok{int} \NormalTok{next = G[node][i];}
+      \KeywordTok{if} \NormalTok{(dist[node] + C[node][i] < dist[next]) \{}
+        \NormalTok{dist[next] = dist[node] + C[node][i];}
+        \KeywordTok{if} \NormalTok{(!inqueue[next]) \{}
+          \KeywordTok{if} \NormalTok{(cnt[next] > n)}
+            \KeywordTok{return} \NormalTok{-}\DecValTok{1}\NormalTok{;}
+          \NormalTok{q.push(next);}
+          \NormalTok{inqueue[next] = }\KeywordTok{true}\NormalTok{;}
+          \NormalTok{cnt[next]++;}
+        \NormalTok{\}}
       \NormalTok{\}}
     \NormalTok{\}}
   \NormalTok{\}}
+  \KeywordTok{return} \DecValTok{1}\NormalTok{;}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -501,72 +440,47 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{list<}\DataTypeTok{int}\NormalTok{> L,G[}\DecValTok{100010}\NormalTok{];}
-\NormalTok{stack<}\DataTypeTok{int}\NormalTok{> S;}
-\DataTypeTok{int} \NormalTok{N, M, deg[}\DecValTok{100010}\NormalTok{], viz[}\DecValTok{100010}\NormalTok{], x, y;}
-
-\DataTypeTok{void} \NormalTok{DFS(}\DataTypeTok{int} \NormalTok{v)}
-\NormalTok{\{}
-  \NormalTok{viz[v]=}\DecValTok{1}\NormalTok{;}
-
-  \KeywordTok{for}\NormalTok{(list<}\DataTypeTok{int}\NormalTok{>::iterator it = G[v].begin(); it!=G[v].end();++it)}
-    \KeywordTok{if}\NormalTok{(viz[*it]==}\DecValTok{0}\NormalTok{)}
-      \NormalTok{DFS(*it);}
+\NormalTok{list<}\DataTypeTok{int}\NormalTok{> G[MAXN];}
+\NormalTok{vector<}\DataTypeTok{int}\NormalTok{> sol;}
+\DataTypeTok{int} \NormalTok{deg[MAXN];}
+\DataTypeTok{bool} \NormalTok{vis[MAXN];}
+\DataTypeTok{void} \NormalTok{dfs(}\DataTypeTok{int} \NormalTok{node) \{}
+  \NormalTok{vis[node] = }\KeywordTok{true}\NormalTok{;}
+  \NormalTok{list<}\DataTypeTok{int}\NormalTok{>::iterator it;}
+  \KeywordTok{for} \NormalTok{(it = G[node].begin(); it != G[node].end(); ++it) \{}
+    \KeywordTok{if} \NormalTok{(vis[*it])}
+      \KeywordTok{continue}\NormalTok{;}
+    \NormalTok{dfs(*it);}
+  \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{bool} \NormalTok{conex()}
-\NormalTok{\{}
-
-  \KeywordTok{return} \DecValTok{0}\NormalTok{;}
-  \KeywordTok{return} \DecValTok{1}\NormalTok{;}
-\NormalTok{\}}
-
-\DataTypeTok{bool} \NormalTok{eulerian()}
-\NormalTok{\{}
-  \NormalTok{DFS(}\DecValTok{1}\NormalTok{);}
-
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i)}
-    \KeywordTok{if}\NormalTok{(deg[i]%}\DecValTok{2}\NormalTok{==}\DecValTok{1} \NormalTok{\textbar{}\textbar{} viz[i]==}\DecValTok{0}\NormalTok{)}
-      \KeywordTok{return} \DecValTok{0}\NormalTok{;}
-
-  \KeywordTok{return} \DecValTok{1}\NormalTok{;}
-\NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{sterg(}\DataTypeTok{int} \NormalTok{v, }\DataTypeTok{int} \NormalTok{w)}
-\NormalTok{\{}
-  \NormalTok{--deg[v];}
-  \NormalTok{--deg[w];}
+\DataTypeTok{void} \NormalTok{rem_edge(}\DataTypeTok{int} \NormalTok{v, }\DataTypeTok{int} \NormalTok{w) \{}
   \NormalTok{G[v].pop_front();}
-  \KeywordTok{for}\NormalTok{(list<}\DataTypeTok{int}\NormalTok{>::iterator it = G[w].begin(); it!=G[w].end();++it)}
-    \KeywordTok{if}\NormalTok{(*it==v)}
-    \NormalTok{\{}
+  \NormalTok{list<}\DataTypeTok{int}\NormalTok{>::iterator it;}
+  \KeywordTok{for} \NormalTok{(it = G[w].begin(); it != G[w].end(); ++it)}
+    \KeywordTok{if} \NormalTok{(*it == v) \{}
       \NormalTok{G[w].erase(it);}
       \KeywordTok{break}\NormalTok{;}
     \NormalTok{\}}
 \NormalTok{\}}
 
-\DataTypeTok{void} \NormalTok{euler(}\DataTypeTok{int} \NormalTok{v)}
-\NormalTok{\{}
-  \KeywordTok{while}\NormalTok{(!G[v].empty())}
-  \NormalTok{\{}
-    \DataTypeTok{int} \NormalTok{w = G[v].front();}
-    \NormalTok{S.push(v);}
-    \NormalTok{sterg(v,w);}
-    \NormalTok{v=w;}
+\NormalTok{stack<}\DataTypeTok{int}\NormalTok{> st;}
+\DataTypeTok{void} \NormalTok{euler(}\DataTypeTok{int} \NormalTok{v) \{}
+  \KeywordTok{while} \NormalTok{(!G[v].empty()) \{}
+    \DataTypeTok{int} \NormalTok{w = *G[v].begin();}
+    \NormalTok{rem_edge(v, w);}
+    \NormalTok{st.push(v);}
+    \NormalTok{v = w;}
   \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{solve()}
-\NormalTok{\{}
-  \DataTypeTok{int} \NormalTok{v=}\DecValTok{1}\NormalTok{;}
-  \KeywordTok{do}
-  \NormalTok{\{}
+\DataTypeTok{int} \NormalTok{main() \{}
+  \NormalTok{st.push(}\DecValTok{1}\NormalTok{);}
+  \KeywordTok{while} \NormalTok{(!st.empty()) \{}
+    \DataTypeTok{int} \NormalTok{v = st.top();}
+    \NormalTok{st.pop();}
     \NormalTok{euler(v);}
-    \NormalTok{v=S.top();}
-    \NormalTok{S.pop();}
-    \NormalTok{L.push_back(v);}
-
-  \NormalTok{\} }\KeywordTok{while}\NormalTok{(!S.empty());}
+    \NormalTok{sol.push_back(v);}
+  \NormalTok{\}}
+  \NormalTok{reverse(sol.begin(), sol.end());}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -580,25 +494,19 @@
 \DataTypeTok{char} \NormalTok{car;}
 \NormalTok{vector <}\DataTypeTok{int}\NormalTok{> g[}\DecValTok{25000}\NormalTok{];}
 \DataTypeTok{int} \NormalTok{l[}\DecValTok{25000}\NormalTok{],r[}\DecValTok{25000}\NormalTok{],u[}\DecValTok{25000}\NormalTok{],was[}\DecValTok{25000}\NormalTok{],S;}
-\DataTypeTok{int} \NormalTok{cupj(}\DataTypeTok{int} \NormalTok{q)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{cupj(}\DataTypeTok{int} \NormalTok{q) \{}
   \KeywordTok{if}\NormalTok{(was[q])}
     \KeywordTok{return} \DecValTok{0}\NormalTok{;}
   \NormalTok{was[q]=}\DecValTok{1}\NormalTok{;}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[q].size();++i)}
-  \NormalTok{\{}
-    \KeywordTok{if}\NormalTok{(!r[g[q][i]])}
-    \NormalTok{\{}
-
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[q].size();++i) \{}
+    \KeywordTok{if}\NormalTok{(!r[g[q][i]]) \{}
       \NormalTok{l[q]=g[q][i];}
       \NormalTok{r[g[q][i]]=q;}
       \KeywordTok{return} \DecValTok{1}\NormalTok{;}
     \NormalTok{\}}
   \NormalTok{\}}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[q].size();++i)}
-  \NormalTok{\{}
-    \KeywordTok{if}\NormalTok{(cupj(r[g[q][i]]))}
-    \NormalTok{\{}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[q].size();++i) \{}
+    \KeywordTok{if}\NormalTok{(cupj(r[g[q][i]])) \{}
       \NormalTok{l[q]=g[q][i];}
       \NormalTok{r[g[q][i]]=q;}
       \KeywordTok{return} \DecValTok{1}\NormalTok{;}
@@ -617,23 +525,18 @@
 \DataTypeTok{int} \NormalTok{N,M,x,y,z,Sol,b[}\DecValTok{262150}\NormalTok{][}\DecValTok{22}\NormalTok{],c[}\DecValTok{22}\NormalTok{][}\DecValTok{22}\NormalTok{];}
 \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> a[}\DecValTok{22}\NormalTok{];}
 
-\DataTypeTok{int} \NormalTok{best(}\DataTypeTok{int} \NormalTok{conf, }\DataTypeTok{int} \NormalTok{last)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{best(}\DataTypeTok{int} \NormalTok{conf, }\DataTypeTok{int} \NormalTok{last) \{}
   \KeywordTok{if}\NormalTok{(b[conf][last]>=}\DecValTok{0}\NormalTok{)}
     \KeywordTok{return} \NormalTok{b[conf][last];}
-
   \NormalTok{b[conf][last]=inf;}
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<a[last].size();++i)}
-    \KeywordTok{if}\NormalTok{(conf & (}\DecValTok{1}\NormalTok{<<a[last][i]))}
-    \NormalTok{\{}
+    \KeywordTok{if}\NormalTok{(conf & (}\DecValTok{1}\NormalTok{<<a[last][i])) \{}
       \KeywordTok{if}\NormalTok{(a[last][i]==}\DecValTok{0} \NormalTok{&& conf!=(}\DecValTok{1}\NormalTok{<<last)+}\DecValTok{1}\NormalTok{)}
         \KeywordTok{continue}\NormalTok{;}
       \KeywordTok{if}\NormalTok{(b[conf][last] > best(conf^(}\DecValTok{1}\NormalTok{<<last),a[last][i])+c[a[last][i]][last])}
         \NormalTok{b[conf][last] = best(conf^(}\DecValTok{1}\NormalTok{<<last),a[last][i])+c[a[last][i]][last];}
     \NormalTok{\}}
-
   \KeywordTok{return} \NormalTok{b[conf][last];}
-
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -649,58 +552,29 @@
 \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> G[MAXN], P[MAXN];}
 \NormalTok{pair<}\DataTypeTok{int}\NormalTok{, pair<}\DataTypeTok{int}\NormalTok{, }\DataTypeTok{int}\NormalTok{> > op[MAXN];}
 
-\DataTypeTok{void} \NormalTok{citire()}
-\NormalTok{\{}
-  \NormalTok{scanf(}\StringTok{"%d%d"}\NormalTok{, &N, &M);}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i <= N; ++i)}
-    \NormalTok{scanf(}\StringTok{"%d"}\NormalTok{, &v[i]);}
-
-  \DataTypeTok{int} \NormalTok{a, b;}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i < N; ++i) \{}
-    \NormalTok{scanf(}\StringTok{"%d%d"}\NormalTok{, &a, &b);}
-    \NormalTok{G[a].push_back(b);}
-    \NormalTok{G[b].push_back(a);}
-  \NormalTok{\}}
-
-  \DataTypeTok{int} \NormalTok{t, x, y;}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i <= M; ++i) \{}
-    \NormalTok{scanf(}\StringTok{"%d%d%d"}\NormalTok{, &t, &x, &y);}
-    \NormalTok{op[i] = make_pair(t, make_pair(x, y));}
-  \NormalTok{\}}
-\NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{df(}\DataTypeTok{int} \NormalTok{nod)}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{df(}\DataTypeTok{int} \NormalTok{nod) \{}
   \NormalTok{fol[nod] = }\DecValTok{1}\NormalTok{;}
   \NormalTok{w[nod] = }\DecValTok{1}\NormalTok{;}
-
   \DataTypeTok{int} \NormalTok{hN = -}\DecValTok{1}\NormalTok{, frunza = }\DecValTok{1}\NormalTok{;}
 
   \KeywordTok{for}\NormalTok{(vector<}\DataTypeTok{int}\NormalTok{> :: iterator it = G[nod].begin(); it != G[nod].end(); ++it) \{}
     \KeywordTok{if}\NormalTok{(fol[*it])}
       \KeywordTok{continue}\NormalTok{;}
-
     \NormalTok{frunza = }\DecValTok{0}\NormalTok{;}
     \NormalTok{niv[*it] = niv[nod] + }\DecValTok{1}\NormalTok{;}
-
     \NormalTok{df(*it);}
-
     \NormalTok{w[nod] += w[*it];}
-
     \KeywordTok{if}\NormalTok{(hN == -}\DecValTok{1}\NormalTok{)}
       \NormalTok{hN = *it;}
-    \KeywordTok{else}
-      \KeywordTok{if}\NormalTok{(w[hN] < w[*it])}
-        \NormalTok{hN = *it;}
+    \KeywordTok{else} \KeywordTok{if}\NormalTok{(w[hN] < w[*it])}
+      \NormalTok{hN = *it;}
   \NormalTok{\}}
-
   \KeywordTok{if}\NormalTok{(frunza) \{}
     \NormalTok{l[nod] = ++nL;}
     \NormalTok{lDim[nL]=}\DecValTok{1}\NormalTok{;}
     \NormalTok{P[nL].push_back(nod);}
     \KeywordTok{return}\NormalTok{;}
   \NormalTok{\}}
-
   \NormalTok{l[nod] = l[hN];}
   \NormalTok{++lDim[l[nod]];}
   \NormalTok{P[l[nod]].push_back(nod);}
@@ -713,73 +587,50 @@
     \NormalTok{lNiv[l[*it]] = niv[nod];}
   \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{build(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{left, }\DataTypeTok{int} \NormalTok{right, }\DataTypeTok{int} \NormalTok{decalaj, }\DataTypeTok{int} \NormalTok{lant)}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{build(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{left, }\DataTypeTok{int} \NormalTok{right, }\DataTypeTok{int} \NormalTok{decalaj, }\DataTypeTok{int} \NormalTok{lant) \{}
   \KeywordTok{if}\NormalTok{(left == right) \{}
     \NormalTok{aint[nod + decalaj] = v[ P[lant][left - }\DecValTok{1}\NormalTok{] ];}
     \KeywordTok{return}\NormalTok{;}
   \NormalTok{\}}
-
   \DataTypeTok{int} \NormalTok{med = (left + right) / }\DecValTok{2}\NormalTok{;}
-
   \NormalTok{build(nod * }\DecValTok{2}\NormalTok{, left, med, decalaj, lant);}
   \NormalTok{build(nod * }\DecValTok{2} \NormalTok{+ }\DecValTok{1}\NormalTok{, med}\DecValTok{+1}\NormalTok{, right, decalaj, lant);}
-
   \NormalTok{aint[nod + decalaj] = max(aint[nod * }\DecValTok{2} \NormalTok{+ decalaj], aint[nod * }\DecValTok{2} \NormalTok{+ }\DecValTok{1} \NormalTok{+ decalaj]);}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{make_paths()}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{make_paths() \{}
   \NormalTok{niv[}\DecValTok{1}\NormalTok{] = }\DecValTok{1}\NormalTok{;}
   \NormalTok{df(}\DecValTok{1}\NormalTok{);}
-
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i <= nL; ++i) \{}
     \NormalTok{reverse(P[i].begin(), P[i].end());}
-
     \KeywordTok{if}\NormalTok{(i > }\DecValTok{1}\NormalTok{)}
       \NormalTok{lPoz[i] = lPoz[i}\DecValTok{-1}\NormalTok{] + lDim[i}\DecValTok{-1}\NormalTok{] * }\DecValTok{4}\NormalTok{;}
-
     \NormalTok{build(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, lDim[i], lPoz[i], i);}
   \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{update(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{left, }\DataTypeTok{int} \NormalTok{right, }\DataTypeTok{int} \NormalTok{poz, }\DataTypeTok{int} \NormalTok{val, }\DataTypeTok{int} \NormalTok{decalaj)}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{update(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{left, }\DataTypeTok{int} \NormalTok{right, }\DataTypeTok{int} \NormalTok{poz, }\DataTypeTok{int} \NormalTok{val, }\DataTypeTok{int} \NormalTok{decalaj) \{}
   \KeywordTok{if}\NormalTok{(left == right) \{}
     \NormalTok{aint[nod + decalaj] = val;}
     \KeywordTok{return}\NormalTok{;}
   \NormalTok{\}}
-
   \DataTypeTok{int} \NormalTok{med = (left + right) / }\DecValTok{2}\NormalTok{;}
-
   \KeywordTok{if}\NormalTok{(poz<=med)}
     \NormalTok{update(nod * }\DecValTok{2}\NormalTok{, left, med, poz, val, decalaj);}
   \KeywordTok{else}
     \NormalTok{update(nod * }\DecValTok{2} \NormalTok{+ }\DecValTok{1}\NormalTok{, med}\DecValTok{+1}\NormalTok{, right, poz, val, decalaj);}
-
   \NormalTok{aint[nod + decalaj] = max(aint[nod * }\DecValTok{2} \NormalTok{+ decalaj], aint[nod * }\DecValTok{2} \NormalTok{+ }\DecValTok{1} \NormalTok{+ decalaj]);}
 \NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{query(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{left, }\DataTypeTok{int} \NormalTok{right, }\DataTypeTok{int} \NormalTok{qleft, }\DataTypeTok{int} \NormalTok{qright, }\DataTypeTok{int} \NormalTok{decalaj)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{query(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{left, }\DataTypeTok{int} \NormalTok{right, }\DataTypeTok{int} \NormalTok{qleft, }\DataTypeTok{int} \NormalTok{qright, }\DataTypeTok{int} \NormalTok{decalaj) \{}
   \KeywordTok{if}\NormalTok{(qleft <= left && right <= qright)}
     \KeywordTok{return} \NormalTok{aint[nod + decalaj];}
-
   \DataTypeTok{int} \NormalTok{med = (left + right) / }\DecValTok{2}\NormalTok{, rez = }\DecValTok{0}\NormalTok{;}
-
   \KeywordTok{if}\NormalTok{(qleft <= med)}
     \NormalTok{rez = max(rez, query(nod * }\DecValTok{2}\NormalTok{, left, med, qleft, qright, decalaj) );}
   \KeywordTok{if}\NormalTok{(med < qright)}
     \NormalTok{rez = max(rez, query(nod * }\DecValTok{2} \NormalTok{+ }\DecValTok{1}\NormalTok{, med + }\DecValTok{1}\NormalTok{, right, qleft, qright, decalaj) );}
-
   \KeywordTok{return} \NormalTok{rez;}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{solve()}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{solve() \{}
   \DataTypeTok{int} \NormalTok{t, x, y, sol = }\DecValTok{0}\NormalTok{;}
-
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i <= M; ++i) \{}
     \NormalTok{t = op[i].first; x = op[i].second.first, y = op[i].second.second;}
     \KeywordTok{if}\NormalTok{(t==}\DecValTok{0}\NormalTok{) \{}
@@ -790,18 +641,14 @@
         \KeywordTok{if}\NormalTok{(l[x] == l[y]) \{}
           \KeywordTok{if}\NormalTok{(niv[x] > niv[y])}
             \NormalTok{swap(x, y);}
-          \NormalTok{sol = max(sol, query(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, lDim[l[x]], niv[x] - lNiv[l[x]], niv[y] - lNiv[l[x]], lPoz[l[x]]) );}
+          \NormalTok{sol = max(sol, query(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, lDim[l[x]], niv[x] - lNiv[l[x]], niv[y] - lNiv[l[x]], lPoz[l[x]]));}
           \KeywordTok{break}\NormalTok{;}
         \NormalTok{\}}
-
         \KeywordTok{if}\NormalTok{(lNiv[l[x]] < lNiv[l[y]])}
           \NormalTok{swap(x, y);}
-
-        \NormalTok{sol = max(sol, query(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, lDim[l[x]], }\DecValTok{1}\NormalTok{, niv[x] - lNiv[l[x]], lPoz[l[x]]) );}
-
+        \NormalTok{sol = max(sol, query(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, lDim[l[x]], }\DecValTok{1}\NormalTok{, niv[x] - lNiv[l[x]], lPoz[l[x]]));}
         \NormalTok{x = lTata[l[x]];}
       \NormalTok{\}}
-      \NormalTok{printf(}\StringTok{"%d}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, sol);}
     \NormalTok{\}}
   \NormalTok{\}}
 \NormalTok{\}}
@@ -815,43 +662,33 @@
 \DataTypeTok{int} \NormalTok{K, N, M, x, y, L[}\DecValTok{200010}\NormalTok{], H[}\DecValTok{200010}\NormalTok{], Lg[}\DecValTok{200010}\NormalTok{], First[}\DecValTok{100010}\NormalTok{], Rmq[}\DecValTok{20}\NormalTok{][}\DecValTok{400010}\NormalTok{];}
 \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> G[}\DecValTok{100010}\NormalTok{];}
 
-\DataTypeTok{void} \NormalTok{dfs(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{lev)}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{dfs(}\DataTypeTok{int} \NormalTok{nod, }\DataTypeTok{int} \NormalTok{lev) \{}
   \NormalTok{H[++K] = nod;}
   \NormalTok{L[K] = lev;}
   \NormalTok{First[nod] = K;}
-
   \DataTypeTok{int} \NormalTok{z = G[nod].size();}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<z;++i)}
-  \NormalTok{\{}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<z;++i) \{}
     \NormalTok{dfs(G[nod][i],lev}\DecValTok{+1}\NormalTok{);}
     \NormalTok{H[++K] = nod;}
     \NormalTok{L[K] = lev;}
   \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{rmq()}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{rmq() \{}
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{2}\NormalTok{;i<=K;++i)}
     \NormalTok{Lg[i] = Lg[i/}\DecValTok{2}\NormalTok{]+}\DecValTok{1}\NormalTok{;}
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=K;++i)}
     \NormalTok{Rmq[}\DecValTok{0}\NormalTok{][i]=i;}
-
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;(}\DecValTok{1}\NormalTok{<<i) < K; ++i)}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{1}\NormalTok{;j<=K-(}\DecValTok{1}\NormalTok{<<i);++j)}
-    \NormalTok{\{}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{1}\NormalTok{;j<=K-(}\DecValTok{1}\NormalTok{<<i);++j) \{}
       \DataTypeTok{int} \NormalTok{l = }\DecValTok{1}\NormalTok{<< (i}\DecValTok{-1}\NormalTok{);}
       \NormalTok{Rmq[i][j] = Rmq[i}\DecValTok{-1}\NormalTok{][j];}
       \KeywordTok{if}\NormalTok{(L[Rmq[i}\DecValTok{-1}\NormalTok{][j + l]] < L[Rmq[i][j]])}
         \NormalTok{Rmq[i][j] = Rmq[i}\DecValTok{-1}\NormalTok{][j + l];}
     \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{lca(}\DataTypeTok{int} \NormalTok{x, }\DataTypeTok{int} \NormalTok{y)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{lca(}\DataTypeTok{int} \NormalTok{x, }\DataTypeTok{int} \NormalTok{y) \{}
   \DataTypeTok{int} \NormalTok{a = First[x], b = First[y];}
-  \KeywordTok{if}\NormalTok{(a>b)}
-  \NormalTok{\{}
+  \KeywordTok{if}\NormalTok{(a>b) \{}
     \DataTypeTok{int} \NormalTok{c=a;}
     \NormalTok{a=b;}
     \NormalTok{b=c;}
@@ -873,38 +710,21 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{// This is a collection of useful code for solving problems that}
-\CommentTok{// involve modular linear equations.  Note that all of the}
-\CommentTok{// algorithms described here work on nonnegative integers.}
-
-\OtherTok{#include <iostream>}
-\OtherTok{#include <vector>}
-\OtherTok{#include <algorithm>}
-
-\KeywordTok{using} \KeywordTok{namespace} \NormalTok{std;}
-
 \KeywordTok{typedef} \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> VI;}
 \KeywordTok{typedef} \NormalTok{pair<}\DataTypeTok{int}\NormalTok{,}\DataTypeTok{int}\NormalTok{> PII;}
 
-\CommentTok{// return a % b (positive value)}
 \DataTypeTok{int} \NormalTok{mod(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b) \{}
   \KeywordTok{return} \NormalTok{((a%b)+b)%b;}
 \NormalTok{\}}
-
-\CommentTok{// computes gcd(a,b)}
 \DataTypeTok{int} \NormalTok{gcd(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b) \{}
   \DataTypeTok{int} \NormalTok{tmp;}
   \KeywordTok{while}\NormalTok{(b)\{a%=b; tmp=a; a=b; b=tmp;\}}
   \KeywordTok{return} \NormalTok{a;}
 \NormalTok{\}}
-
-\CommentTok{// computes lcm(a,b)}
 \DataTypeTok{int} \NormalTok{lcm(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b) \{}
   \KeywordTok{return} \NormalTok{a/gcd(a,b)*b;}
 \NormalTok{\}}
-
-\CommentTok{// returns d = gcd(a,b); finds x,y such that d = ax + by}
-\DataTypeTok{int} \NormalTok{extended_euclid(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b, }\DataTypeTok{int} \NormalTok{&x, }\DataTypeTok{int} \NormalTok{&y) \{  }
+\DataTypeTok{int} \NormalTok{extended_euclid(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b, }\DataTypeTok{int} \NormalTok{&x, }\DataTypeTok{int} \NormalTok{&y) \{}
   \DataTypeTok{int} \NormalTok{xx = y = }\DecValTok{0}\NormalTok{;}
   \DataTypeTok{int} \NormalTok{yy = x = }\DecValTok{1}\NormalTok{;}
   \KeywordTok{while} \NormalTok{(b) \{}
@@ -915,8 +735,6 @@
   \NormalTok{\}}
   \KeywordTok{return} \NormalTok{a;}
 \NormalTok{\}}
-
-\CommentTok{// finds all solutions to ax = b (mod n)}
 \NormalTok{VI modular_linear_equation_solver(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b, }\DataTypeTok{int} \NormalTok{n) \{}
   \DataTypeTok{int} \NormalTok{x, y;}
   \NormalTok{VI solutions;}
@@ -928,30 +746,18 @@
   \NormalTok{\}}
   \KeywordTok{return} \NormalTok{solutions;}
 \NormalTok{\}}
-
-\CommentTok{// computes b such that ab = 1 (mod n), returns -1 on failure}
 \DataTypeTok{int} \NormalTok{mod_inverse(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{n) \{}
   \DataTypeTok{int} \NormalTok{x, y;}
   \DataTypeTok{int} \NormalTok{d = extended_euclid(a, n, x, y);}
   \KeywordTok{if} \NormalTok{(d > }\DecValTok{1}\NormalTok{) }\KeywordTok{return} \NormalTok{-}\DecValTok{1}\NormalTok{;}
   \KeywordTok{return} \NormalTok{mod(x,n);}
 \NormalTok{\}}
-
-\CommentTok{// Chinese remainder theorem (special case): find z such that}
-\CommentTok{// z % x = a, z % y = b.  Here, z is unique modulo M = lcm(x,y).}
-\CommentTok{// Return (z,M).  On failure, M = -1.}
 \NormalTok{PII chinese_remainder_theorem(}\DataTypeTok{int} \NormalTok{x, }\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{y, }\DataTypeTok{int} \NormalTok{b) \{}
   \DataTypeTok{int} \NormalTok{s, t;}
   \DataTypeTok{int} \NormalTok{d = extended_euclid(x, y, s, t);}
   \KeywordTok{if} \NormalTok{(a%d != b%d) }\KeywordTok{return} \NormalTok{make_pair(}\DecValTok{0}\NormalTok{, -}\DecValTok{1}\NormalTok{);}
   \KeywordTok{return} \NormalTok{make_pair(mod(s*b*x+t*a*y,x*y)/d, x*y/d);}
 \NormalTok{\}}
-
-\CommentTok{// Chinese remainder theorem: find z such that}
-\CommentTok{// z % x[i] = a[i] for all i.  Note that the solution is}
-\CommentTok{// unique modulo M = lcm_i (x[i]).  Return (z,M).  On }
-\CommentTok{// failure, M = -1.  Note that we do not require the a[i]'s}
-\CommentTok{// to be relatively prime.}
 \NormalTok{PII chinese_remainder_theorem(}\DataTypeTok{const} \NormalTok{VI &x, }\DataTypeTok{const} \NormalTok{VI &a) \{}
   \NormalTok{PII ret = make_pair(a[}\DecValTok{0}\NormalTok{], x[}\DecValTok{0}\NormalTok{]);}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i < x.size(); i++) \{}
@@ -960,8 +766,6 @@
   \NormalTok{\}}
   \KeywordTok{return} \NormalTok{ret;}
 \NormalTok{\}}
-
-\CommentTok{// computes x and y such that ax + by = c; on failure, x = y =-1}
 \DataTypeTok{void} \NormalTok{linear_diophantine(}\DataTypeTok{int} \NormalTok{a, }\DataTypeTok{int} \NormalTok{b, }\DataTypeTok{int} \NormalTok{c, }\DataTypeTok{int} \NormalTok{&x, }\DataTypeTok{int} \NormalTok{&y) \{}
   \DataTypeTok{int} \NormalTok{d = gcd(a,b);}
   \KeywordTok{if} \NormalTok{(c%d) \{}
@@ -983,12 +787,7 @@
 \DataTypeTok{double} \NormalTok{A[}\DecValTok{303}\NormalTok{][}\DecValTok{303}\NormalTok{];}
 \DataTypeTok{double} \NormalTok{X[}\DecValTok{303}\NormalTok{];}
 
-\DataTypeTok{int} \NormalTok{main()}
-\NormalTok{\{}
-  \NormalTok{freopen(}\StringTok{"gauss.in"}\NormalTok{,}\StringTok{"r"}\NormalTok{,stdin);}
-  \NormalTok{freopen(}\StringTok{"gauss.out"}\NormalTok{,}\StringTok{"w"}\NormalTok{,stdout);}
-  \NormalTok{scanf(}\StringTok{"%d%d"}\NormalTok{,&N,&M);}
-
+\DataTypeTok{int} \NormalTok{main() \{}
   \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i) \{}
     \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{1}\NormalTok{;j<=M}\DecValTok{+1}\NormalTok{;++j) \{}
       \NormalTok{scanf(}\StringTok{"%lf"}\NormalTok{,&A[i][j]);}
@@ -1004,8 +803,7 @@
       \KeywordTok{continue}\NormalTok{;}
     \NormalTok{\}}
     \KeywordTok{if}\NormalTok{(k!=i) \{}
-      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{q=}\DecValTok{1}\NormalTok{;q<=M}\DecValTok{+1}\NormalTok{;++q)}
-      \NormalTok{\{}
+      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{q=}\DecValTok{1}\NormalTok{;q<=M}\DecValTok{+1}\NormalTok{;++q) \{}
         \DataTypeTok{double} \NormalTok{aux = A[i][q];}
         \NormalTok{A[i][q]= A[k][q];}
         \NormalTok{A[k][q]= aux;}
@@ -1023,27 +821,6 @@
     \NormalTok{\}}
     \NormalTok{++i;++j;}
   \NormalTok{\}}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=N;i>}\DecValTok{0}\NormalTok{;--i)}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{1}\NormalTok{;j<=M}\DecValTok{+1}\NormalTok{;++j) \{}
-      \KeywordTok{if}\NormalTok{(A[i][j]>EPS\textbar{}\textbar{}A[i][j]<-EPS) \{}
-        \KeywordTok{if}\NormalTok{(j==M}\DecValTok{+1}\NormalTok{) \{}
-          \NormalTok{printf(}\StringTok{"Imposibil}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{);}
-          \KeywordTok{return} \DecValTok{0}\NormalTok{;}
-        \NormalTok{\}}
-
-        \NormalTok{X[j]=A[i][M}\DecValTok{+1}\NormalTok{];}
-        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=j}\DecValTok{+1}\NormalTok{;k<=M;++k) \{}
-          \NormalTok{X[j]-=X[k]*A[i][k];}
-        \NormalTok{\}}
-        \KeywordTok{break}\NormalTok{;}
-      \NormalTok{\}}
-    \NormalTok{\}}
-
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=M;++i) \{}
-    \NormalTok{printf(}\StringTok{"%.8lf "}\NormalTok{,X[i]);}
-  \NormalTok{\}}
-  \NormalTok{printf(}\StringTok{"}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{);}
-  \KeywordTok{return} \DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1054,39 +831,30 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{vector<}\DataTypeTok{int}\NormalTok{> prefix(}\DataTypeTok{const} \NormalTok{string& str)}
-\NormalTok{\{}
+\NormalTok{vector<}\DataTypeTok{int}\NormalTok{> prefix(}\DataTypeTok{const} \NormalTok{string& str) \{}
   \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> pi(str.size(), }\DecValTok{0}\NormalTok{);}
-
   \DataTypeTok{int} \NormalTok{k = }\DecValTok{0}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{1}\NormalTok{; i < str.size(); ++i) \{}
     \KeywordTok{while} \NormalTok{(k > }\DecValTok{0} \NormalTok{&& str[i] != str[k])}
       \NormalTok{k = pi[k - }\DecValTok{1}\NormalTok{];}
-
     \KeywordTok{if} \NormalTok{(str[i] == str[k])}
       \NormalTok{++k;}
     \NormalTok{pi[i] = k;}
   \NormalTok{\}}
-
   \KeywordTok{return} \NormalTok{pi;}
 \NormalTok{\}}
- 
-\NormalTok{vector<}\DataTypeTok{int}\NormalTok{> match(}\DataTypeTok{const} \NormalTok{string& str, }\DataTypeTok{const} \NormalTok{string& patt)}
-\NormalTok{\{}
+\NormalTok{vector<}\DataTypeTok{int}\NormalTok{> match(}\DataTypeTok{const} \NormalTok{string& str, }\DataTypeTok{const} \NormalTok{string& patt) \{}
   \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> matches;}
   \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> pi = prefix(patt);}
-
   \DataTypeTok{int} \NormalTok{k = }\DecValTok{0}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < str.size(); ++i) \{}
     \KeywordTok{while} \NormalTok{(k > }\DecValTok{0} \NormalTok{&& str[i] != patt[k])}
       \NormalTok{k = pi[k - }\DecValTok{1}\NormalTok{];}
-
     \KeywordTok{if} \NormalTok{(str[i] == patt[k])}
       \NormalTok{++k;}
     \KeywordTok{if} \NormalTok{(k == patt.size())}
       \NormalTok{matches.push_back(i - patt.size() + }\DecValTok{1}\NormalTok{);}
   \NormalTok{\}}
-
   \KeywordTok{return} \NormalTok{matches;}
 \NormalTok{\}}
 \end{Highlighting}
@@ -1098,113 +866,32 @@
 \begin{Highlighting}[]
 \DataTypeTok{char} \NormalTok{A[MAXN], B[MAXN];}
 \DataTypeTok{int} \NormalTok{NA, NB;}
-
 \DataTypeTok{int} \NormalTok{hashA1, hashA2, P1, P2;}
-
 \DataTypeTok{char} \NormalTok{match[MAXN];}
 
-\DataTypeTok{int} \NormalTok{main()}
-\NormalTok{\{}
-  \NormalTok{freopen(}\StringTok{"strmatch.in"}\NormalTok{, }\StringTok{"rt"}\NormalTok{, stdin);}
-  \NormalTok{freopen(}\StringTok{"strmatch.out"}\NormalTok{, }\StringTok{"wt"}\NormalTok{, stdout);}
-
-  \NormalTok{scanf(}\StringTok{"%s %s"}\NormalTok{, A, B);}
-  \NormalTok{NA = strlen(A);}
-  \NormalTok{NB = strlen(B);}
-
+\DataTypeTok{int} \NormalTok{main() \{}
   \NormalTok{P1 = P2 = }\DecValTok{1}\NormalTok{;}
   \NormalTok{hashA1 = hashA2 = }\DecValTok{0}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < NA; i++) \{}
     \NormalTok{hashA1 = (hashA1 * P + A[i]) % MOD1;}
     \NormalTok{hashA2 = (hashA2 * P + A[i]) % MOD2;}
-
     \KeywordTok{if} \NormalTok{(i != }\DecValTok{0}\NormalTok{)}
       \NormalTok{P1 = (P1 * P) % MOD1,}
          \NormalTok{P2 = (P2 * P) % MOD2;}
   \NormalTok{\}}
-
-  \KeywordTok{if} \NormalTok{(NA > NB) \{}
-    \NormalTok{printf(}\StringTok{"0}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{);}
-    \KeywordTok{return} \DecValTok{0}\NormalTok{;}
-  \NormalTok{\}}
-
   \DataTypeTok{int} \NormalTok{hash1 = }\DecValTok{0}\NormalTok{, hash2 = }\DecValTok{0}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < NA; i++)}
     \NormalTok{hash1 = (hash1 * P + B[i]) % MOD1,}
           \NormalTok{hash2 = (hash2 * P + B[i]) % MOD2;}
-
   \DataTypeTok{int} \NormalTok{Nr = }\DecValTok{0}\NormalTok{;}
   \KeywordTok{if} \NormalTok{(hash1 == hashA1 && hash2 == hashA2)}
     \NormalTok{match[}\DecValTok{0}\NormalTok{] = }\DecValTok{1}\NormalTok{, Nr++;}
-
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = NA; i < NB; i++) \{}
     \NormalTok{hash1 = ((hash1 - (B[i - NA] * P1) % MOD1 + MOD1) * P + B[i]) % MOD1;}
     \NormalTok{hash2 = ((hash2 - (B[i - NA] * P2) % MOD2 + MOD2) * P + B[i]) % MOD2;}
-
     \KeywordTok{if} \NormalTok{(hash1 == hashA1 && hash2 == hashA2)}
       \NormalTok{match[ i - NA + }\DecValTok{1} \NormalTok{] = }\DecValTok{1}\NormalTok{, Nr++;}
   \NormalTok{\}}
-  \KeywordTok{return} \DecValTok{0}\NormalTok{;}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
-
-\subsection{Aho-Corasick}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\DataTypeTok{int} \NormalTok{lg,n,l,final[DN],ic,sc;}
-\DataTypeTok{char} \NormalTok{tx[DL],c[DN];}
-
-\KeywordTok{struct} \NormalTok{ac \{}
-    \NormalTok{vector<}\DataTypeTok{int}\NormalTok{> nd;}\CommentTok{//sirurile care se termina in nodul curent}
-    \DataTypeTok{int} \NormalTok{n0;}\CommentTok{//numarul de potriviri din nodul curent sau din fii lui}
-    \NormalTok{ac *f[DA],*fail;}
-    \NormalTok{ac() \{}
-        \NormalTok{n0=}\DecValTok{0}\NormalTok{;}
-        \NormalTok{fail=NULL;}
-        \NormalTok{memset(f,}\DecValTok{0}\NormalTok{,}\KeywordTok{sizeof}\NormalTok{(f));}
-    \NormalTok{\}}
-\NormalTok{\} *q[DN*DN],*t,*p;}
-
-
-\DataTypeTok{void} \NormalTok{ins(ac *t,}\DataTypeTok{char} \NormalTok{*p,}\DataTypeTok{int} \NormalTok{i) \{}\CommentTok{//inserarea se face ca si la trie}
-    \KeywordTok{if}\NormalTok{(!isalpha(*p)) \{}
-        \NormalTok{t->nd.push_back(i);}
-        \KeywordTok{return}\NormalTok{;}
-    \NormalTok{\}}
-    \DataTypeTok{int} \NormalTok{urm=*p-'a';}
-    \KeywordTok{if}\NormalTok{(}\DecValTok{0}\NormalTok{==t->f[urm]) t->f[urm]=}\KeywordTok{new} \NormalTok{ac;}
-    \NormalTok{ins(t->f[urm],p}\DecValTok{+1}\NormalTok{,i);}
-\NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{bfs(ac *t) \{}
-    \NormalTok{ac *dolar;}\CommentTok{//unde o sa mearga fail-ul fiecarui nod}
-    \NormalTok{t->fail=t;}
-    \KeywordTok{for}\NormalTok{(q[ic=sc=}\DecValTok{1}\NormalTok{]=t;ic<=sc;++ic) \{}
-        \NormalTok{ac *fr=q[ic];}
-        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{; i<DA; ++i) }\KeywordTok{if}\NormalTok{(fr->f[i]!=NULL) \{}\CommentTok{//nodul caruia ii cautam fail-ul}
-            \CommentTok{//ne ducem in fail pana gasim un nod care are ca fiu ultima litera a nodului sau pana ajungem in radacina}
-            \KeywordTok{for}\NormalTok{(dolar=fr->fail;dolar!=t && dolar->f[i]==NULL;dolar=dolar->fail);}
-
-            \KeywordTok{if}\NormalTok{(dolar->f[i]!=NULL && dolar->f[i]!=fr->f[i]) dolar=dolar->f[i];}
-            \NormalTok{fr->f[i]->fail=dolar;}
-            \NormalTok{q[++sc]=fr->f[i];}
-        \NormalTok{\}}
-    \NormalTok{\}}
-    \NormalTok{t->fail=NULL;}
-\NormalTok{\}}
-
-
-\DataTypeTok{void} \NormalTok{antibfs(ac *t) \{}
-    \CommentTok{//parcurgem nodurile in ordinea inversa a bfs-ului astfel fiecare nod va fi parcurs dupa ce au}
-    \CommentTok{//fost parcursi toti fii lui si astfel putem calcula n0}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=sc; i>}\DecValTok{0}\NormalTok{; --i) \{}
-        \NormalTok{ac *fr=q[i];}
-        \KeywordTok{if}\NormalTok{(fr->fail!=NULL) fr->fail->n0+=fr->n0;}
-        \CommentTok{//parcurgem toate cuvintele care se termina in nodul curent si actualizam solutia}
-        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{0}\NormalTok{; j<fr->nd.size(); ++j) final[fr->nd[j]]=fr->n0;}
-    \NormalTok{\}}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1215,20 +902,15 @@
 \begin{Highlighting}[]
 \DataTypeTok{int} \NormalTok{N;}
 \DataTypeTok{char} \NormalTok{s[MAXN];}
-
 \DataTypeTok{int} \NormalTok{dp[}\DecValTok{2}\NormalTok{][MAXN];}
 \DataTypeTok{long} \DataTypeTok{long} \NormalTok{res = }\DecValTok{0}\NormalTok{;}
 
-\DataTypeTok{int} \NormalTok{explode(}\DataTypeTok{int} \NormalTok{l, }\DataTypeTok{int} \NormalTok{r)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{explode(}\DataTypeTok{int} \NormalTok{l, }\DataTypeTok{int} \NormalTok{r) \{}
   \DataTypeTok{int} \NormalTok{len = }\DecValTok{0}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(; l >= }\DecValTok{0} \NormalTok{&& r < N && s[l] == s[r]; --l, ++r, ++len);}
-
   \KeywordTok{return} \NormalTok{len;}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{odd_center()}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{odd_center() \{}
   \DataTypeTok{int} \NormalTok{last = -}\DecValTok{1}\NormalTok{, right = -}\DecValTok{1}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < N; ++i) \{}
     \KeywordTok{if} \NormalTok{(right >= i)}
@@ -1237,7 +919,6 @@
     \DataTypeTok{int} \NormalTok{l = i - dp[}\DecValTok{0}\NormalTok{][i];}
     \DataTypeTok{int} \NormalTok{r = i + dp[}\DecValTok{0}\NormalTok{][i];}
     \NormalTok{dp[}\DecValTok{0}\NormalTok{][i] += explode(l, r);}
-
     \KeywordTok{if} \NormalTok{(i + dp[}\DecValTok{0}\NormalTok{][i] > right) \{}
       \NormalTok{last = i;}
       \NormalTok{right = i + dp[}\DecValTok{0}\NormalTok{][i];}
@@ -1245,21 +926,16 @@
     \NormalTok{res += (}\DataTypeTok{long} \DataTypeTok{long}\NormalTok{) dp[}\DecValTok{0}\NormalTok{][i];}
   \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{even_center()}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{even_center() \{}
   \DataTypeTok{int} \NormalTok{last = -}\DecValTok{1}\NormalTok{, right = -}\DecValTok{1}\NormalTok{;}
   \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < N; ++i) \{}
     \KeywordTok{if} \NormalTok{(s[i] != s[i + }\DecValTok{1}\NormalTok{])}
       \KeywordTok{continue}\NormalTok{;}
-
     \KeywordTok{if} \NormalTok{(right > i)}
       \NormalTok{dp[}\DecValTok{1}\NormalTok{][i] = min(dp[}\DecValTok{1}\NormalTok{][}\DecValTok{2} \NormalTok{* last - i], right - i - }\DecValTok{1}\NormalTok{);}
-
     \DataTypeTok{int} \NormalTok{l = i - dp[}\DecValTok{1}\NormalTok{][i];}
     \DataTypeTok{int} \NormalTok{r = i + dp[}\DecValTok{1}\NormalTok{][i] + }\DecValTok{1}\NormalTok{;}
     \NormalTok{dp[}\DecValTok{1}\NormalTok{][i] += explode(l, r);}
-
     \KeywordTok{if} \NormalTok{(i + dp[}\DecValTok{1}\NormalTok{][i] + }\DecValTok{1} \NormalTok{> right) \{}
       \NormalTok{last = i;}
       \NormalTok{right = i + dp[}\DecValTok{1}\NormalTok{][i] + }\DecValTok{1}\NormalTok{;}
@@ -1267,21 +943,9 @@
     \NormalTok{res += (}\DataTypeTok{long} \DataTypeTok{long}\NormalTok{) dp[}\DecValTok{1}\NormalTok{][i];}
   \NormalTok{\}}
 \NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{main()}
-\NormalTok{\{}
-  \NormalTok{freopen(}\StringTok{"pscpld.in"}\NormalTok{, }\StringTok{"r"}\NormalTok{, stdin);}
-  \NormalTok{freopen(}\StringTok{"pscpld.out"}\NormalTok{, }\StringTok{"w"}\NormalTok{, stdout);}
-
-  \NormalTok{scanf(}\StringTok{"%s"}\NormalTok{, s);}
-  \NormalTok{N = strlen(s);}
-
+\DataTypeTok{int} \NormalTok{main() \{}
   \NormalTok{odd_center();}
   \NormalTok{even_center();}
-
-  \NormalTok{printf(}\StringTok{"%lld}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{, res);}
-
-  \KeywordTok{return} \DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1301,50 +965,38 @@
 \NormalTok{\};}
 
 \NormalTok{Trie *T = }\KeywordTok{new} \NormalTok{Trie;}
-
-\DataTypeTok{void} \NormalTok{ins(Trie *node, }\DataTypeTok{char} \NormalTok{*s)}
-\NormalTok{\{}
+\DataTypeTok{void} \NormalTok{ins(Trie *node, }\DataTypeTok{char} \NormalTok{*s) \{}
   \KeywordTok{if} \NormalTok{(*s == '\textbackslash{}}\DecValTok{0}\NormalTok{') \{}
     \NormalTok{node->cnt++;}
     \KeywordTok{return}\NormalTok{;}
   \NormalTok{\}}
-
   \KeywordTok{if} \NormalTok{(node->son[ch] == }\DecValTok{0}\NormalTok{) \{}
     \NormalTok{node->son[ch] = }\KeywordTok{new} \NormalTok{Trie;}
     \NormalTok{node->nrsons++;}
   \NormalTok{\}}
-
   \NormalTok{ins(node->son[ch], s + }\DecValTok{1}\NormalTok{);}
 \NormalTok{\}}
 
-\DataTypeTok{int} \NormalTok{del(Trie *node, }\DataTypeTok{char} \NormalTok{*s)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{del(Trie *node, }\DataTypeTok{char} \NormalTok{*s) \{}
   \KeywordTok{if} \NormalTok{(*s == '\textbackslash{}}\DecValTok{0}\NormalTok{')}
     \NormalTok{node->cnt--;}
   \KeywordTok{else} \KeywordTok{if} \NormalTok{(del(node->son[ch], s + }\DecValTok{1}\NormalTok{)) \{}
     \NormalTok{node->son[ch] = }\DecValTok{0}\NormalTok{;}
     \NormalTok{node->nrsons--;}
   \NormalTok{\}}
-
   \KeywordTok{if} \NormalTok{(node->cnt == }\DecValTok{0} \NormalTok{&& node->nrsons == }\DecValTok{0} \NormalTok{&& node != T) \{}
     \KeywordTok{delete} \NormalTok{node;}
     \KeywordTok{return} \DecValTok{1}\NormalTok{;}
   \NormalTok{\}}
-
-  \KeywordTok{return} \DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{freq(Trie *node, }\DataTypeTok{char} \NormalTok{*s)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{freq(Trie *node, }\DataTypeTok{char} \NormalTok{*s) \{}
   \KeywordTok{if} \NormalTok{(*s == '\textbackslash{}}\DecValTok{0}\NormalTok{')}
     \KeywordTok{return} \NormalTok{node->cnt;}
   \KeywordTok{if} \NormalTok{(node->son[ch])}
     \KeywordTok{return} \NormalTok{freq(node->son[ch], s + }\DecValTok{1}\NormalTok{);}
   \KeywordTok{return} \DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{pref(Trie *node, }\DataTypeTok{char} \NormalTok{*s, }\DataTypeTok{int} \NormalTok{k)}
-\NormalTok{\{}
+\DataTypeTok{int} \NormalTok{pref(Trie *node, }\DataTypeTok{char} \NormalTok{*s, }\DataTypeTok{int} \NormalTok{k) \{}
   \KeywordTok{if} \NormalTok{(*s == '\textbackslash{}}\DecValTok{0}\NormalTok{' \textbar{}\textbar{} node->son[ch] == }\DecValTok{0}\NormalTok{)}
     \KeywordTok{return} \NormalTok{k;}
   \KeywordTok{return} \NormalTok{pref(node->son[ch], s + }\DecValTok{1}\NormalTok{, k + }\DecValTok{1}\NormalTok{);}
@@ -1360,46 +1012,36 @@
 \begin{Highlighting}[]
 \KeywordTok{typedef} \NormalTok{pair<}\DataTypeTok{double}\NormalTok{, }\DataTypeTok{double}\NormalTok{> point;}
 
-\DataTypeTok{const} \DataTypeTok{int} \NormalTok{MAXN = }\DecValTok{120010}\NormalTok{;}
-
 \DataTypeTok{int} \NormalTok{n;}
 \NormalTok{point v[MAXN];}
-
 \DataTypeTok{int} \NormalTok{head;}
 \NormalTok{point stack[MAXN];}
 
-\KeywordTok{inline} \DataTypeTok{double} \NormalTok{cross_prod(}\DataTypeTok{const} \NormalTok{point& A, }\DataTypeTok{const} \NormalTok{point& B, }\DataTypeTok{const} \NormalTok{point& C)}
-\NormalTok{\{}
-    \KeywordTok{return} \NormalTok{(B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x);}
+\KeywordTok{inline} \DataTypeTok{double} \NormalTok{cross_prod(}\DataTypeTok{const} \NormalTok{point& A, }\DataTypeTok{const} \NormalTok{point& B, }\DataTypeTok{const} \NormalTok{point& C) \{}
+  \KeywordTok{return} \NormalTok{(B.x - A.x) * (C.y - A.y) - (B.y - A.y) * (C.x - A.x);}
 \NormalTok{\}}
-
-\KeywordTok{inline} \DataTypeTok{bool} \NormalTok{comp(}\DataTypeTok{const} \NormalTok{point& A, }\DataTypeTok{const} \NormalTok{point& B)}
-\NormalTok{\{}
-    \KeywordTok{return} \NormalTok{cross_prod(v[}\DecValTok{1}\NormalTok{], A, B) < }\DecValTok{0}\NormalTok{;}
+\KeywordTok{inline} \DataTypeTok{bool} \NormalTok{comp(}\DataTypeTok{const} \NormalTok{point& A, }\DataTypeTok{const} \NormalTok{point& B) \{}
+  \KeywordTok{return} \NormalTok{cross_prod(v[}\DecValTok{1}\NormalTok{], A, B) < }\DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
-
-\DataTypeTok{void} \NormalTok{sort_points()}
-\NormalTok{\{}
-    \DataTypeTok{int} \NormalTok{pos = }\DecValTok{1}\NormalTok{;}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{2}\NormalTok{; i <= n; ++i)}
-        \KeywordTok{if} \NormalTok{(v[i] < v[pos])}
-            \NormalTok{pos = i;}
-    \NormalTok{swap(v[}\DecValTok{1}\NormalTok{], v[pos]);}
-    \NormalTok{sort(v + }\DecValTok{2}\NormalTok{, v + n + }\DecValTok{1}\NormalTok{, comp);}
+\DataTypeTok{void} \NormalTok{sort_points() \{}
+  \DataTypeTok{int} \NormalTok{pos = }\DecValTok{1}\NormalTok{;}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{2}\NormalTok{; i <= n; ++i)}
+    \KeywordTok{if} \NormalTok{(v[i] < v[pos])}
+      \NormalTok{pos = i;}
+  \NormalTok{swap(v[}\DecValTok{1}\NormalTok{], v[pos]);}
+  \NormalTok{sort(v + }\DecValTok{2}\NormalTok{, v + n + }\DecValTok{1}\NormalTok{, comp);}
 \NormalTok{\}}
+\DataTypeTok{void} \NormalTok{convex_hull() \{}
+  \NormalTok{sort_points();}
 
-\DataTypeTok{void} \NormalTok{convex_hull()}
-\NormalTok{\{}
-    \NormalTok{sort_points();}
-
-    \NormalTok{stack[}\DecValTok{1}\NormalTok{] = v[}\DecValTok{1}\NormalTok{];}
-    \NormalTok{stack[}\DecValTok{2}\NormalTok{] = v[}\DecValTok{2}\NormalTok{];}
-    \NormalTok{head = }\DecValTok{2}\NormalTok{;}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{3}\NormalTok{; i <= n; ++i) \{}
-        \KeywordTok{while} \NormalTok{(head >= }\DecValTok{2} \NormalTok{&& cross_prod(stack[head - }\DecValTok{1}\NormalTok{], stack[head], v[i]) > }\DecValTok{0}\NormalTok{)}
-            \NormalTok{--head;}
-        \NormalTok{stack[++head] = v[i];}
-    \NormalTok{\}}
+  \NormalTok{stack[}\DecValTok{1}\NormalTok{] = v[}\DecValTok{1}\NormalTok{];}
+  \NormalTok{stack[}\DecValTok{2}\NormalTok{] = v[}\DecValTok{2}\NormalTok{];}
+  \NormalTok{head = }\DecValTok{2}\NormalTok{;}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{3}\NormalTok{; i <= n; ++i) \{}
+    \KeywordTok{while} \NormalTok{(head >= }\DecValTok{2} \NormalTok{&& cross_prod(stack[head - }\DecValTok{1}\NormalTok{], stack[head], v[i]) > }\DecValTok{0}\NormalTok{)}
+      \NormalTok{--head;}
+    \NormalTok{stack[++head] = v[i];}
+  \NormalTok{\}}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1409,18 +1051,18 @@
 \begin{Shaded}
 \begin{Highlighting}[]
 \KeywordTok{struct} \NormalTok{point \{}
-    \DataTypeTok{double} \NormalTok{x, y;}
-    \NormalTok{point() \{\}}
-    \NormalTok{point(}\DataTypeTok{double} \NormalTok{x_, }\DataTypeTok{double} \NormalTok{y_): x(x_), y(y_) \{\}}
-    \NormalTok{point(}\DataTypeTok{const} \NormalTok{point& p): x(p.x), y(p.y) \{\}}
+  \DataTypeTok{double} \NormalTok{x, y;}
+  \NormalTok{point() \{\}}
+  \NormalTok{point(}\DataTypeTok{double} \NormalTok{x_, }\DataTypeTok{double} \NormalTok{y_): x(x_), y(y_) \{\}}
+  \NormalTok{point(}\DataTypeTok{const} \NormalTok{point& p): x(p.x), y(p.y) \{\}}
 
-    \NormalTok{point }\KeywordTok{operator}\NormalTok{+(}\DataTypeTok{const} \NormalTok{point& p) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x + p.x, y + p.y); \}}
-    \NormalTok{point }\KeywordTok{operator}\NormalTok{-(}\DataTypeTok{const} \NormalTok{point& p) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x - p.x, y - p.y); \}}
-    \NormalTok{point }\KeywordTok{operator}\NormalTok{*(}\DataTypeTok{double} \NormalTok{c) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x * c, y * c); \}}
-    \NormalTok{point }\KeywordTok{operator}\NormalTok{/(}\DataTypeTok{double} \NormalTok{c) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x / c, y / c); \}}
+  \NormalTok{point }\KeywordTok{operator}\NormalTok{+(}\DataTypeTok{const} \NormalTok{point& p) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x + p.x, y + p.y); \}}
+  \NormalTok{point }\KeywordTok{operator}\NormalTok{-(}\DataTypeTok{const} \NormalTok{point& p) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x - p.x, y - p.y); \}}
+  \NormalTok{point }\KeywordTok{operator}\NormalTok{*(}\DataTypeTok{double} \NormalTok{c) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x * c, y * c); \}}
+  \NormalTok{point }\KeywordTok{operator}\NormalTok{/(}\DataTypeTok{double} \NormalTok{c) }\DataTypeTok{const} \NormalTok{\{ }\KeywordTok{return} \NormalTok{point(x / c, y / c); \}}
 \NormalTok{\};}
 \NormalTok{ostream &}\KeywordTok{operator}\NormalTok{<<(ostream &os, }\DataTypeTok{const} \NormalTok{point& p) \{}
-    \NormalTok{os << }\StringTok{"("} \NormalTok{<< p.x << }\StringTok{","} \NormalTok{<< p.y << }\StringTok{")"}\NormalTok{;}
+  \NormalTok{os << }\StringTok{"("} \NormalTok{<< p.x << }\StringTok{","} \NormalTok{<< p.y << }\StringTok{")"}\NormalTok{;}
 \NormalTok{\}}
 
 \DataTypeTok{double} \NormalTok{dot(point p, point q) \{ }\KeywordTok{return} \NormalTok{p.x * q.x + p.y * q.y; \}}
@@ -1428,201 +1070,132 @@
 \DataTypeTok{double} \NormalTok{dist(point p, point q) \{ }\KeywordTok{return} \NormalTok{sqrt(dist2(p, q)); \}}
 \DataTypeTok{double} \NormalTok{cross(point p, point q) \{ }\KeywordTok{return} \NormalTok{p.x * q.y - p.y * q.x; \}}
 
-\CommentTok{// test if point c is Left \textbar{} On \textbar{} Right of line through a, b}
-\CommentTok{// returns > 0 if left, = 0 if on, < 0 if right}
 \DataTypeTok{double} \NormalTok{is_left(point a, point b, point c) \{}
-    \KeywordTok{return} \NormalTok{cross(b - a, c - a);}
+  \KeywordTok{return} \NormalTok{cross(b - a, c - a);}
 \NormalTok{\}}
 
 \NormalTok{point rotate_cw_90(point p) \{ }\KeywordTok{return} \NormalTok{point(p.y, -p.x); \}}
 \NormalTok{point rotate_ccw_90(point p) \{ }\KeywordTok{return} \NormalTok{point(-p.y, p.x); \}}
-\CommentTok{// rotate point counter-clockwise around origin}
 \NormalTok{point rotate(point p, }\DataTypeTok{double} \NormalTok{a) \{}
-    \KeywordTok{return} \NormalTok{point(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));}
+  \KeywordTok{return} \NormalTok{point(p.x * cos(a) - p.y * sin(a), p.x * sin(a) + p.y * cos(a));}
 \NormalTok{\}}
 
-\CommentTok{// project c on line through a and b (a != b)}
 \NormalTok{point project_point_line(point a, point b, point c) \{}
-    \KeywordTok{return} \NormalTok{a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);}
+  \KeywordTok{return} \NormalTok{a + (b - a) * dot(c - a, b - a) / dot(b - a, b - a);}
 \NormalTok{\}}
-\CommentTok{// project point c onto line segment through a and b}
 \NormalTok{point project_point_segment(point a, point b, point c) \{}
-    \DataTypeTok{double} \NormalTok{d = dot(b - a, b - a);}
-    \KeywordTok{if} \NormalTok{(abs(d) < EPS) }\KeywordTok{return} \NormalTok{a;}
-    \NormalTok{d = dot(c - a, b - a) / d;}
-    \KeywordTok{if} \NormalTok{(d < }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \NormalTok{a;}
-    \KeywordTok{if} \NormalTok{(d > }\DecValTok{1}\NormalTok{) }\KeywordTok{return} \NormalTok{b;}
-    \KeywordTok{return} \NormalTok{a + (b - a) * d;}
+  \DataTypeTok{double} \NormalTok{d = dot(b - a, b - a);}
+  \KeywordTok{if} \NormalTok{(abs(d) < EPS) }\KeywordTok{return} \NormalTok{a;}
+  \NormalTok{d = dot(c - a, b - a) / d;}
+  \KeywordTok{if} \NormalTok{(d < }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \NormalTok{a;}
+  \KeywordTok{if} \NormalTok{(d > }\DecValTok{1}\NormalTok{) }\KeywordTok{return} \NormalTok{b;}
+  \KeywordTok{return} \NormalTok{a + (b - a) * d;}
 \NormalTok{\}}
 
-\CommentTok{// compute distance from c to segment between a and b}
 \DataTypeTok{double} \NormalTok{distance_point_segment(point a, point b, point c) \{}
-    \KeywordTok{return} \NormalTok{sqrt(dist2(c, project_point_segment(a, b, c)));}
+  \KeywordTok{return} \NormalTok{sqrt(dist2(c, project_point_segment(a, b, c)));}
 \NormalTok{\}}
-\CommentTok{// compute distance between point (x, y, z) and plane ax + by + cz = d}
 \DataTypeTok{double} \NormalTok{distance_point_plane(}\DataTypeTok{double} \NormalTok{x, }\DataTypeTok{double} \NormalTok{y, }\DataTypeTok{double} \NormalTok{z,}
-        \DataTypeTok{double} \NormalTok{a, }\DataTypeTok{double} \NormalTok{b, }\DataTypeTok{double} \NormalTok{c, }\DataTypeTok{double} \NormalTok{d) \{}
-    \KeywordTok{return} \NormalTok{abs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);}
+    \DataTypeTok{double} \NormalTok{a, }\DataTypeTok{double} \NormalTok{b, }\DataTypeTok{double} \NormalTok{c, }\DataTypeTok{double} \NormalTok{d) \{}
+  \KeywordTok{return} \NormalTok{abs(a * x + b * y + c * z - d) / sqrt(a * a + b * b + c * c);}
 \NormalTok{\}}
 
-\CommentTok{// determine if lines a - b and c - d are parallel or collinear}
 \DataTypeTok{bool} \NormalTok{lines_parallel(point a, point b, point c, point d) \{}
-    \KeywordTok{return} \NormalTok{abs(cross(b - a, c - d)) < EPS;}
+  \KeywordTok{return} \NormalTok{abs(cross(b - a, c - d)) < EPS;}
 \NormalTok{\}}
 \DataTypeTok{bool} \NormalTok{lines_collinear(point a, point b, point c, point d) \{}
-    \KeywordTok{return} \NormalTok{lines_parallel(a, b, c, d) &&}
-        \NormalTok{abs(cross(a - b, a - c)) < EPS &&}
-        \NormalTok{abs(cross(c - d, c - a)) < EPS;}
+  \KeywordTok{return} \NormalTok{lines_parallel(a, b, c, d) &&}
+    \NormalTok{abs(cross(a - b, a - c)) < EPS &&}
+    \NormalTok{abs(cross(c - d, c - a)) < EPS;}
 \NormalTok{\}}
 
-\CommentTok{// check if line segment a - b intersects line segment c - d}
 \DataTypeTok{bool} \NormalTok{segments_intersect(point a, point b, point c, point d) \{}
-    \KeywordTok{if} \NormalTok{(lines_collinear(a, b, c, d)) \{}
-        \KeywordTok{if} \NormalTok{(dist2(a, c) < EPS \textbar{}\textbar{} dist2(a, d) < EPS \textbar{}\textbar{}}
-                \NormalTok{dist2(b, c) < EPS \textbar{}\textbar{} dist2(b, d) < EPS) }\KeywordTok{return} \KeywordTok{true}\NormalTok{;}
-        \KeywordTok{if} \NormalTok{(dot(c - a, c - b) > }\DecValTok{0} \NormalTok{&& dot(d - a, d - b) > }\DecValTok{0} \NormalTok{&&}
-                \NormalTok{dot(c - b, d - b) > }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \KeywordTok{false}\NormalTok{;}
-        \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
-    \NormalTok{\}}
-    \KeywordTok{if} \NormalTok{(cross(d - a, b - a) * cross(c - a, b - a) > }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \KeywordTok{false}\NormalTok{;}
-    \KeywordTok{if} \NormalTok{(cross(a - c, d - c) * cross(b - c, d - c) > }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \KeywordTok{false}\NormalTok{;}
+  \KeywordTok{if} \NormalTok{(lines_collinear(a, b, c, d)) \{}
+    \KeywordTok{if} \NormalTok{(dist2(a, c) < EPS \textbar{}\textbar{} dist2(a, d) < EPS \textbar{}\textbar{}}
+        \NormalTok{dist2(b, c) < EPS \textbar{}\textbar{} dist2(b, d) < EPS) }\KeywordTok{return} \KeywordTok{true}\NormalTok{;}
+    \KeywordTok{if} \NormalTok{(dot(c - a, c - b) > }\DecValTok{0} \NormalTok{&& dot(d - a, d - b) > }\DecValTok{0} \NormalTok{&&}
+        \NormalTok{dot(c - b, d - b) > }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \KeywordTok{false}\NormalTok{;}
     \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
+  \NormalTok{\}}
+  \KeywordTok{if} \NormalTok{(cross(d - a, b - a) * cross(c - a, b - a) > }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \KeywordTok{false}\NormalTok{;}
+  \KeywordTok{if} \NormalTok{(cross(a - c, d - c) * cross(b - c, d - c) > }\DecValTok{0}\NormalTok{) }\KeywordTok{return} \KeywordTok{false}\NormalTok{;}
+  \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
 \NormalTok{\}}
 \NormalTok{point compute_line_intersection(point a, point b, point c, point d) \{}
-    \NormalTok{b = b - a; d = c - d; c = c - a;}
-    \KeywordTok{return} \NormalTok{a + b * cross(c, d) / cross(b, d);}
+  \NormalTok{b = b - a; d = c - d; c = c - a;}
+  \KeywordTok{return} \NormalTok{a + b * cross(c, d) / cross(b, d);}
 \NormalTok{\}}
-
-\CommentTok{// compute center of circle given three points}
 \NormalTok{point compute_circle_center(point a, point b, point c) \{}
-    \NormalTok{b = (a + b) / }\DecValTok{2}\NormalTok{;}
-    \NormalTok{c = (a + c) / }\DecValTok{2}\NormalTok{;}
-    \KeywordTok{return} \NormalTok{compute_line_intersection(b, b + rotate_cw_90(a - b),}
-            \NormalTok{c, c + rotate_cw_90(a - c));}
+  \NormalTok{b = (a + b) / }\DecValTok{2}\NormalTok{;}
+  \NormalTok{c = (a + c) / }\DecValTok{2}\NormalTok{;}
+  \KeywordTok{return} \NormalTok{compute_line_intersection(b, b + rotate_cw_90(a - b),}
+      \NormalTok{c, c + rotate_cw_90(a - c));}
 \NormalTok{\}}
 
-\CommentTok{// test if point p is in polygon (use winding number test)}
 \DataTypeTok{bool} \NormalTok{point_in_poly(point p, }\DataTypeTok{const} \NormalTok{vector<point>& v) \{}
-    \DataTypeTok{int} \NormalTok{wn = }\DecValTok{0}\NormalTok{;}
-    \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
-        \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
-        \KeywordTok{if} \NormalTok{(v[i].y <= p.y) \{}
-            \KeywordTok{if} \NormalTok{(v[j].y > p.y && is_left(v[i], v[j], p) > }\DecValTok{0}\NormalTok{)}
-                \NormalTok{++wn;}
-        \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
-            \KeywordTok{if} \NormalTok{(v[j].y <= p.y && is_left(v[i], v[j], p) < }\DecValTok{0}\NormalTok{)}
-                \NormalTok{--wn;}
-        \NormalTok{\}}
+  \DataTypeTok{int} \NormalTok{wn = }\DecValTok{0}\NormalTok{;}
+  \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
+    \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
+    \KeywordTok{if} \NormalTok{(v[i].y <= p.y) \{}
+      \KeywordTok{if} \NormalTok{(v[j].y > p.y && is_left(v[i], v[j], p) > }\DecValTok{0}\NormalTok{)}
+        \NormalTok{++wn;}
+    \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
+      \KeywordTok{if} \NormalTok{(v[j].y <= p.y && is_left(v[i], v[j], p) < }\DecValTok{0}\NormalTok{)}
+        \NormalTok{--wn;}
     \NormalTok{\}}
-
-    \KeywordTok{return} \NormalTok{wn != }\DecValTok{0}\NormalTok{;}
+  \NormalTok{\}}
+  \KeywordTok{return} \NormalTok{wn != }\DecValTok{0}\NormalTok{;}
 \NormalTok{\}}
 \DataTypeTok{bool} \NormalTok{point_on_polygon(point p, }\DataTypeTok{const} \NormalTok{vector<point>& v) \{}
-    \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
-        \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
-        \KeywordTok{if} \NormalTok{(dist2(project_point_segment(v[i], v[j], p), p) < EPS)}
-            \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
-    \NormalTok{\}}
-    \KeywordTok{return} \KeywordTok{false}\NormalTok{;}
+  \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
+    \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
+    \KeywordTok{if} \NormalTok{(dist2(project_point_segment(v[i], v[j], p), p) < EPS)}
+      \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
+  \NormalTok{\}}
+  \KeywordTok{return} \KeywordTok{false}\NormalTok{;}
 \NormalTok{\}}
 
-\CommentTok{// compute signed area of polygon}
 \DataTypeTok{double} \NormalTok{signed_area(}\DataTypeTok{const} \NormalTok{vector<point>& v) \{}
-    \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
-    \DataTypeTok{double} \NormalTok{area = }\DecValTok{0}\NormalTok{;}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
-        \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
-        \NormalTok{area += v[i].x * v[j].y - v[j].x * v[i].y;}
-    \NormalTok{\}}
-    \KeywordTok{return} \NormalTok{area / }\FloatTok{2.0}\NormalTok{;}
+  \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
+  \DataTypeTok{double} \NormalTok{area = }\DecValTok{0}\NormalTok{;}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
+    \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
+    \NormalTok{area += v[i].x * v[j].y - v[j].x * v[i].y;}
+  \NormalTok{\}}
+  \KeywordTok{return} \NormalTok{area / }\FloatTok{2.0}\NormalTok{;}
 \NormalTok{\}}
 \DataTypeTok{double} \NormalTok{area(}\DataTypeTok{const} \NormalTok{vector<point>& v) \{}
-    \KeywordTok{return} \NormalTok{abs(signed_area(v));}
+  \KeywordTok{return} \NormalTok{abs(signed_area(v));}
 \NormalTok{\}}
-
-\CommentTok{// compute centroid of polygon}
 \NormalTok{point centroid(}\DataTypeTok{const} \NormalTok{vector<point>& v) \{}
-    \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
-    \NormalTok{point c(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{);}
-    \DataTypeTok{double} \NormalTok{scale = }\FloatTok{6.0} \NormalTok{* signed_area(v);}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
-        \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
-        \NormalTok{c = c + (v[i] + v[j]) * (v[i].x * v[j].y - v[j].x * v[i].y);}
-    \NormalTok{\}}
-    \KeywordTok{return} \NormalTok{c / scale;}
+  \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
+  \NormalTok{point c(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{);}
+  \DataTypeTok{double} \NormalTok{scale = }\FloatTok{6.0} \NormalTok{* signed_area(v);}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
+    \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
+    \NormalTok{c = c + (v[i] + v[j]) * (v[i].x * v[j].y - v[j].x * v[i].y);}
+  \NormalTok{\}}
+  \KeywordTok{return} \NormalTok{c / scale;}
 \NormalTok{\}}
-
 \DataTypeTok{bool} \NormalTok{is_simple(}\DataTypeTok{const} \NormalTok{vector<point>& v) \{}
-    \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
-    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
-        \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{k = i + }\DecValTok{1}\NormalTok{; k < n; ++k) \{}
-            \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
-            \DataTypeTok{int} \NormalTok{l = (k + }\DecValTok{1}\NormalTok{) % n;}
-            \KeywordTok{if} \NormalTok{(i == l \textbar{}\textbar{} j == k) }\KeywordTok{continue}\NormalTok{;}
-            \KeywordTok{if} \NormalTok{(segments_intersect(v[i], v[j], v[k], v[l]))}
-                \KeywordTok{return} \KeywordTok{false}\NormalTok{;}
-        \NormalTok{\}}
+  \DataTypeTok{int} \NormalTok{n = }\KeywordTok{static_cast}\NormalTok{<}\DataTypeTok{int}\NormalTok{>(v.size());}
+  \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < n; ++i) \{}
+    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{k = i + }\DecValTok{1}\NormalTok{; k < n; ++k) \{}
+      \DataTypeTok{int} \NormalTok{j = (i + }\DecValTok{1}\NormalTok{) % n;}
+      \DataTypeTok{int} \NormalTok{l = (k + }\DecValTok{1}\NormalTok{) % n;}
+      \KeywordTok{if} \NormalTok{(i == l \textbar{}\textbar{} j == k) }\KeywordTok{continue}\NormalTok{;}
+      \KeywordTok{if} \NormalTok{(segments_intersect(v[i], v[j], v[k], v[l]))}
+        \KeywordTok{return} \KeywordTok{false}\NormalTok{;}
     \NormalTok{\}}
-    \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
+  \NormalTok{\}}
+  \KeywordTok{return} \KeywordTok{true}\NormalTok{;}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
 
 \section{Other}
-
-\subsection{Range minimum query}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\OtherTok{#define log 18}
-\OtherTok{#define Nmax 100100}
-
-\KeywordTok{inline} \DataTypeTok{int} \NormalTok{min(}\DataTypeTok{int} \NormalTok{a,}\DataTypeTok{int} \NormalTok{b)}
-\NormalTok{\{}
-  \KeywordTok{if}\NormalTok{(a<b)}
-    \KeywordTok{return} \NormalTok{a;}
-  \KeywordTok{return} \NormalTok{b;}
-\NormalTok{\}}
-
-\DataTypeTok{int} \NormalTok{rmq[log][Nmax],x,y,maxi,sh;}
-\DataTypeTok{int} \NormalTok{v[Nmax];}
-\DataTypeTok{int} \NormalTok{lg[Nmax],N,M;}
-\DataTypeTok{int} \NormalTok{main()}
-\NormalTok{\{}
-  \NormalTok{freopen(}\StringTok{"rmq.in"}\NormalTok{,}\StringTok{"r"}\NormalTok{,stdin);}
-  \NormalTok{freopen(}\StringTok{"rmq.out"}\NormalTok{,}\StringTok{"w"}\NormalTok{,stdout);}
-
-  \NormalTok{scanf(}\StringTok{"%d%d"}\NormalTok{,&N,&M);}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i)}
-    \NormalTok{scanf(}\StringTok{"%d"}\NormalTok{,&v[i]);}
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{2}\NormalTok{;i<=N;++i)}
-    \NormalTok{lg[i]=lg[i/}\DecValTok{2}\NormalTok{]+}\DecValTok{1}\NormalTok{;}
-
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i)}
-    \NormalTok{rmq[}\DecValTok{0}\NormalTok{][i]=v[i];}
-  \NormalTok{v[}\DecValTok{0}\NormalTok{]=-}\DecValTok{1}\NormalTok{;}
-
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;(}\DecValTok{1}\NormalTok{<<i)<=N;++i)}
-  \NormalTok{\{}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{1}\NormalTok{;j+(}\DecValTok{1}\NormalTok{<<i)-}\DecValTok{1}\NormalTok{<=N;++j)}
-    \NormalTok{\{}
-      \NormalTok{maxi=}\DecValTok{1}\NormalTok{<<(i}\DecValTok{-1}\NormalTok{);}
-      \NormalTok{rmq[i][j]=min(rmq[i}\DecValTok{-1}\NormalTok{][j],rmq[i}\DecValTok{-1}\NormalTok{][j+maxi]);}
-    \NormalTok{\}}
-  \NormalTok{\}}
-
-  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=M;++i)}
-  \NormalTok{\{}
-    \NormalTok{scanf(}\StringTok{"%d%d"}\NormalTok{,&x,&y);}
-    \NormalTok{maxi=lg[y-x}\DecValTok{+1}\NormalTok{];}
-    \NormalTok{sh=y-x}\DecValTok{+1}\NormalTok{-(}\DecValTok{1}\NormalTok{<<maxi);}
-    \NormalTok{printf(}\StringTok{"%d}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{,min(rmq[maxi][x],rmq[maxi][x+sh]));}
-  \NormalTok{\}}
-\NormalTok{\}}
-\end{Highlighting}
-\end{Shaded}
 
 \subsection{2SAT}
 
@@ -1633,128 +1206,106 @@
 \DataTypeTok{int} \NormalTok{N,index=}\DecValTok{1}\NormalTok{,k,Nn,M,x,y;}
 \DataTypeTok{int} \NormalTok{rez[}\DecValTok{201010}\NormalTok{];}
 \DataTypeTok{int} \NormalTok{notn(}\DataTypeTok{int} \NormalTok{x)\{}
-    \KeywordTok{if}\NormalTok{(x<=N)\{}
-        \KeywordTok{return} \NormalTok{x + N;}
-    \NormalTok{\}}
-    \KeywordTok{return} \NormalTok{x-N;}
+  \KeywordTok{if}\NormalTok{(x<=N)\{}
+    \KeywordTok{return} \NormalTok{x + N;}
+  \NormalTok{\}}
+  \KeywordTok{return} \NormalTok{x-N;}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{df(}\DataTypeTok{int} \NormalTok{x)\{}
-
-    \NormalTok{viz[x] = index;}
-    \NormalTok{low[x] = index;}
-    \NormalTok{stackx[++k] = x;}
-    \NormalTok{iss[x] = }\DecValTok{1}\NormalTok{;}
-    \NormalTok{++index;}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[x].size();++i)\{}
-        \KeywordTok{if}\NormalTok{(viz[g[x][i]] == }\DecValTok{0}\NormalTok{)\{}
-            \NormalTok{df(g[x][i]);}
-            \NormalTok{low[x] = min(low[x],low[g[x][i]]);}
-        \NormalTok{\}}
-        \KeywordTok{else}\NormalTok{\{}
-            \KeywordTok{if}\NormalTok{(iss[g[x][i]])\{}
-                \NormalTok{low[x] = min(low[x],low[g[x][i]]);}
-            \NormalTok{\}}
-        \NormalTok{\}}
+  \NormalTok{viz[x] = index;}
+  \NormalTok{low[x] = index;}
+  \NormalTok{stackx[++k] = x;}
+  \NormalTok{iss[x] = }\DecValTok{1}\NormalTok{;}
+  \NormalTok{++index;}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<g[x].size();++i)\{}
+    \KeywordTok{if}\NormalTok{(viz[g[x][i]] == }\DecValTok{0}\NormalTok{)\{}
+      \NormalTok{df(g[x][i]);}
+      \NormalTok{low[x] = min(low[x],low[g[x][i]]);}
+    \NormalTok{\} }\KeywordTok{else}\NormalTok{\{}
+      \KeywordTok{if}\NormalTok{(iss[g[x][i]])\{}
+        \NormalTok{low[x] = min(low[x],low[g[x][i]]);}
+      \NormalTok{\}}
     \NormalTok{\}}
-    \KeywordTok{if}\NormalTok{(low[x] == viz[x])\{}
-
-        \NormalTok{aux.clear();}
-
-        \KeywordTok{do}\NormalTok{\{}
-            \NormalTok{aux.pb(stackx[k]);}
-            \NormalTok{iss[stackx[k]] = }\DecValTok{0}\NormalTok{;}
-            \NormalTok{--k;}
-        \NormalTok{\}}\KeywordTok{while}\NormalTok{(stackx[k}\DecValTok{+1}\NormalTok{] != x);}
-
-        \NormalTok{comp.pb(aux);}
-    \NormalTok{\}}
+  \NormalTok{\}}
+  \KeywordTok{if}\NormalTok{(low[x] == viz[x])\{}
+    \NormalTok{aux.clear();}
+    \KeywordTok{do}\NormalTok{\{}
+      \NormalTok{aux.pb(stackx[k]);}
+      \NormalTok{iss[stackx[k]] = }\DecValTok{0}\NormalTok{;}
+      \NormalTok{--k;}
+    \NormalTok{\}}\KeywordTok{while}\NormalTok{(stackx[k}\DecValTok{+1}\NormalTok{] != x);}
+    \NormalTok{comp.pb(aux);}
+  \NormalTok{\}}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{init()\{}
-    \NormalTok{index = }\DecValTok{1}\NormalTok{;}
-    \NormalTok{stackx.resize(Nn}\DecValTok{+10}\NormalTok{);}
-    \NormalTok{viz.resize(Nn}\DecValTok{+10}\NormalTok{);}
-    \NormalTok{iss.resize(Nn}\DecValTok{+10}\NormalTok{);}
-    \NormalTok{low.resize(Nn}\DecValTok{+10}\NormalTok{);}
-    \NormalTok{tare.resize(Nn}\DecValTok{+10}\NormalTok{);}
-    \NormalTok{last.resize(Nn}\DecValTok{+10}\NormalTok{);}
-    \NormalTok{gr_in.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{index = }\DecValTok{1}\NormalTok{;}
+  \NormalTok{stackx.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{viz.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{iss.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{low.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{tare.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{last.resize(Nn}\DecValTok{+10}\NormalTok{);}
+  \NormalTok{gr_in.resize(Nn}\DecValTok{+10}\NormalTok{);}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{make_ctc()\{}
-    \NormalTok{Nn=}\DecValTok{2}\NormalTok{*N;}
-    \NormalTok{init();}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=Nn;++i)\{}
-        \KeywordTok{if}\NormalTok{(viz[i]==}\DecValTok{0}\NormalTok{)\{}
-            \NormalTok{df(i);}
-            \CommentTok{//  printf("%d\textbackslash{}n",i);}
-        \NormalTok{\}}
+  \NormalTok{Nn=}\DecValTok{2}\NormalTok{*N;}
+  \NormalTok{init();}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=Nn;++i)\{}
+    \KeywordTok{if}\NormalTok{(viz[i]==}\DecValTok{0}\NormalTok{)\{}
+      \NormalTok{df(i);}
     \NormalTok{\}}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<comp.size();++i)\{}
-        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{0}\NormalTok{;j<comp[i].size();++j)\{}
-            \NormalTok{tare[comp[i][j]] = i}\DecValTok{+1}\NormalTok{;}
-        \NormalTok{\}}
+  \NormalTok{\}}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<comp.size();++i)\{}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{0}\NormalTok{;j<comp[i].size();++j)\{}
+      \NormalTok{tare[comp[i][j]] = i}\DecValTok{+1}\NormalTok{;}
     \NormalTok{\}}
+  \NormalTok{\}}
 \NormalTok{\}}
-
 \DataTypeTok{void} \NormalTok{solve()\{}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i)\{}
-        \KeywordTok{if}\NormalTok{(tare[i] == tare[notn(i)])\{}
-            \NormalTok{printf(}\StringTok{"-1}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{);}
-            \KeywordTok{return}\NormalTok{;}
-        \NormalTok{\}}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i)\{}
+    \KeywordTok{if}\NormalTok{(tare[i] == tare[notn(i)])\{}
+      \NormalTok{printf(}\StringTok{"-1}\CharTok{\textbackslash{}n}\StringTok{"}\NormalTok{);}
+      \KeywordTok{return}\NormalTok{;}
     \NormalTok{\}}
-
-    \DataTypeTok{int} \NormalTok{nod;}
-
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<comp.size();++i)\{}
-        \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{0}\NormalTok{;j<comp[i].size();++j)\{}
-            \NormalTok{nod = comp[i][j];}
-
-            \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=}\DecValTok{0}\NormalTok{;k<g[nod].size();++k)\{}
-                \DataTypeTok{int} \NormalTok{compv = tare[g[nod][k]];}
-                \KeywordTok{if} \NormalTok{( last[compv] != i}\DecValTok{+1} \NormalTok{&& compv != i}\DecValTok{+1} \NormalTok{)\{}
-                    \NormalTok{gx[i}\DecValTok{+1}\NormalTok{].pb(compv);}
-                    \NormalTok{++gr_in[compv];}
-                    \NormalTok{last[compv]=i}\DecValTok{+1}\NormalTok{;}
-                \NormalTok{\}}
-            \NormalTok{\}}
+  \NormalTok{\}}
+  \DataTypeTok{int} \NormalTok{nod;}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<comp.size();++i)\{}
+    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{j=}\DecValTok{0}\NormalTok{;j<comp[i].size();++j)\{}
+      \NormalTok{nod = comp[i][j];}
+      \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{k=}\DecValTok{0}\NormalTok{;k<g[nod].size();++k)\{}
+        \DataTypeTok{int} \NormalTok{compv = tare[g[nod][k]];}
+        \KeywordTok{if} \NormalTok{( last[compv] != i}\DecValTok{+1} \NormalTok{&& compv != i}\DecValTok{+1} \NormalTok{)\{}
+          \NormalTok{gx[i}\DecValTok{+1}\NormalTok{].pb(compv);}
+          \NormalTok{++gr_in[compv];}
+          \NormalTok{last[compv]=i}\DecValTok{+1}\NormalTok{;}
         \NormalTok{\}}
+      \NormalTok{\}}
     \NormalTok{\}}
-    \NormalTok{queue<}\DataTypeTok{int}\NormalTok{> Q;}
-    \CommentTok{//printf("%d\textbackslash{}n\textbackslash{}n",comp.size());}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=comp.size();++i)\{}
-        \KeywordTok{if}\NormalTok{(gr_in[i]==}\DecValTok{0}\NormalTok{)\{}
-            \NormalTok{Q.push(i);}
-            \CommentTok{// printf("%d!\textbackslash{}n",i);}
-        \NormalTok{\}}
+  \NormalTok{\}}
+  \NormalTok{queue<}\DataTypeTok{int}\NormalTok{> Q;}
+  \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=comp.size();++i)\{}
+    \KeywordTok{if}\NormalTok{(gr_in[i]==}\DecValTok{0}\NormalTok{)\{}
+      \NormalTok{Q.push(i);}
     \NormalTok{\}}
-    \DataTypeTok{int} \NormalTok{nr = }\DecValTok{0}\NormalTok{;}
-    \KeywordTok{while}\NormalTok{(!Q.empty())\{}
-        \NormalTok{++nr;}
-        \NormalTok{nod = Q.front(); Q.pop();}
-        \CommentTok{// printf("%d\textbackslash{}n",nod);}
-        \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<gx[nod].size();++i)\{}
-            \DataTypeTok{int} \NormalTok{nodv = gx[nod][i];}
-            \NormalTok{--gr_in[nodv];}
-            \KeywordTok{if} \NormalTok{(gr_in[nodv]==}\DecValTok{0}\NormalTok{)}
-                \NormalTok{Q.push(nodv);}
-        \NormalTok{\}}
-        \KeywordTok{if} \NormalTok{( last[nod] == -}\DecValTok{1} \NormalTok{)  }\KeywordTok{continue} \NormalTok{;}
-
-        \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<comp[nod}\DecValTok{-1}\NormalTok{].size();++i)\{}
-            \NormalTok{rez[comp[nod}\DecValTok{-1}\NormalTok{][i]] = }\DecValTok{0}\NormalTok{;}
-            \NormalTok{rez[notn(comp[nod}\DecValTok{-1}\NormalTok{][i])] = }\DecValTok{1}\NormalTok{;}
-        \NormalTok{\}}
-        \NormalTok{nod = tare[notn(comp[nod}\DecValTok{-1}\NormalTok{][}\DecValTok{0}\NormalTok{])];}
-        \NormalTok{last[nod] = -}\DecValTok{1}\NormalTok{;}
+  \NormalTok{\}}
+  \DataTypeTok{int} \NormalTok{nr = }\DecValTok{0}\NormalTok{;}
+  \KeywordTok{while}\NormalTok{(!Q.empty())\{}
+    \NormalTok{++nr;}
+    \NormalTok{nod = Q.front(); Q.pop();}
+    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<gx[nod].size();++i)\{}
+      \DataTypeTok{int} \NormalTok{nodv = gx[nod][i];}
+      \NormalTok{--gr_in[nodv];}
+      \KeywordTok{if} \NormalTok{(gr_in[nodv]==}\DecValTok{0}\NormalTok{)}
+        \NormalTok{Q.push(nodv);}
     \NormalTok{\}}
-    \CommentTok{//printf("\textbackslash{}n\textbackslash{}n%d\textbackslash{}n\textbackslash{}n",nr);}
-    \KeywordTok{for}\NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{1}\NormalTok{;i<=N;++i)\{}
-        \NormalTok{printf(}\StringTok{"%d "}\NormalTok{,rez[i]);}
+    \KeywordTok{if} \NormalTok{( last[nod] == -}\DecValTok{1} \NormalTok{)  }\KeywordTok{continue} \NormalTok{;}
+    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i=}\DecValTok{0}\NormalTok{;i<comp[nod}\DecValTok{-1}\NormalTok{].size();++i)\{}
+      \NormalTok{rez[comp[nod}\DecValTok{-1}\NormalTok{][i]] = }\DecValTok{0}\NormalTok{;}
+      \NormalTok{rez[notn(comp[nod}\DecValTok{-1}\NormalTok{][i])] = }\DecValTok{1}\NormalTok{;}
     \NormalTok{\}}
-    \KeywordTok{return}\NormalTok{;}
+    \NormalTok{nod = tare[notn(comp[nod}\DecValTok{-1}\NormalTok{][}\DecValTok{0}\NormalTok{])];}
+    \NormalTok{last[nod] = -}\DecValTok{1}\NormalTok{;}
+  \NormalTok{\}}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -1763,186 +1314,112 @@
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{// --------------------------------------------------------------------------}
-\CommentTok{// A straightforward, but probably sub-optimal KD-tree implmentation that's}
-\CommentTok{// probably good enough for most things (current it's a 2D-tree)}
-\CommentTok{//}
-\CommentTok{//  - constructs from n points in O(n lg^2 n) time}
-\CommentTok{//  - handles nearest-neighbor query in O(lg n) if points are well distributed}
-\CommentTok{//  - worst case for nearest-neighbor may be linear in pathological case}
-\CommentTok{//}
-\CommentTok{// Sonny Chan, Stanford University, April 2009}
-\CommentTok{// --------------------------------------------------------------------------}
-
-\OtherTok{#include <iostream>}
-\OtherTok{#include <vector>}
-\OtherTok{#include <limits>}
-\OtherTok{#include <cstdlib>}
-
-\KeywordTok{using} \KeywordTok{namespace} \NormalTok{std;}
-
-\CommentTok{// number type for coordinates, and its maximum value}
-\KeywordTok{typedef} \DataTypeTok{long} \DataTypeTok{long} \NormalTok{ntype;}
 \DataTypeTok{const} \NormalTok{ntype sentry = numeric_limits<ntype>::max();}
-
-\CommentTok{// point structure for 2D-tree, can be extended to 3D}
 \KeywordTok{struct} \NormalTok{point \{}
-    \NormalTok{ntype x, y;}
-    \NormalTok{point(ntype xx = }\DecValTok{0}\NormalTok{, ntype yy = }\DecValTok{0}\NormalTok{) : x(xx), y(yy) \{\}}
+  \NormalTok{ntype x, y;}
+  \NormalTok{point(ntype xx = }\DecValTok{0}\NormalTok{, ntype yy = }\DecValTok{0}\NormalTok{) : x(xx), y(yy) \{\}}
+\NormalTok{\};}
+\DataTypeTok{bool} \KeywordTok{operator}\NormalTok{==(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b) \{}
+  \KeywordTok{return} \NormalTok{a.x == b.x && a.y == b.y;}
+\NormalTok{\}}
+\DataTypeTok{bool} \NormalTok{on_x(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b) \{}
+  \KeywordTok{return} \NormalTok{a.x < b.x;}
+\NormalTok{\}}
+\DataTypeTok{bool} \NormalTok{on_y(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b) \{}
+  \KeywordTok{return} \NormalTok{a.y < b.y;}
+\NormalTok{\}}
+\NormalTok{ntype pdist2(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b) \{}
+  \NormalTok{ntype dx = a.x-b.x, dy = a.y-b.y;}
+  \KeywordTok{return} \NormalTok{dx*dx + dy*dy;}
+\NormalTok{\}}
+\KeywordTok{struct} \NormalTok{bbox \{}
+  \NormalTok{ntype x0, x1, y0, y1;}
+  \NormalTok{bbox() : x0(sentry), x1(-sentry), y0(sentry), y1(-sentry) \{\}}
+  \DataTypeTok{void} \NormalTok{compute(}\DataTypeTok{const} \NormalTok{vector<point> &v) \{}
+    \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < v.size(); ++i) \{}
+      \NormalTok{x0 = min(x0, v[i].x);   x1 = max(x1, v[i].x);}
+      \NormalTok{y0 = min(y0, v[i].y);   y1 = max(y1, v[i].y);}
+    \NormalTok{\}}
+  \NormalTok{\}}
+  \NormalTok{ntype distance(}\DataTypeTok{const} \NormalTok{point &p) \{}
+    \KeywordTok{if} \NormalTok{(p.x < x0) \{}
+      \KeywordTok{if} \NormalTok{(p.y < y0)       }\KeywordTok{return} \NormalTok{pdist2(point(x0, y0), p);}
+      \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.y > y1)  }\KeywordTok{return} \NormalTok{pdist2(point(x0, y1), p);}
+      \KeywordTok{else}                \KeywordTok{return} \NormalTok{pdist2(point(x0, p.y), p);}
+    \NormalTok{\} }\KeywordTok{else} \KeywordTok{if} \NormalTok{(p.x > x1) \{}
+      \KeywordTok{if} \NormalTok{(p.y < y0)       }\KeywordTok{return} \NormalTok{pdist2(point(x1, y0), p);}
+      \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.y > y1)  }\KeywordTok{return} \NormalTok{pdist2(point(x1, y1), p);}
+      \KeywordTok{else}                \KeywordTok{return} \NormalTok{pdist2(point(x1, p.y), p);}
+    \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
+      \KeywordTok{if} \NormalTok{(p.y < y0)       }\KeywordTok{return} \NormalTok{pdist2(point(p.x, y0), p);}
+      \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.y > y1)  }\KeywordTok{return} \NormalTok{pdist2(point(p.x, y1), p);}
+      \KeywordTok{else}                \KeywordTok{return} \DecValTok{0}\NormalTok{;}
+    \NormalTok{\}}
+  \NormalTok{\}}
+\NormalTok{\};}
+\KeywordTok{struct} \NormalTok{kdnode \{}
+  \DataTypeTok{bool} \NormalTok{leaf;      }\CommentTok{// true if this is a leaf node (has one point)}
+  \NormalTok{point pt;       }\CommentTok{// the single point of this is a leaf}
+  \NormalTok{bbox bound;     }\CommentTok{// bounding box for set of points in children}
+
+  \NormalTok{kdnode *first, *second; }\CommentTok{// two children of this kd-node}
+
+  \NormalTok{kdnode() : leaf(}\KeywordTok{false}\NormalTok{), first(}\DecValTok{0}\NormalTok{), second(}\DecValTok{0}\NormalTok{) \{\}}
+  \NormalTok{~kdnode() \{ }\KeywordTok{if} \NormalTok{(first) }\KeywordTok{delete} \NormalTok{first; }\KeywordTok{if} \NormalTok{(second) }\KeywordTok{delete} \NormalTok{second; \}}
+
+  \NormalTok{ntype intersect(}\DataTypeTok{const} \NormalTok{point &p) \{}
+    \KeywordTok{return} \NormalTok{bound.distance(p);}
+  \NormalTok{\}}
+  \DataTypeTok{void} \NormalTok{construct(vector<point> &vp) \{}
+    \NormalTok{bound.compute(vp);}
+    \KeywordTok{if} \NormalTok{(vp.size() == }\DecValTok{1}\NormalTok{) \{}
+      \NormalTok{leaf = }\KeywordTok{true}\NormalTok{;}
+      \NormalTok{pt = vp[}\DecValTok{0}\NormalTok{];}
+    \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
+      \KeywordTok{if} \NormalTok{(bound.x1-bound.x0 >= bound.y1-bound.y0)}
+        \NormalTok{sort(vp.begin(), vp.end(), on_x);}
+      \KeywordTok{else}
+        \NormalTok{sort(vp.begin(), vp.end(), on_y);}
+
+      \DataTypeTok{int} \NormalTok{half = vp.size()/}\DecValTok{2}\NormalTok{;}
+      \NormalTok{vector<point> vl(vp.begin(), vp.begin()+half);}
+      \NormalTok{vector<point> vr(vp.begin()+half, vp.end());}
+      \NormalTok{first = }\KeywordTok{new} \NormalTok{kdnode();   first->construct(vl);}
+      \NormalTok{second = }\KeywordTok{new} \NormalTok{kdnode();  second->construct(vr);}
+    \NormalTok{\}}
+  \NormalTok{\}}
 \NormalTok{\};}
 
-\DataTypeTok{bool} \KeywordTok{operator}\NormalTok{==(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b)}
-\NormalTok{\{}
-    \KeywordTok{return} \NormalTok{a.x == b.x && a.y == b.y;}
-\NormalTok{\}}
+\KeywordTok{struct} \NormalTok{kdtree \{}
+  \NormalTok{kdnode *root;}
+  \NormalTok{kdtree(}\DataTypeTok{const} \NormalTok{vector<point> &vp) \{}
+    \NormalTok{vector<point> v(vp.begin(), vp.end());}
+    \NormalTok{root = }\KeywordTok{new} \NormalTok{kdnode();}
+    \NormalTok{root->construct(v);}
+  \NormalTok{\}}
+  \NormalTok{~kdtree() \{ }\KeywordTok{delete} \NormalTok{root; \}}
+  \NormalTok{ntype search(kdnode *node, }\DataTypeTok{const} \NormalTok{point &p) \{}
+    \KeywordTok{if} \NormalTok{(node->leaf) \{}
+      \KeywordTok{return} \NormalTok{pdist2(p, node->pt);}
+    \NormalTok{\}}
+    \NormalTok{ntype bfirst = node->first->intersect(p);}
+    \NormalTok{ntype bsecond = node->second->intersect(p);}
 
-\CommentTok{// sorts points on x-coordinate}
-\DataTypeTok{bool} \NormalTok{on_x(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b)}
-\NormalTok{\{}
-    \KeywordTok{return} \NormalTok{a.x < b.x;}
-\NormalTok{\}}
-
-\CommentTok{// sorts points on y-coordinate}
-\DataTypeTok{bool} \NormalTok{on_y(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b)}
-\NormalTok{\{}
-    \KeywordTok{return} \NormalTok{a.y < b.y;}
-\NormalTok{\}}
-
-\CommentTok{// squared distance between points}
-\NormalTok{ntype pdist2(}\DataTypeTok{const} \NormalTok{point &a, }\DataTypeTok{const} \NormalTok{point &b)}
-\NormalTok{\{}
-    \NormalTok{ntype dx = a.x-b.x, dy = a.y-b.y;}
-    \KeywordTok{return} \NormalTok{dx*dx + dy*dy;}
-\NormalTok{\}}
-
-\CommentTok{// bounding box for a set of points}
-\KeywordTok{struct} \NormalTok{bbox}
-\NormalTok{\{}
-    \NormalTok{ntype x0, x1, y0, y1;}
-    
-    \NormalTok{bbox() : x0(sentry), x1(-sentry), y0(sentry), y1(-sentry) \{\}}
-    
-    \CommentTok{// computes bounding box from a bunch of points}
-    \DataTypeTok{void} \NormalTok{compute(}\DataTypeTok{const} \NormalTok{vector<point> &v) \{}
-        \KeywordTok{for} \NormalTok{(}\DataTypeTok{int} \NormalTok{i = }\DecValTok{0}\NormalTok{; i < v.size(); ++i) \{}
-            \NormalTok{x0 = min(x0, v[i].x);   x1 = max(x1, v[i].x);}
-            \NormalTok{y0 = min(y0, v[i].y);   y1 = max(y1, v[i].y);}
-        \NormalTok{\}}
+    \KeywordTok{if} \NormalTok{(bfirst < bsecond) \{}
+      \NormalTok{ntype best = search(node->first, p);}
+      \KeywordTok{if} \NormalTok{(bsecond < best)}
+        \NormalTok{best = min(best, search(node->second, p));}
+      \KeywordTok{return} \NormalTok{best;}
+    \NormalTok{\} }\KeywordTok{else} \NormalTok{\{}
+      \NormalTok{ntype best = search(node->second, p);}
+      \KeywordTok{if} \NormalTok{(bfirst < best)}
+        \NormalTok{best = min(best, search(node->first, p));}
+      \KeywordTok{return} \NormalTok{best;}
     \NormalTok{\}}
-    
-    \CommentTok{// squared distance between a point and this bbox, 0 if inside}
-    \NormalTok{ntype distance(}\DataTypeTok{const} \NormalTok{point &p) \{}
-        \KeywordTok{if} \NormalTok{(p.x < x0) \{}
-            \KeywordTok{if} \NormalTok{(p.y < y0)       }\KeywordTok{return} \NormalTok{pdist2(point(x0, y0), p);}
-            \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.y > y1)  }\KeywordTok{return} \NormalTok{pdist2(point(x0, y1), p);}
-            \KeywordTok{else}                \KeywordTok{return} \NormalTok{pdist2(point(x0, p.y), p);}
-        \NormalTok{\}}
-        \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.x > x1) \{}
-            \KeywordTok{if} \NormalTok{(p.y < y0)       }\KeywordTok{return} \NormalTok{pdist2(point(x1, y0), p);}
-            \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.y > y1)  }\KeywordTok{return} \NormalTok{pdist2(point(x1, y1), p);}
-            \KeywordTok{else}                \KeywordTok{return} \NormalTok{pdist2(point(x1, p.y), p);}
-        \NormalTok{\}}
-        \KeywordTok{else} \NormalTok{\{}
-            \KeywordTok{if} \NormalTok{(p.y < y0)       }\KeywordTok{return} \NormalTok{pdist2(point(p.x, y0), p);}
-            \KeywordTok{else} \KeywordTok{if} \NormalTok{(p.y > y1)  }\KeywordTok{return} \NormalTok{pdist2(point(p.x, y1), p);}
-            \KeywordTok{else}                \KeywordTok{return} \DecValTok{0}\NormalTok{;}
-        \NormalTok{\}}
-    \NormalTok{\}}
-\NormalTok{\};}
-
-\CommentTok{// stores a single node of the kd-tree, either internal or leaf}
-\KeywordTok{struct} \NormalTok{kdnode }
-\NormalTok{\{}
-    \DataTypeTok{bool} \NormalTok{leaf;      }\CommentTok{// true if this is a leaf node (has one point)}
-    \NormalTok{point pt;       }\CommentTok{// the single point of this is a leaf}
-    \NormalTok{bbox bound;     }\CommentTok{// bounding box for set of points in children}
-    
-    \NormalTok{kdnode *first, *second; }\CommentTok{// two children of this kd-node}
-    
-    \NormalTok{kdnode() : leaf(}\KeywordTok{false}\NormalTok{), first(}\DecValTok{0}\NormalTok{), second(}\DecValTok{0}\NormalTok{) \{\}}
-    \NormalTok{~kdnode() \{ }\KeywordTok{if} \NormalTok{(first) }\KeywordTok{delete} \NormalTok{first; }\KeywordTok{if} \NormalTok{(second) }\KeywordTok{delete} \NormalTok{second; \}}
-    
-    \CommentTok{// intersect a point with this node (returns squared distance)}
-    \NormalTok{ntype intersect(}\DataTypeTok{const} \NormalTok{point &p) \{}
-        \KeywordTok{return} \NormalTok{bound.distance(p);}
-    \NormalTok{\}}
-    
-    \CommentTok{// recursively builds a kd-tree from a given cloud of points}
-    \DataTypeTok{void} \NormalTok{construct(vector<point> &vp)}
-    \NormalTok{\{}
-        \CommentTok{// compute bounding box for points at this node}
-        \NormalTok{bound.compute(vp);}
-        
-        \CommentTok{// if we're down to one point, then we're a leaf node}
-        \KeywordTok{if} \NormalTok{(vp.size() == }\DecValTok{1}\NormalTok{) \{}
-            \NormalTok{leaf = }\KeywordTok{true}\NormalTok{;}
-            \NormalTok{pt = vp[}\DecValTok{0}\NormalTok{];}
-        \NormalTok{\}}
-        \KeywordTok{else} \NormalTok{\{}
-            \CommentTok{// split on x if the bbox is wider than high (not best heuristic...)}
-            \KeywordTok{if} \NormalTok{(bound.x1-bound.x0 >= bound.y1-bound.y0)}
-                \NormalTok{sort(vp.begin(), vp.end(), on_x);}
-            \CommentTok{// otherwise split on y-coordinate}
-            \KeywordTok{else}
-                \NormalTok{sort(vp.begin(), vp.end(), on_y);}
-            
-            \CommentTok{// divide by taking half the array for each child}
-            \CommentTok{// (not best performance if many duplicates in the middle)}
-            \DataTypeTok{int} \NormalTok{half = vp.size()/}\DecValTok{2}\NormalTok{;}
-            \NormalTok{vector<point> vl(vp.begin(), vp.begin()+half);}
-            \NormalTok{vector<point> vr(vp.begin()+half, vp.end());}
-            \NormalTok{first = }\KeywordTok{new} \NormalTok{kdnode();   first->construct(vl);}
-            \NormalTok{second = }\KeywordTok{new} \NormalTok{kdnode();  second->construct(vr);            }
-        \NormalTok{\}}
-    \NormalTok{\}}
-\NormalTok{\};}
-
-\CommentTok{// simple kd-tree class to hold the tree and handle queries}
-\KeywordTok{struct} \NormalTok{kdtree}
-\NormalTok{\{}
-    \NormalTok{kdnode *root;}
-    
-    \CommentTok{// constructs a kd-tree from a points (copied here, as it sorts them)}
-    \NormalTok{kdtree(}\DataTypeTok{const} \NormalTok{vector<point> &vp) \{}
-        \NormalTok{vector<point> v(vp.begin(), vp.end());}
-        \NormalTok{root = }\KeywordTok{new} \NormalTok{kdnode();}
-        \NormalTok{root->construct(v);}
-    \NormalTok{\}}
-    \NormalTok{~kdtree() \{ }\KeywordTok{delete} \NormalTok{root; \}}
-    
-    \CommentTok{// recursive search method returns squared distance to nearest point}
-    \NormalTok{ntype search(kdnode *node, }\DataTypeTok{const} \NormalTok{point &p)}
-    \NormalTok{\{}
-        \KeywordTok{if} \NormalTok{(node->leaf) \{}
-            \CommentTok{// commented special case tells a point not to find itself}
-\CommentTok{//            if (p == node->pt) return sentry;}
-\CommentTok{//            else               }
-                \KeywordTok{return} \NormalTok{pdist2(p, node->pt);}
-        \NormalTok{\}}
-        
-        \NormalTok{ntype bfirst = node->first->intersect(p);}
-        \NormalTok{ntype bsecond = node->second->intersect(p);}
-        
-        \CommentTok{// choose the side with the closest bounding box to search first}
-        \CommentTok{// (note that the other side is also searched if needed)}
-        \KeywordTok{if} \NormalTok{(bfirst < bsecond) \{}
-            \NormalTok{ntype best = search(node->first, p);}
-            \KeywordTok{if} \NormalTok{(bsecond < best)}
-                \NormalTok{best = min(best, search(node->second, p));}
-            \KeywordTok{return} \NormalTok{best;}
-        \NormalTok{\}}
-        \KeywordTok{else} \NormalTok{\{}
-            \NormalTok{ntype best = search(node->second, p);}
-            \KeywordTok{if} \NormalTok{(bfirst < best)}
-                \NormalTok{best = min(best, search(node->first, p));}
-            \KeywordTok{return} \NormalTok{best;}
-        \NormalTok{\}}
-    \NormalTok{\}}
-    
-    \CommentTok{// squared distance to the nearest }
-    \NormalTok{ntype nearest(}\DataTypeTok{const} \NormalTok{point &p) \{}
-        \KeywordTok{return} \NormalTok{search(root, p);}
-    \NormalTok{\}}
+  \NormalTok{\}}
+  \NormalTok{ntype nearest(}\DataTypeTok{const} \NormalTok{point &p) \{}
+    \KeywordTok{return} \NormalTok{search(root, p);}
+  \NormalTok{\}}
 \NormalTok{\};}
 \end{Highlighting}
 \end{Shaded}
